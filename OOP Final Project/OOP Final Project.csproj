@@ -7,4 +7,22 @@
     <RootNamespace>OOP_Final_Project</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers/" />
+    <Folder Include="Data/Entities/" />
+    <Folder Include="Data/Migrations/" />
+    <Folder Include="Interfaces/" />
+    <Folder Include="Pages/Appointments/" />
+    <Folder Include="Pages/Clinics/" />
+    <Folder Include="Pages/Departments/" />
+    <Folder Include="Pages/Documents/" />
+    <Folder Include="Pages/Employees/" />
+    <Folder Include="Pages/Patients/" />
+    <Folder Include="ViewModels/" />
+    <Folder Include="ViewModels/Account/" />
+    <Folder Include="ViewModels/Appointments/" />
+    <Folder Include="ViewModels/Common/" />
+    <Folder Include="ViewModels/Reports/" />
+  </ItemGroup>
+
 </Project>
