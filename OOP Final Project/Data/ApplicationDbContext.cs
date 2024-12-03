@@ -1,11 +1,12 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 namespace OOP_Final_Project.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

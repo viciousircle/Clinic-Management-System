@@ -4,6 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using OOP_Final_Project.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Cấu hình Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+
+// Cấu hình phân quyền
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("DoctorOnly", policy => policy.RequireRole("Doctor"));
+    options.AddPolicy("ReceptionistOnly", policy => policy.RequireRole("Receptionist"));
+});
 
 var app = builder.Build();
 
@@ -28,6 +45,9 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
+
+app.UseAuthentication();  // Cần thêm dòng này để xác thực người dùng
+// app.UseAuthorization();   // Cần thêm dòng này để kiểm tra phân quyền
 
 // Seed dữ liệu mẫu khi ứng dụng khởi động
 using (var scope = app.Services.CreateScope())
@@ -66,7 +86,7 @@ using (var scope = app.Services.CreateScope())
         dbContext.SaveChanges();
 
         // Seed Roles
-        var roles = DataSeeder.SeedRoles(5);
+        var roles = DataSeeder.SeedRoles();
         dbContext.Roles.AddRange(roles);
         dbContext.SaveChanges();
 
@@ -94,7 +114,7 @@ using (var scope = app.Services.CreateScope())
         dbContext.SaveChanges();
 
         // Seed HasRoles
-        var hasRoles = DataSeeder.SeedHasRoles(120, employees, roles);
+        var hasRoles = DataSeeder.SeedHasRoles(employees, roles);
         dbContext.HasRoles.AddRange(hasRoles);
         dbContext.SaveChanges();
 
@@ -133,5 +153,6 @@ using (var scope = app.Services.CreateScope())
 
     }
 }
+
 
 app.Run();

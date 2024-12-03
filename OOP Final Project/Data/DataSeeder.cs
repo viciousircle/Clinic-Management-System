@@ -27,12 +27,17 @@ public class DataSeeder
         return faker.Generate(count);
     }
 
-    public static List<Role> SeedRoles(int count)
+    // Seed Roles
+    public static List<Role> SeedRoles()
     {
-        var faker = new Faker<Role>()
-            .RuleFor(r => r.Id, f => f.IndexFaker + 1)
-            .RuleFor(r => r.RoleName, f => f.Commerce.Department());
-        return faker.Generate(count);
+        return new List<Role>
+        {
+            new Role { Id = 1, RoleName = "Admin" },
+            new Role { Id = 2, RoleName = "Doctor" },
+            new Role { Id = 3, RoleName = "Nurse" },
+            new Role { Id = 4, RoleName = "Receptionist" },
+            new Role { Id = 5, RoleName = "Accountant" }
+        };
     }
 
     public static List<Patient> SeedPatients(int count)
@@ -79,16 +84,54 @@ public class DataSeeder
         return faker.Generate(count);
     }
 
-    public static List<HasRole> SeedHasRoles(int count, List<Employee> employees, List<Role> roles)
+    // Seed HasRoles
+    public static List<HasRole> SeedHasRoles(List<Employee> employees, List<Role> roles)
     {
-        var faker = new Faker<HasRole>()
-            .RuleFor(hr => hr.Id, f => f.IndexFaker + 1)
-            .RuleFor(hr => hr.EmployeeId, f => f.PickRandom(employees).Id)
-            .RuleFor(hr => hr.RoleId, f => f.PickRandom(roles).Id)
-            .RuleFor(hr => hr.TimeFrom, f => f.Date.Past())
-            .RuleFor(hr => hr.TimeTo, f => f.Date.Future())
-            .RuleFor(hr => hr.IsActive, f => f.Random.Bool());
-        return faker.Generate(count);
+        var hasRoles = new List<HasRole>();
+
+        // Gán vai trò Admin cho nhân viên đầu tiên
+        var admin = employees.First();
+        hasRoles.Add(new HasRole
+        {
+            Id = 1,
+            EmployeeId = admin.Id,
+            RoleId = roles.First(r => r.RoleName == "Admin").Id,
+            TimeFrom = DateTime.Now.AddYears(-1),
+            TimeTo = DateTime.Now.AddYears(1),
+            IsActive = true
+        });
+
+        // Gán Receptionist cho 10 người tiếp theo
+        var receptionists = employees.Skip(1).Take(10);
+        foreach (var employee in receptionists)
+        {
+            hasRoles.Add(new HasRole
+            {
+                Id = hasRoles.Count + 1,
+                EmployeeId = employee.Id,
+                RoleId = roles.First(r => r.RoleName == "Receptionist").Id,
+                TimeFrom = DateTime.Now.AddYears(-1),
+                TimeTo = DateTime.Now.AddYears(1),
+                IsActive = true
+            });
+        }
+
+        // Gán Doctor cho các nhân viên còn lại
+        var doctors = employees.Skip(11);
+        foreach (var employee in doctors)
+        {
+            hasRoles.Add(new HasRole
+            {
+                Id = hasRoles.Count + 1,
+                EmployeeId = employee.Id,
+                RoleId = roles.First(r => r.RoleName == "Doctor").Id,
+                TimeFrom = DateTime.Now.AddYears(-1),
+                TimeTo = DateTime.Now.AddYears(1),
+                IsActive = true
+            });
+        }
+
+        return hasRoles;
     }
 
     public static List<InDepartment> SeedInDepartments(int count, List<Employee> employees, List<Department> departments)
