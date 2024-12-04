@@ -4,15 +4,21 @@
     ViewData["Title"] = "Clinic Management Dashboard";
 }
 
-<div class="container">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="~/css/index.css">
+</head>
+
+<div class="container mt-5">
     <!-- Dashboard Header -->
     <div class="text-center mb-5">
-        <h1 class="display-4">Clinic Management Dashboard</h1>
-        <p>Manage your clinic efficiently. View key statistics, recent activities, and manage appointments with ease.
-        </p>
+        <h1 class="display-4 text-white">Clinic Management Dashboard</h1>
+        <p class="text-light">Manage your clinic efficiently. View key statistics, recent activities, and manage
+            appointments with ease.</p>
         <!-- Login Button for Employees -->
         <div>
-            <a href="@Url.Page("Login")" class="btn btn-primary btn-lg">Đăng nhập</a>
+            <a href="@Url.Page("Login")" class="btn bg-dark text-light btn-lg">Đăng nhập</a>
         </div>
     </div>
 
@@ -20,22 +26,22 @@
     <div class="row">
         <div class="col-md-3">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
-                <a href="#" class="list-group-item list-group-item-action">Patients</a>
-                <a href="#" class="list-group-item list-group-item-action">Appointments</a>
-                <a href="#" class="list-group-item list-group-item-action">Doctors</a>
-                <a href="#" class="list-group-item list-group-item-action">Reports</a>
-                <a href="#" class="list-group-item list-group-item-action">Settings</a>
+                <a href="#" class="list-group-item list-group-item-action text-white bg-dark">Dashboard</a>
+                <a href="@Url.Page("Patients")" class="list-group-item list-group-item-action">Patients</a>
+                <a href="@Url.Page("Appointments")" class="list-group-item list-group-item-action">Appointments</a>
+                <a href="@Url.Page("Doctors")" class="list-group-item list-group-item-action">Doctors</a>
+                <a href="@Url.Page("Reports")" class="list-group-item list-group-item-action">Reports</a>
+                <a href="@Url.Page("Settings")" class="list-group-item list-group-item-action">Settings</a>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="row">
                 <!-- Total Patients Overview -->
                 <div class="col-sm-4">
-                    <div class="card text-white bg-primary mb-4">
-                        <div class="card-header">Total Patients</div>
+                    <div class="card bg-dark text-white mb-4">
+                        <div class="card-header bg-dark">Total Patients</div>
                         <div class="card-body">
                             <h5 class="card-title">120</h5>
                             <p class="card-text">View and manage all patient records.</p>
@@ -44,24 +50,23 @@
                 </div>
 
                 <!-- Upcoming Appointments Overview -->
-                <div class="col-sm-4">
-                    <div class="card text-white bg-success mb-4">
-                        <div class="card-header">Upcoming Appointments</div>
+                <div class="col-sm-8">
+                    <div class="card bg-dark text-white mb-4">
+                        <div class="card-header bg-dark">Upcoming Appointments</div>
                         <div class="card-body">
                             <h5 class="card-title">5 Appointments</h5>
                             <p class="card-text">See scheduled appointments and manage them.</p>
                             <!-- Make an Appointment Button -->
                             <a href="@Url.Page("Appointments/MakeAnAppointment")" class="btn btn-warning btn-block">Make
-                                an
-                                Appointment</a>
+                                an Appointment</a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Total Doctors Overview -->
-                <div class="col-sm-4">
-                    <div class="card text-white bg-info mb-4">
-                        <div class="card-header">Total Doctors</div>
+                <div class="col-sm-8">
+                    <div class="card bg-dark text-white mb-4">
+                        <div class="card-header bg-dark ">Total Doctors</div>
                         <div class="card-body">
                             <h5 class="card-title">8 Doctors</h5>
                             <p class="card-text">View and manage doctor profiles and schedules.</p>
@@ -71,8 +76,8 @@
             </div>
 
             <!-- Recent Activity Section -->
-            <div class="card mb-4">
-                <div class="card-header">Recent Activities</div>
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-header bg-dark">Recent Activities</div>
                 <div class="card-body">
                     <ul>
                         <li>New patient added: John Doe</li>
@@ -85,8 +90,8 @@
             <!-- Tasks Section -->
             <div class="row mb-4">
                 <div class="col-sm-6">
-                    <div class="card">
-                        <div class="card-header">Tasks</div>
+                    <div class="card bg-dark text-white">
+                        <div class="card-header bg-dark">Tasks</div>
                         <div class="card-body">
                             <ul>
                                 <li>Follow up with patient John Doe</li>
@@ -99,8 +104,8 @@
 
                 <!-- Notifications Section -->
                 <div class="col-sm-6">
-                    <div class="card">
-                        <div class="card-header">Notifications</div>
+                    <div class="card bg-dark text-white">
+                        <div class="card-header bg-dark">Notifications</div>
                         <div class="card-body">
                             <ul>
                                 <li><strong>New Message</strong> from Dr. Smith</li>
@@ -113,11 +118,10 @@
             </div>
 
             <!-- Appointment Statistics Chart (Placeholder) -->
-            <div class="card mb-4">
-                <div class="card-header">Appointment Statistics</div>
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-header bg-dark">Appointment Statistics</div>
                 <div class="card-body">
                     <canvas id="appointmentChart" width="400" height="200"></canvas>
-                    <!-- You can later integrate Chart.js or other libraries here for dynamic charts -->
                 </div>
             </div>
         </div>
@@ -125,6 +129,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Placeholder for future chart integration
         var ctx = document.getElementById('appointmentChart').getContext('2d');
@@ -135,8 +140,8 @@
                 datasets: [{
                     label: 'Appointments',
                     data: [20, 30, 25, 40, 35],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(0, 204, 153, 0.2)', // Subtle teal background
+                    borderColor: 'rgba(0, 204, 153, 1)', // ChatGPT-like teal border color
                     borderWidth: 1
                 }]
             },
@@ -150,3 +155,8 @@
         });
     </script>
 }
+
+<!-- Bootstrap JS and Dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
