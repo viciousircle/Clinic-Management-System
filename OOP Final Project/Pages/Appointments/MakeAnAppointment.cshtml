@@ -1,6 +1,5 @@
 ﻿@page
 @model OOP_Final_Project.Pages.Appointments.MakeAnAppointmentModel
-
 @{
     ViewData["Title"] = "Make an Appointment";
 }
@@ -26,7 +25,6 @@
                                 <option value="Dr. Smith">Dr. Smith</option>
                                 <option value="Dr. Johnson">Dr. Johnson</option>
                                 <option value="Dr. Lee">Dr. Lee</option>
-                                <!-- Add more doctors here -->
                             </select>
                         </div>
 
@@ -37,9 +35,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="AppointmentTime">Appointment Time</label>
-                            <input type="time" class="form-control" id="AppointmentTime" name="AppointmentTime"
-                                required />
+                            <label for="AppointmentTime">Available Appointment Time</label>
+                            <select class="form-control" id="AppointmentTime" name="AppointmentTime" required>
+                                <option value="">-- Choose a Time --</option>
+                                @foreach (var slot in Model.AvailableTimeSlots)
+                                {
+                                    <option value="@slot">@slot</option>
+                                }
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -54,3 +57,75 @@
         </div>
     </div>
 </div>
+
+
+<style>
+    /* Card styling */
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    /* Form element styling */
+    .form-group label {
+        font-size: 1rem;
+        color: #495057;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        font-size: 1rem;
+        padding: 10px;
+        margin-bottom: 15px;
+        transition: border 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Button styling */
+    .btn {
+        background-color: #28a745;
+        color: white;
+        font-size: 1rem;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #218838;
+    }
+
+    @* /* Responsive design for smaller screens */
+    @media
+    (max-width: 768px) {
+        .container {
+            margin-top: 20px;
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+        }
+    } *@
+</style>
