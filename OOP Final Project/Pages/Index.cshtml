@@ -1,10 +1,148 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Clinic Management Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <!-- Dashboard Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4">Clinic Management Dashboard</h1>
+        <p>Manage your clinic efficiently. View key statistics, recent activities, and manage appointments with ease.
+        </p>
+        <!-- Login Button for Employees -->
+        <div>
+            <a href="@Url.Page("Login")" class="btn btn-primary btn-lg">Đăng nhập</a>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
+                <a href="#" class="list-group-item list-group-item-action">Patients</a>
+                <a href="#" class="list-group-item list-group-item-action">Appointments</a>
+                <a href="#" class="list-group-item list-group-item-action">Doctors</a>
+                <a href="#" class="list-group-item list-group-item-action">Reports</a>
+                <a href="#" class="list-group-item list-group-item-action">Settings</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="row">
+                <!-- Total Patients Overview -->
+                <div class="col-sm-4">
+                    <div class="card text-white bg-primary mb-4">
+                        <div class="card-header">Total Patients</div>
+                        <div class="card-body">
+                            <h5 class="card-title">120</h5>
+                            <p class="card-text">View and manage all patient records.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Appointments Overview -->
+                <div class="col-sm-4">
+                    <div class="card text-white bg-success mb-4">
+                        <div class="card-header">Upcoming Appointments</div>
+                        <div class="card-body">
+                            <h5 class="card-title">5 Appointments</h5>
+                            <p class="card-text">See scheduled appointments and manage them.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Doctors Overview -->
+                <div class="col-sm-4">
+                    <div class="card text-white bg-info mb-4">
+                        <div class="card-header">Total Doctors</div>
+                        <div class="card-body">
+                            <h5 class="card-title">8 Doctors</h5>
+                            <p class="card-text">View and manage doctor profiles and schedules.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div class="card mb-4">
+                <div class="card-header">Recent Activities</div>
+                <div class="card-body">
+                    <ul>
+                        <li>New patient added: John Doe</li>
+                        <li>Appointment scheduled: Dr. Smith with Jane Doe</li>
+                        <li>Report generated: Patient Analysis Report</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div class="row mb-4">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">Tasks</div>
+                        <div class="card-body">
+                            <ul>
+                                <li>Follow up with patient John Doe</li>
+                                <li>Review the lab reports for Jane Doe</li>
+                                <li>Schedule next vaccination session</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">Notifications</div>
+                        <div class="card-body">
+                            <ul>
+                                <li><strong>New Message</strong> from Dr. Smith</li>
+                                <li><strong>Reminder:</strong> Patient appointment tomorrow at 10:00 AM</li>
+                                <li><strong>Alert:</strong> System maintenance on Saturday</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Statistics Chart (Placeholder) -->
+            <div class="card mb-4">
+                <div class="card-header">Appointment Statistics</div>
+                <div class="card-body">
+                    <canvas id="appointmentChart" width="400" height="200"></canvas>
+                    <!-- You can later integrate Chart.js or other libraries here for dynamic charts -->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Placeholder for future chart integration
+        var ctx = document.getElementById('appointmentChart').getContext('2d');
+        var appointmentChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [20, 30, 25, 40, 35],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
