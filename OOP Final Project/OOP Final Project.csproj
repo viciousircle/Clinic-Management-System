@@ -12,7 +12,6 @@
     <Folder Include="Data/Entities/" />
     <Folder Include="Data/Migrations/" />
     <Folder Include="Interfaces/" />
-    <Folder Include="Pages/Appointments/" />
     <Folder Include="Pages/Clinics/" />
     <Folder Include="Pages/Departments/" />
     <Folder Include="Pages/Documents/" />

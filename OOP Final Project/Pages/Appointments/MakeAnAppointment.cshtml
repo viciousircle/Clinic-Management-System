@@ -1,0 +1,56 @@
+﻿@page
+@model OOP_Final_Project.Pages.Appointments.MakeAnAppointmentModel
+
+@{
+    ViewData["Title"] = "Make an Appointment";
+}
+
+<div class="container">
+    <h1 class="display-4 text-center mb-4">Create Appointment</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Appointment Details</div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="PatientName">Patient Name</label>
+                            <input type="text" class="form-control" id="PatientName" name="PatientName" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Doctor">Select Doctor</label>
+                            <select class="form-control" id="Doctor" name="Doctor" required>
+                                <option value="">-- Choose a Doctor --</option>
+                                <option value="Dr. Smith">Dr. Smith</option>
+                                <option value="Dr. Johnson">Dr. Johnson</option>
+                                <option value="Dr. Lee">Dr. Lee</option>
+                                <!-- Add more doctors here -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="AppointmentDate">Appointment Date</label>
+                            <input type="date" class="form-control" id="AppointmentDate" name="AppointmentDate"
+                                required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="AppointmentTime">Appointment Time</label>
+                            <input type="time" class="form-control" id="AppointmentTime" name="AppointmentTime"
+                                required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Reason">Reason for Visit</label>
+                            <textarea class="form-control" id="Reason" name="Reason" rows="3" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
