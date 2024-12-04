@@ -9,3 +9,4 @@ public class ApplicationRole : IdentityRole
     // Thêm các thuộc tính bổ sung cho vai trò nếu cần
     public string Description { get; set; }
 }
+
