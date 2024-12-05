@@ -1,130 +1,79 @@
 ﻿@page
 @model OOP_Final_Project.Pages.Appointments.InfoAppointmentModel
 @{
+    ViewData["Title"] = "Appointment Details";
 }
 
-<div class="container">
-    <h1 class="display-4 text-center mb-4">Create Appointment</h1>
-
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Appointment Details</div>
-                <div class="card-body">
-                    <form method="post">
-                        <div class="form-group">
-                            <label for="PatientName">Patient Name</label>
-                            <input type="text" class="form-control" id="PatientName" name="PatientName" required />
+<div class="text-center mb-4">
+    <h1>Appointment Details</h1>
+    <p class="text-muted">Please arrange time to come on time for your appointment!</p>
+</div>
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card shadow-lg" style="max-width: 40rem; width: 100%;">
+        <div class="card-header bg-dark text-white text-center">
+            <i class="bi bi-calendar-check fs-4"></i>
+            <h4 class="mt-2">Appointment Information</h4>
+        </div>
+        <div class="card-body px-4 py-5">
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-clock text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">Appointment Date</h6>
+                            <p class="text-muted mb-0">@Model.AppointmentDate</p>
                         </div>
-
-                        <div class="form-group">
-                            <label for="Doctor">Select Doctor</label>
-                            <select class="form-control" id="Doctor" name="Doctor" required>
-                                <option value="">-- Choose a Doctor --</option>
-                                <option value="Dr. Smith">Dr. Smith</option>
-                                <option value="Dr. Johnson">Dr. Johnson</option>
-                                <option value="Dr. Lee">Dr. Lee</option>
-                            </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-person-circle text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">Doctor</h6>
+                            <p class="text-muted mb-0">@Model.DoctorName</p>
                         </div>
-
-                        <div class="form-group">
-                            <label for="AppointmentDate">Appointment Date</label>
-                            <input type="date" class="form-control" id="AppointmentDate" name="AppointmentDate"
-                                required />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-award text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">Specialization</h6>
+                            <p class="text-muted mb-0">@Model.Specialization</p>
                         </div>
-@* 
-                        <div class="form-group">
-                            <label for="AppointmentTime">Available Appointment Time</label>
-                            <select class="form-control" id="AppointmentTime" name="AppointmentTime" required>
-                                <option value="">-- Choose a Time --</option>
-                                @foreach (var slot in Model.AvailableTimeSlots)
-                                {
-                                    <option value="@slot">@slot</option>
-                                }
-                            </select>
-                        </div> *@
-
-                        <div class="form-group">
-                            <label for="Reason">Reason for Visit</label>
-                            <textarea class="form-control" id="Reason" name="Reason" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-geo-alt text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">Location</h6>
+                            <p class="text-muted mb-0">@Model.Location</p>
                         </div>
-
-                        <button type="submit" class="btn btn-success btn-block">Book Appointment</button>
-                    </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-card-text text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6 class="fw-bold">Notes</h6>
+                            <p class="text-muted mb-0">@Model.Notes</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="card-footer bg-light d-flex justify-content-end gap-2">
+            <a href="/Appointments/Reschedule" class="btn btn-dark">
+                <i class="bi bi-calendar-event"></i> Reschedule
+            </a>
+            <a href="/Appointments/Cancel" class="btn btn-outline-danger">
+                <i class="bi bi-x-circle"></i> Cancel Appointment
+            </a>
+        </div>
     </div>
 </div>
-
-
-<style>
-    /* Card styling */
-    .card {
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-    }
-
-    .card-header {
-        background-color: #007bff;
-        color: white;
-        font-weight: bold;
-        font-size: 1.2rem;
-        text-align: center;
-        border-radius: 8px 8px 0 0;
-    }
-
-    .card-body {
-        padding: 30px;
-    }
-
-    /* Form element styling */
-    .form-group label {
-        font-size: 1rem;
-        color: #495057;
-    }
-
-    .form-control {
-        border-radius: 5px;
-        border: 1px solid #ced4da;
-        font-size: 1rem;
-        padding: 10px;
-        margin-bottom: 15px;
-        transition: border 0.3s ease-in-out;
-    }
-
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    }
-
-    /* Button styling */
-    .btn {
-        background-color: #28a745;
-        color: white;
-        font-size: 1rem;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        width: 100%;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-        background-color: #218838;
-    }
-
-    @* /* Responsive design for smaller screens */
-    @media
-    (max-width: 768px) {
-        .container {
-            margin-top: 20px;
-        }
-
-        .card-header {
-            font-size: 1.1rem;
-        }
-    } *@
-</style>
