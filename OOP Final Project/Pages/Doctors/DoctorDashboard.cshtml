@@ -6,30 +6,31 @@
 
 <head>
     <!-- Link to Bootstrap 5 for modern UI -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    @* <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> *@
 </head>
+
 <div class="container-fluid mt-5">
     <div class="row">
         <!-- Sidebar Section -->
         <div class="col-md-3 col-lg-2 p-3  text-dark">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-dark ">
-                    <i></i> Dashboard
+                <a href="@Url.Page("/Doctors/DoctorDashboard")" class="list-group-item list-group-item-secondary ">
+                    Dashboard
                 </a>
-                <a href="#" class="list-group-item list-group-item-action ">
-                    <i></i> Patients
-                </a>
-                <a href="@Url.Page("/Appointments/DoctorAppointment")" class="list-group-item list-group-item-action ">
+                <a href="@Url.Page("/Appointments/DoctorAppointment")" class="list-group-item list-group-item-action">
                     Appointments
                 </a>
-                <a href="#" class="list-group-item list-group-item-action ">
-                    <i></i> Doctors
+                <a href="@Url.Page("/Doctors/PatientManagement")" class="list-group-item list-group-item-action ">
+                    Patients
                 </a>
                 <a href="#" class="list-group-item list-group-item-action ">
-                    <i></i> Reports
+                    Doctors
                 </a>
                 <a href="#" class="list-group-item list-group-item-action ">
-                    <i></i> Settings
+                    Reports
+                </a>
+                <a href="#" class="list-group-item list-group-item-action ">
+                    Settings
                 </a>
             </div>
         </div>
