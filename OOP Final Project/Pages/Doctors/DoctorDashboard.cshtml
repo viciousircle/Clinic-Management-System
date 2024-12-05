@@ -1,0 +1,377 @@
+﻿@page
+@model OOP_Final_Project.Pages.Doctors.DoctorDashboardModel
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+}
+
+<head>
+    <!-- Link to Bootstrap 5 for modern UI -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- Sidebar Section -->
+        <div class="col-md-3 col-lg-2 p-3  text-dark">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-dark ">
+                    <i></i> Dashboard
+                </a>
+                <a href="#" class="list-group-item list-group-item-action ">
+                    <i></i> Patients
+                </a>
+                <a href="@Url.Page("/Appointments/DoctorAppointment")" class="list-group-item list-group-item-action ">
+                    Appointments
+                </a>
+                <a href="#" class="list-group-item list-group-item-action ">
+                    <i></i> Doctors
+                </a>
+                <a href="#" class="list-group-item list-group-item-action ">
+                    <i></i> Reports
+                </a>
+                <a href="#" class="list-group-item list-group-item-action ">
+                    <i></i> Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="col-md-9 col-lg-10">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold">Doctor Dashboard</h1>
+                <p class="text-muted">Have a nice day, our lovely doctor 🥰</p>
+            </div>
+
+            <!-- Quick Stats Section -->
+            <div class="container mt-4">
+                <div class="row justify-content-center">
+                    <!-- Total Patients in Month -->
+                    <div class="col-md-4">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-users me-2"></i> Total Patients in Month
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="fw-bold text-primary">12</h2>
+                                <p class="text-muted mb-0">This month</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Appointments Today -->
+                    <div class="col-md-4">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-calendar-day me-2"></i> Upcoming Appointments Today
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="fw-bold text-warning">30</h2>
+                                <p class="text-muted mb-0">Today</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Appointments Today -->
+                    <div class="col-md-4">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-check-circle me-2"></i> Completed Appointments Today
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="fw-bold text-success">2</h2>
+                                <p class="text-muted mb-0">Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="container mt-4">
+                <div class="row g-4 justify-content-between">
+                    <!-- Monthly Patients Chart (Line Chart) -->
+                    <div class="col-md-6 col-lg-7">
+                        <div class="card shadow">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-chart-line me-2"></i> Monthly Patients
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="monthlyPatientsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Days Chart (Bar Chart) -->
+                    <div class="col-md-6 col-lg-5">
+                        <div class="card shadow">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-calendar-check me-2"></i> Number of Full Days
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="fullDaysChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Appointments Stats Section -->
+            <div class="container mt-4">
+                <div class="row g-4 justify-content-center">
+                    <!-- Appointments Statistics (Pie Chart) -->
+                    <div class="col-md-6 col-lg-7">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-chart-pie me-2"></i> Appointments Statistics (Pie Chart)
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="appointmentsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointments Statistics (Bar Chart) -->
+                    <div class="col-md-6 col-lg-5">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-chart-bar me-2"></i> Appointments Statistics (Bar Chart)
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="appointmentsBarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Pie Chart for Appointments Statistics (Outline Style)
+        var ctx = document.getElementById('appointmentsChart').getContext('2d');
+        var appointmentsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Completed', 'Pending', 'Cancelled'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [12, 5, 3],  // Example data
+                    backgroundColor: ['rgba(108, 117, 125, 0.2)', 'rgba(23, 162, 184, 0.2)', 'rgba(255, 193, 7, 0.2)'],  // Transparent fills
+                    borderColor: ['#6c757d', '#17a2b8', '#ffc107'],  // Darker borders for outline effect
+                    borderWidth: 2,  // Thicker border for a more outlined look
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' appointments';  // Improved tooltip formatting
+                            }
+                        }
+                    }
+                },
+                elements: {
+                    arc: {
+                        borderWidth: 10
+                    }
+                }
+            }
+        });
+
+        // Bar Chart for Appointments Statistics (Outline Style)
+        var ctxBar = document.getElementById('appointmentsBarChart').getContext('2d');
+        var appointmentsBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Completed', 'Pending', 'Cancelled'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [12, 5, 3],  // Example data
+                    backgroundColor: ['rgba(108, 117, 125, 0.2)', 'rgba(23, 162, 184, 0.2)', 'rgba(255, 193, 7, 0.2)'],  // Transparent fills
+                    borderColor: ['#6c757d', '#17a2b8', '#ffc107'],  // Darker borders for outline effect
+                    borderWidth: 2,  // Thicker border for a more outlined look
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' appointments';  // Improved tooltip formatting
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Monthly Patients Chart (Line Chart)
+        var ctxMonthly = document.getElementById('monthlyPatientsChart').getContext('2d');
+        var monthlyPatientsChart = new Chart(ctxMonthly, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],  // Tháng
+                datasets: [{
+                    label: 'Monthly Patients',
+                    data: [10, 15, 13, 25, 18, 20],  // Số bệnh nhân trong các tháng
+                    fill: false,
+                    borderColor: '#007bff',
+                    tension: 0.1,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' patients';  // Tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+
+    <script>
+        // Full Days Chart (Bar Chart)
+        var ctxFullDays = document.getElementById('fullDaysChart').getContext('2d');
+        var fullDaysChart = new Chart(ctxFullDays, {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],  // Các ngày trong tuần
+                datasets: [{
+                    label: 'Full Days',
+                    data: [5, 6, 4, 7, 6, 3, 5],  // Số ngày đi đủ trong tuần
+                    backgroundColor: '#28a745',
+                    borderColor: '#218838',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' full days';  // Tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+}

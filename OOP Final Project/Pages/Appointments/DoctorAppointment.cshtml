@@ -1,0 +1,48 @@
+﻿@page
+@model OOP_Final_Project.Pages.Appointments.DoctorAppointmentModel
+@{
+}
+
+<!-- Upcoming Appointments Section -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header d-flex align-items-center bg-dark text-white">
+        <i class="fas fa-calendar-check me-2"></i> Upcoming Appointments
+    </div>
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Appointment Date</th>
+                    <th>Appointment Time</th>
+                    <th>Reason for Visit</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr>
+                        <td>@appointment.PatientName</td>
+                        <td>@appointment.AppointmentDate.ToString("yyyy-MM-dd")</td>
+                        <td>@appointment.AppointmentTime</td>
+                        <td>@appointment.Reason</td>
+                        <td>
+                            @if (appointment.Status == "Completed")
+                            {
+                                <span class="badge bg-success">Completed</span>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="MarkCompleted" asp-route-id="@appointment.Id">
+                                    <button type="submit" class="btn btn-outline-success btn-sm">Mark as
+                                        Completed</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
