@@ -1,127 +1,84 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Clinic Management Dashboard";
+    ViewData["Title"] = "Home Patient";
 }
 
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="~/css/index.css">
+
 </head>
 
 <div class="container mt-5">
     <!-- Dashboard Header -->
     <div class="text-center mb-5">
-        <h1 class="display-4 text-white">Clinic Management Dashboard</h1>
-        <p class="text-light">Manage your clinic efficiently. View key statistics, recent activities, and manage
-            appointments with ease.</p>
-        <!-- Login Button for Employees -->
-        <div>
-            <a href="@Url.Page("Login")" class="btn bg-dark text-light btn-lg">Đăng nhập</a>
-        </div>
+        <h1 class="display-4">VICIOUSIRCLE CLINIC</h1>
+        <h4>Welcome to the Viciousircle Clinic System</h4>
     </div>
 
-    <!-- Navigation Bar -->
+
+    <!-- Main Content -->
     <div class="row">
-        <div class="col-md-3">
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action text-white bg-dark">Dashboard</a>
-                <a href="@Url.Page("Patients")" class="list-group-item list-group-item-action">Patients</a>
-                <a href="@Url.Page("Appointments")" class="list-group-item list-group-item-action">Appointments</a>
-                <a href="@Url.Page("Doctors")" class="list-group-item list-group-item-action">Doctors</a>
-                <a href="@Url.Page("Reports")" class="list-group-item list-group-item-action">Reports</a>
-                <a href="@Url.Page("Settings")" class="list-group-item list-group-item-action">Settings</a>
+        <!-- Overview Cards -->
+        <div class="col-md-12">
+            <div class="row">
+                <!-- Upcoming Appointments -->
+                <div class="col-sm-6">
+                    <div class="card text-white bg-dark shadow-lg mb-4">
+                        <div class="card-header d-flex align-items-center ">
+                            <i class="bi bi-calendar-check mr-2"></i> Upcoming Appointments
+                        </div>
+                        <div class="border-top border-secondary"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">1 Appointment</h5>
+                            <p class="card-text">Please arrange time to come on time for your appointment.</p>
+
+                            <a href="@Url.Page("Appointments/InfoAppointment")" class="btn btn-danger">See Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical History -->
+                <div class="col-sm-6">
+                    <div class="card bg-dark text-white shadow-lg mb-4">
+                        <div class="card-header d-flex align-items-center">
+                            <i class="bi bi-file-earmark-medical mr-2"></i> Medical History
+                        </div>
+                        <div class="border-top border-secondary"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">Latest Visit: 15 Nov 2024</h5>
+                            <p class="card-text">Review your past diagnoses and treatment records.</p>
+                            <a href="@Url.Page("Patients/MedicalHistory")" class="btn btn-warning text-dark">View
+                                History</a>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-md-8">
-            <div class="row">
-                <!-- Total Patients Overview -->
-                <div class="col-sm-4">
-                    <div class="card bg-dark text-white mb-4">
-                        <div class="card-header bg-dark">Total Patients</div>
-                        <div class="card-body">
-                            <h5 class="card-title">120</h5>
-                            <p class="card-text">View and manage all patient records.</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Upcoming Appointments Overview -->
-                <div class="col-sm-8">
-                    <div class="card bg-dark text-white mb-4">
-                        <div class="card-header bg-dark">Upcoming Appointments</div>
-                        <div class="card-body">
-                            <h5 class="card-title">5 Appointments</h5>
-                            <p class="card-text">See scheduled appointments and manage them.</p>
-                            <!-- Make an Appointment Button -->
-                            <a href="@Url.Page("Appointments/MakeAnAppointment")" class="btn btn-warning btn-block">Make
-                                an Appointment</a>
-                        </div>
-                    </div>
-                </div>
+        <!-- Patient Support Section -->
 
-                <!-- Total Doctors Overview -->
-                <div class="col-sm-8">
-                    <div class="card bg-dark text-white mb-4">
-                        <div class="card-header bg-dark ">Total Doctors</div>
-                        <div class="card-body">
-                            <h5 class="card-title">8 Doctors</h5>
-                            <p class="card-text">View and manage doctor profiles and schedules.</p>
-                        </div>
-                    </div>
+        <div class="col-md-6">
+            <div class="card bg-light  text-dark shadow-lg mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-headset"></i> Want a new appointment?
                 </div>
-            </div>
-
-            <!-- Recent Activity Section -->
-            <div class="card bg-dark text-white mb-4">
-                <div class="card-header bg-dark">Recent Activities</div>
                 <div class="card-body">
-                    <ul>
-                        <li>New patient added: John Doe</li>
-                        <li>Appointment scheduled: Dr. Smith with Jane Doe</li>
-                        <li>Report generated: Patient Analysis Report</li>
-                    </ul>
+                    <p>Book a new appointment with your doctor.</p>
+                    <a href="@Url.Page("Support")" class="btn btn-success">Book</a>
                 </div>
             </div>
+        </div>
 
-            <!-- Tasks Section -->
-            <div class="row mb-4">
-                <div class="col-sm-6">
-                    <div class="card bg-dark text-white">
-                        <div class="card-header bg-dark">Tasks</div>
-                        <div class="card-body">
-                            <ul>
-                                <li>Follow up with patient John Doe</li>
-                                <li>Review the lab reports for Jane Doe</li>
-                                <li>Schedule next vaccination session</li>
-                            </ul>
-                        </div>
-                    </div>
+        <div class="col-md-6">
+            <div class="card shadow-lg mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-headset"></i> Need Help?
                 </div>
-
-                <!-- Notifications Section -->
-                <div class="col-sm-6">
-                    <div class="card bg-dark text-white">
-                        <div class="card-header bg-dark">Notifications</div>
-                        <div class="card-body">
-                            <ul>
-                                <li><strong>New Message</strong> from Dr. Smith</li>
-                                <li><strong>Reminder:</strong> Patient appointment tomorrow at 10:00 AM</li>
-                                <li><strong>Alert:</strong> System maintenance on Saturday</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Appointment Statistics Chart (Placeholder) -->
-            <div class="card bg-dark text-white mb-4">
-                <div class="card-header bg-dark">Appointment Statistics</div>
                 <div class="card-body">
-                    <canvas id="appointmentChart" width="400" height="200"></canvas>
+                    <p>Contact our support team for assistance with your records, appointments</p>
+                    <a href="@Url.Page("Support")" class="btn btn-dark">Contact Support</a>
                 </div>
             </div>
         </div>
@@ -129,30 +86,9 @@
 </div>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Future Placeholder for Chart.js -->
     <script>
-        // Placeholder for future chart integration
-        var ctx = document.getElementById('appointmentChart').getContext('2d');
-        var appointmentChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-                datasets: [{
-                    label: 'Appointments',
-                    data: [20, 30, 25, 40, 35],
-                    backgroundColor: 'rgba(0, 204, 153, 0.2)', // Subtle teal background
-                    borderColor: 'rgba(0, 204, 153, 1)', // ChatGPT-like teal border color
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+        // For dynamic content later
     </script>
 }
 

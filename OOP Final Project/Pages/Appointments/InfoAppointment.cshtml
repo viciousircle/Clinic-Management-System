@@ -1,0 +1,130 @@
+﻿@page
+@model OOP_Final_Project.Pages.Appointments.InfoAppointmentModel
+@{
+}
+
+<div class="container">
+    <h1 class="display-4 text-center mb-4">Create Appointment</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Appointment Details</div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="PatientName">Patient Name</label>
+                            <input type="text" class="form-control" id="PatientName" name="PatientName" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Doctor">Select Doctor</label>
+                            <select class="form-control" id="Doctor" name="Doctor" required>
+                                <option value="">-- Choose a Doctor --</option>
+                                <option value="Dr. Smith">Dr. Smith</option>
+                                <option value="Dr. Johnson">Dr. Johnson</option>
+                                <option value="Dr. Lee">Dr. Lee</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="AppointmentDate">Appointment Date</label>
+                            <input type="date" class="form-control" id="AppointmentDate" name="AppointmentDate"
+                                required />
+                        </div>
+@* 
+                        <div class="form-group">
+                            <label for="AppointmentTime">Available Appointment Time</label>
+                            <select class="form-control" id="AppointmentTime" name="AppointmentTime" required>
+                                <option value="">-- Choose a Time --</option>
+                                @foreach (var slot in Model.AvailableTimeSlots)
+                                {
+                                    <option value="@slot">@slot</option>
+                                }
+                            </select>
+                        </div> *@
+
+                        <div class="form-group">
+                            <label for="Reason">Reason for Visit</label>
+                            <textarea class="form-control" id="Reason" name="Reason" rows="3" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-block">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* Card styling */
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    /* Form element styling */
+    .form-group label {
+        font-size: 1rem;
+        color: #495057;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        font-size: 1rem;
+        padding: 10px;
+        margin-bottom: 15px;
+        transition: border 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Button styling */
+    .btn {
+        background-color: #28a745;
+        color: white;
+        font-size: 1rem;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #218838;
+    }
+
+    @* /* Responsive design for smaller screens */
+    @media
+    (max-width: 768px) {
+        .container {
+            margin-top: 20px;
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+        }
+    } *@
+</style>

@@ -16,7 +16,6 @@
     <Folder Include="Pages/Departments/" />
     <Folder Include="Pages/Documents/" />
     <Folder Include="Pages/Employees/" />
-    <Folder Include="Pages/Patients/" />
     <Folder Include="ViewModels/" />
     <Folder Include="ViewModels/Account/" />
     <Folder Include="ViewModels/Appointments/" />
