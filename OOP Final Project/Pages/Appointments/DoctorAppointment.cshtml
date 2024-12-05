@@ -82,18 +82,8 @@
                                         <td>@appointment.AppointmentTime</td>
                                         <td>@appointment.Reason</td>
                                         <td>
-                                            @if (appointment.Status == "Completed")
-                                            {
-                                                <span class="badge bg-success">Completed</span>
-                                            }
-                                            else
-                                            {
-                                                <form method="post" asp-page-handler="MarkCompleted"
-                                                    asp-route-id="@appointment.Id">
-                                                    <button type="submit" class="btn btn-outline-success btn-sm">Health Check
-                                                        Form</button>
-                                                </form>
-                                            }
+                                            <a href="@Url.Page("/Documents/HealthCheckForm")"
+                                                class=" btn-outline-dark btn">Health check now</a>
                                         </td>
                                     </tr>
                                 }

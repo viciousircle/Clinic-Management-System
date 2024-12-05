@@ -1,0 +1,140 @@
+﻿@page
+@model OOP_Final_Project.Pages.Documents.HealthCheckFormModel
+@{
+    ViewData["Title"] = "Check Health Form";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- Sidebar Section -->
+        <div class="col-md-3 col-lg-2 p-3 text-dark" id="scrollspy"
+            style="position: sticky; top: 200px; height: 100vh; overflow-y: auto;">
+            <nav id="sidebar" class="nav flex-column list-group">
+                <a href="#basicInfo" class="list-group-item list-group-item-action">Basic Information</a>
+                <a href="#symptoms" class="list-group-item list-group-item-action">Symptoms</a>
+                <a href="#diagnose" class="list-group-item list-group-item-action">Diagnose</a>
+                <a href="#prescribe" class="list-group-item list-group-item-action">Prescribe Medicine</a>
+                <a href="#confirm" class="list-group-item list-group-item-action">Confirm</a>
+            </nav>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="col-md-9 col-lg-10">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold">Check Health Form</h1>
+                <p class="text-muted">Fill out the form to evaluate patient health.</p>
+            </div>
+
+            <!-- Form Sections -->
+            <div class="container mt-4">
+                <!-- Basic Information Section -->
+                <section id="basicInfo" class="mb-5">
+                    <h2 class="fw-bold">Basic Information</h2>
+                    <div class="mb-3">
+                        <label for="patientName" class="form-label">Patient Name</label>
+                        <input type="text" class="form-control" id="patientName" name="PatientName" required>
+                        <div class="invalid-feedback">Please enter the patient's name.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" class="form-control" id="age" name="Age" required>
+                        <div class="invalid-feedback">Please enter the patient's age.</div>
+                    </div>
+                </section>
+
+                <!-- Symptoms Section -->
+                <section id="symptoms" class="mb-5">
+                    <h2 class="fw-bold">Symptoms</h2>
+                    <div class="mb-3">
+                        <label for="symptoms" class="form-label">Symptoms</label>
+                        <textarea class="form-control" id="symptoms" name="Symptoms" rows="4" required></textarea>
+                        <div class="invalid-feedback">Please describe the symptoms.</div>
+                    </div>
+                </section>
+
+                <!-- Diagnose Section -->
+                <section id="diagnose" class="mb-5">
+                    <h2 class="fw-bold">Diagnose</h2>
+                    <p>Provide your diagnosis for the patient based on the symptoms.</p>
+                    <textarea class="form-control" id="diagnosis" name="Diagnosis" rows="4" required></textarea>
+                </section>
+
+                <!-- Prescribe Medicine Section -->
+                <section id="prescribe" class="mb-5">
+                    <h2 class="fw-bold">Prescribe Medicine</h2>
+                    <div id="prescriptionList">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="medicine" class="form-label">Medicine</label>
+                                <input type="text" class="form-control" id="medicine" name="Medicine"
+                                    placeholder="Start typing...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" name="Quantity">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="type" class="form-label">Type</label>
+                                <select class="form-control" id="type" name="Type">
+                                    <option value="Tablet">Tablet</option>
+                                    <option value="Syrup">Syrup</option>
+                                    <option value="Injection">Injection</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" id="addPrescription">+ Add
+                        Prescription</button>
+                </section>
+
+                <!-- Confirm Section -->
+                <section id="confirm" class="mb-5">
+                    <h2 class="fw-bold">Confirm</h2>
+                    <p>Review all entered information before confirming.</p>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="confirmCheckbox" required>
+                        <label class="form-check-label" for="confirmCheckbox">
+                            I confirm that I have reviewed the information provided.
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100" id="submitButton" disabled>Submit</button>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Enable the Submit button only when the checkbox is checked
+        document.getElementById('confirmCheckbox').addEventListener('change', function () {
+            document.getElementById('submitButton').disabled = !this.checked;
+        });
+
+        // Add new prescription dynamically
+        document.getElementById('addPrescription').addEventListener('click', function () {
+            const prescriptionList = document.getElementById('prescriptionList');
+            const newPrescription = document.createElement('div');
+            newPrescription.className = 'row mb-3';
+            newPrescription.innerHTML = `
+                    <div class="col-md-6">
+                        <label class="form-label">Medicine</label>
+                        <input type="text" class="form-control" name="Medicine" placeholder="Start typing...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-control" name="Quantity">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Type</label>
+                        <select class="form-control" name="Type">
+                            <option value="Tablet">Tablet</option>
+                            <option value="Syrup">Syrup</option>
+                            <option value="Injection">Injection</option>
+                        </select>
+                    </div>
+                `;
+            prescriptionList.appendChild(newPrescription);
+        });
+    </script>
+}
