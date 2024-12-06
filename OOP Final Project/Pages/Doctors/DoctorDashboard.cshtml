@@ -5,6 +5,10 @@
 }
 
 <head>
+    <!-- Link to external CSS libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.css" />
+
+    <!-- Uncomment if using FullCalendar -->
 </head>
 
 <div class="container-fluid mt-5">
@@ -39,6 +43,31 @@
                 <h1 class="fw-bold">Doctor Dashboard</h1>
                 <p class="text-muted">Have a nice day, our lovely doctor 🥰</p>
             </div>
+
+            <!-- Flip Clock Section -->
+            <div class="container mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-body text-center">
+                                <div id="flipClock" class="d-flex justify-content-center"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Calendar Section -->
+                    <div class="col-md-5">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-calendar-alt me-2"></i> Calendar
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+
+
+
 
             <!-- Quick Stats Section -->
             <div class="container mt-4">
@@ -159,218 +188,254 @@
     </div>
 </div>
 
+<style>
+    #flipClock {
+        transform: scale(0.7);
+        /* Scale down the clock */
+        margin: 0 auto;
+        /* Center the clock */
+    }
+</style>
+
+
+
 @section Scripts {
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Pie Chart for Appointments Statistics (Outline Style)
-            var ctx = document.getElementById('appointmentsChart').getContext('2d');
-            var appointmentsChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Completed', 'Pending', 'Cancelled'],
-                    datasets: [{
-                        label: 'Appointments',
-                        data: [12, 5, 3],  // Example data
-                        backgroundColor: ['rgba(108, 117, 125, 0.2)', 'rgba(23, 162, 184, 0.2)', 'rgba(255, 193, 7, 0.2)'],  // Transparent fills
-                        borderColor: ['#6c757d', '#17a2b8', '#ffc107'],  // Darker borders for outline effect
-                        borderWidth: 2,  // Thicker border for a more outlined look
-                        hoverOffset: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return tooltipItem.label + ": " + tooltipItem.raw + ' appointments';  // Improved tooltip formatting
-                                }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Pie Chart for Appointments Statistics (Outline Style)
+        var ctx = document.getElementById('appointmentsChart').getContext('2d');
+        var appointmentsChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Completed', 'Pending', 'Cancelled'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [12, 5, 3],  // Example data
+                    backgroundColor: ['rgba(108, 117, 125, 0.2)', 'rgba(23, 162, 184, 0.2)', 'rgba(255, 193, 7, 0.2)'],  // Transparent fills
+                    borderColor: ['#6c757d', '#17a2b8', '#ffc107'],  // Darker borders for outline effect
+                    borderWidth: 2,  // Thicker border for a more outlined look
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
                             }
                         }
                     },
-                    elements: {
-                        arc: {
-                            borderWidth: 10
-                        }
-                    }
-                }
-            });
-
-            // Bar Chart for Appointments Statistics (Outline Style)
-            var ctxBar = document.getElementById('appointmentsBarChart').getContext('2d');
-            var appointmentsBarChart = new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: ['Completed', 'Pending', 'Cancelled'],
-                    datasets: [{
-                        label: 'Appointments',
-                        data: [12, 5, 3],  // Example data
-                        backgroundColor: ['rgba(108, 117, 125, 0.2)', 'rgba(23, 162, 184, 0.2)', 'rgba(255, 193, 7, 0.2)'],  // Transparent fills
-                        borderColor: ['#6c757d', '#17a2b8', '#ffc107'],  // Darker borders for outline effect
-                        borderWidth: 2,  // Thicker border for a more outlined look
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return tooltipItem.label + ": " + tooltipItem.raw + ' appointments';  // Improved tooltip formatting
-                                }
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' appointments';  // Improved tooltip formatting
                             }
                         }
                     }
-                }
-            });
-        </script>
-
-        <script>
-            // Monthly Patients Chart (Line Chart)
-            var ctxMonthly = document.getElementById('monthlyPatientsChart').getContext('2d');
-            var monthlyPatientsChart = new Chart(ctxMonthly, {
-                type: 'line',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],  // Tháng
-                    datasets: [{
-                        label: 'Monthly Patients',
-                        data: [10, 15, 13, 25, 18, 20],  // Số bệnh nhân trong các tháng
-                        fill: false,
-                        borderColor: '#007bff',
-                        tension: 0.1,
-                        borderWidth: 2
-                    }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
+                elements: {
+                    arc: {
+                        borderWidth: 10
+                    }
+                }
+            }
+        });
+
+        // Bar Chart for Appointments Statistics (Outline Style)
+        var ctxBar = document.getElementById('appointmentsBarChart').getContext('2d');
+        var appointmentsBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Completed', 'Pending', 'Cancelled'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [12, 5, 3],  // Example data
+                    backgroundColor: ['rgba(108, 117, 125, 0.2)', 'rgba(23, 162, 184, 0.2)', 'rgba(255, 193, 7, 0.2)'],  // Transparent fills
+                    borderColor: ['#6c757d', '#17a2b8', '#ffc107'],  // Darker borders for outline effect
+                    borderWidth: 2,  // Thicker border for a more outlined look
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14
                             }
                         }
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14
-                                }
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14
                             }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return tooltipItem.label + ": " + tooltipItem.raw + ' patients';  // Tooltip
-                                }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' appointments';  // Improved tooltip formatting
                             }
                         }
                     }
                 }
-            });
+            }
+        });
+    </script>
 
-        </script>
-
-        <script>
-            // Full Days Chart (Bar Chart)
-            var ctxFullDays = document.getElementById('fullDaysChart').getContext('2d');
-            var fullDaysChart = new Chart(ctxFullDays, {
-                type: 'bar',
-                data: {
-                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],  // Các ngày trong tuần
-                    datasets: [{
-                        label: 'Full Days',
-                        data: [5, 6, 4, 7, 6, 3, 5],  // Số ngày đi đủ trong tuần
-                        backgroundColor: '#28a745',
-                        borderColor: '#218838',
-                        borderWidth: 2,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
+    <script>
+        // Monthly Patients Chart (Line Chart)
+        var ctxMonthly = document.getElementById('monthlyPatientsChart').getContext('2d');
+        var monthlyPatientsChart = new Chart(ctxMonthly, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],  // Tháng
+                datasets: [{
+                    label: 'Monthly Patients',
+                    data: [10, 15, 13, 25, 18, 20],  // Số bệnh nhân trong các tháng
+                    fill: false,
+                    borderColor: '#007bff',
+                    tension: 0.1,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 14
                             }
                         }
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                font: {
-                                    size: 14
-                                }
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
                             }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (tooltipItem) {
-                                    return tooltipItem.label + ": " + tooltipItem.raw + ' full days';  // Tooltip
-                                }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' patients';  // Tooltip
                             }
                         }
                     }
                 }
+            }
+        });
+
+    </script>
+
+    <script>
+        // Full Days Chart (Bar Chart)
+        var ctxFullDays = document.getElementById('fullDaysChart').getContext('2d');
+        var fullDaysChart = new Chart(ctxFullDays, {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],  // Các ngày trong tuần
+                datasets: [{
+                    label: 'Full Days',
+                    data: [5, 6, 4, 7, 6, 3, 5],  // Số ngày đi đủ trong tuần
+                    backgroundColor: '#28a745',
+                    borderColor: '#218838',
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return tooltipItem.label + ": " + tooltipItem.raw + ' full days';  // Tooltip
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.min.js"></script>
+    <script>
+        // FlipClock Initialization
+        document.addEventListener('DOMContentLoaded', function () {
+            var clock = $('#flipClock').FlipClock({
+                clockFace: 'TwentyFourHourClock',  // Only show hours and minutes
+                autoStart: true,
+                showSeconds: false,  // Disable seconds display
+                countdown: false
             });
 
-        </script>
+            // Optionally, set the time to sync with the current time
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var totalMinutes = (hours * 60) + minutes;
+
+            clock.setTime(totalMinutes * 60); // Convert to seconds since FlipClock works in seconds
+        });
+    </script>
+
+
+
+
 }
