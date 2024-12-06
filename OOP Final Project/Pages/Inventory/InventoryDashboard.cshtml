@@ -1,0 +1,354 @@
+﻿@page
+@model OOP_Final_Project.Pages.Inventory.InventoryDashboardModel
+@{
+    ViewData["Title"] = "Inventory Dashboard";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- Sidebar Section -->
+        <div class="col-md-3 col-lg-2 p-3 text-dark">
+            <div class="list-group">
+                <a href="@Url.Page("/Inventory/InventoryDashBoard")" class="list-group-item list-group-item-secondary">
+                    Dashboard
+                </a>
+                <a href="@Url.Page("/Inventory/InventoryManagement")" class="list-group-item list-group-item-action">
+                    Inventory
+                </a>
+                <a href="@Url.Page("#")" class="list-group-item list-group-item-action">
+                    Prescribe
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Doctors
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Reports
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="col-md-9 col-lg-10">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold">Pharmacist Dashboard</h1>
+                <p class="text-muted">Have a nice day ⭐️</p>
+            </div>
+
+            <!-- Quick Stats Section -->
+            <div class="container mt-4">
+                <div class="row justify-content-center">
+                    <!-- Total Medicines -->
+                    <div class="col-md-4">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-pills me-2"></i> Total Medicines
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="fw-bold text-primary">skdmsdm</h2>
+                                <p class="text-muted mb-0">Available in inventory</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expiring Soon -->
+                    <div class="col-md-4">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-exclamation-circle me-2"></i> Expiring Soon
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="fw-bold text-warning">dksod</h2>
+                                <p class="text-muted mb-0">Medicines need attention</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock -->
+                    <div class="col-md-4">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-box-open me-2"></i> Low Stock
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="fw-bold text-danger">daskdmskd</h2>
+                                <p class="text-muted mb-0">Critical stock levels</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales and Dispensed Chart Section -->
+                <div class="row mt-5">
+                    <!-- Sales Chart -->
+                    <div class="col-md-6">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-chart-line me-2"></i> Sales Chart
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="salesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medicines Dispensed Chart -->
+                    <div class="col-md-6">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-chart-bar me-2"></i> Medicines Dispensed Chart
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="medicinesDispensedChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Stock Levels Chart Section -->
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-chart-bar me-2"></i> Inventory Stock Levels by Medicine Type
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="inventoryStockChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Added Medicines Line Chart Section -->
+                    <div class="col-md-6">
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-plus-circle me-2"></i> Added Medicines Over Time
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="addedMedicinesLineChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Sample sales data
+            const salesData = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Monthly Sales',
+                    data: [120, 150, 180, 200, 170, 220],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.4
+                }]
+            };
+
+            const salesConfig = {
+                type: 'line',
+                data: salesData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Sales Over the Last 6 Months'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Months'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Sales (Units)'
+                            }
+                        }
+                    }
+                }
+            };
+
+            const salesChart = new Chart(
+                document.getElementById('salesChart'),
+                salesConfig
+            );
+        </script>
+
+        <script>
+            const medicinesDispensedData = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Medicines Dispensed',
+                    data: [200, 180, 250, 300, 220, 260],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const medicinesDispensedConfig = {
+                type: 'bar',
+                data: medicinesDispensedData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Monthly Medicines Dispensed'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Months'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Medicines Dispensed'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            const medicinesDispensedChart = new Chart(
+                document.getElementById('medicinesDispensedChart'),
+                medicinesDispensedConfig
+            );
+        </script>
+
+        <script>
+            const inventoryStockData = {
+                labels: ['Tablets', 'Syrups', 'Injections', 'Ointments', 'Supplements'],
+                datasets: [{
+                    label: 'Stock Levels',
+                    data: [500, 300, 150, 200, 100],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const inventoryStockConfig = {
+                type: 'bar',
+                data: inventoryStockData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Current Inventory Stock Levels by Type'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Medicine Type'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Stock Levels (Units)'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            const inventoryStockChart = new Chart(
+                document.getElementById('inventoryStockChart'),
+                inventoryStockConfig
+            );
+        </script>
+
+        <script>
+            // Data for Added Medicines Line Chart
+            const addedMedicinesDataLine = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'], // Replace with dynamic data if needed
+                datasets: [{
+                    label: 'Medicines Added',
+                    data: [20, 35, 50, 45, 60, 70], // Example data
+                    fill: false,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    tension: 0.1
+                }]
+            };
+
+            // Config for Added Medicines Line Chart
+            const addedMedicinesConfigLine = {
+                type: 'line', // Line chart
+                data: addedMedicinesDataLine,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Month' } },
+                        y: { title: { display: true, text: 'Medicines Added' }, beginAtZero: true }
+                    }
+                }
+            };
+
+            // Render the Added Medicines Line Chart
+            const addedMedicinesLineChartCtx = document.getElementById('addedMedicinesLineChart').getContext('2d');
+            const addedMedicinesLineChart = new Chart(addedMedicinesLineChartCtx, addedMedicinesConfigLine);
+        </script>
+
+
+
+    }
+    }
