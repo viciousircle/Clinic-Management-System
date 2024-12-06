@@ -1,0 +1,246 @@
+﻿@page
+@model OOP_Final_Project.Pages.Inventory.PrescribeManagementModel
+@{
+    ViewData["Title"] = "Prescribe Management";
+}
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- Sidebar Section -->
+        <div class="col-md-3 col-lg-2 p-3 text-dark">
+            <div class="list-group">
+                <a href="@Url.Page("/Inventory/InventoryDashBoard")" class="list-group-item list-group-item-action">
+                    Dashboard
+                </a>
+                <a href="@Url.Page("/Inventory/InventoryManagement")" class="list-group-item list-group-item-action">
+                    Inventory
+                </a>
+                <a href="@Url.Page("/Inventory/PrescribeManagement")" class="list-group-item list-group-item-secondary">
+                    Prescribe
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Doctors
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Reports
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="col-md-9 col-lg-10">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold">Prescribe Management</h1>
+            </div>
+
+            <!-- Search Bar Section (with Search Button) -->
+            <div class="container mb-4 mt-4 d-flex">
+                <input type="text" id="searchInput" class="form-control me-2"
+                    placeholder="Search for prescriptions by ID, Prescribed By, or Date">
+                <button class="btn btn-outline-dark" onclick="searchPrescriptions()">Search</button>
+            </div>
+
+            <!-- Prescriptions Table Section for Today -->
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-prescription me-2"></i> Prescription List Today
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped" id="prescriptionTableToday">
+                                    <thead>
+                                        <tr class="text-lg-center">
+                                            <th scope="col">ID Appointment</th>
+                                            <th scope="col">Prescribed By</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var group in Model.PrescriptionGroups.Where(g =>
+                                        DateTime.Parse(g.Prescriptions.First().Date) == DateTime.Now.Date))
+                                        {
+                                            <tr class="text-lg-center align-middle">
+                                                <td>@group.IDAppointment</td>
+                                                <td>@group.Prescriptions.First().PrescribedBy</td>
+                                                <td>@group.Prescriptions.First().Date</td>
+                                                <td>
+                                                    <button class="btn btn-outline-dark" data-bs-toggle="modal"
+                                                        data-bs-target="#detailsModal"
+                                                        data-idappointment="@group.IDAppointment"
+                                                        data-prescriptions='@Html.Raw(Json.Serialize(group.Prescriptions))'>
+                                                        See Details
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prescriptions Table Section for Past Days (Hidden by default) -->
+            <div class="container mt-4" id="pastPrescriptionsContainer" style="display:none;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow border-0 rounded-3">
+                            <div class="card-header bg-dark text-white text-center">
+                                <i class="fas fa-prescription me-2"></i> Prescription List (Past Days)
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped" id="prescriptionTablePast">
+                                    <thead>
+                                        <tr class="text-lg-center">
+                                            <th scope="col">ID Appointment</th>
+                                            <th scope="col">Prescribed By</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var group in Model.PrescriptionGroups.Where(g =>
+                                        DateTime.Parse(g.Prescriptions.First().Date) < DateTime.Now.Date))
+                                        {
+                                            <tr class="text-lg-center align-middle">
+                                                <td>@group.IDAppointment</td>
+                                                <td>@group.Prescriptions.First().PrescribedBy</td>
+                                                <td>@group.Prescriptions.First().Date</td>
+                                                <td>
+                                                    <button class="btn btn-outline-dark" data-bs-toggle="modal"
+                                                        data-bs-target="#detailsModal"
+                                                        data-idappointment="@group.IDAppointment"
+                                                        data-prescriptions='@Html.Raw(Json.Serialize(group.Prescriptions))'>
+                                                        See Details
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Prescription Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Prescription details will appear here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Complete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JavaScript for the modal to work -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Get the modal elements
+        var detailsModal = document.getElementById('detailsModal');
+        detailsModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Button that triggered the modal
+            var idappointment = button.getAttribute('data-idappointment');
+            var prescriptionsJson = button.getAttribute('data-prescriptions');
+            var prescriptions = JSON.parse(prescriptionsJson); // Parse the prescriptions data
+
+            // Set modal title and body content dynamically
+            var modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = ''; // Clear previous content
+
+            // Create a list of prescriptions and display them in the modal
+            prescriptions.forEach(function (prescription) {
+                var prescriptionDetails = `
+                                                                    <p><strong>Medicine:</strong> ${prescription.Medicine || 'N/A'}</p>
+                                                                    <p><strong>Dosage:</strong> ${prescription.Dosage || 'N/A'}</p>
+                                                                    <p><strong>Quantity:</strong> ${prescription.Quantity || 'N/A'}</p>
+                                                                    <p><strong>Prescribed By:</strong> ${prescription.PrescribedBy || 'N/A'}</p>
+                                                                    <p><strong>Date:</strong> ${prescription.Date || 'N/A'}</p>
+                                                                    <hr>
+                                                                `;
+                modalBody.innerHTML += prescriptionDetails;
+            });
+        });
+
+        // Search function
+        function searchPrescriptions() {
+            var input, filter, todayTable, pastTable, trToday, trPast, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            todayTable = document.getElementById("prescriptionTableToday");
+            pastTable = document.getElementById("prescriptionTablePast");
+            trToday = todayTable.getElementsByTagName("tr");
+            trPast = pastTable.getElementsByTagName("tr");
+
+            // Search Today Table
+            let todayFound = false;
+            for (i = 1; i < trToday.length; i++) {
+                td = trToday[i].getElementsByTagName("td");
+                let found = false;
+                for (let j = 0; j < td.length - 1; j++) { // Exclude the last column (the button)
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                trToday[i].style.display = found ? "" : "none";
+                if (found) todayFound = true;
+            }
+
+            // Search Past Table
+            let pastFound = false;
+            for (i = 1; i < trPast.length; i++) {
+                td = trPast[i].getElementsByTagName("td");
+                let found = false;
+                for (let j = 0; j < td.length - 1; j++) { // Exclude the last column (the button)
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                trPast[i].style.display = found ? "" : "none";
+                if (found) pastFound = true;
+            }
+
+            // Show Past Prescriptions section if any match is found
+            if (pastFound) {
+                document.getElementById("pastPrescriptionsContainer").style.display = "block";
+            } else {
+                document.getElementById("pastPrescriptionsContainer").style.display = "none";
+            }
+
+            // Show only if any prescriptions were found
+            if (!todayFound && !pastFound) {
+                alert("No matching prescriptions found.");
+            }
+        }
+    </script>
+}
