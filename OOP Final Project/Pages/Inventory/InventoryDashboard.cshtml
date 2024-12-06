@@ -147,208 +147,208 @@
         </div>
     </div>
 
-    @section Scripts {
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Sample sales data
-            const salesData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                datasets: [{
-                    label: 'Monthly Sales',
-                    data: [120, 150, 180, 200, 170, 220],
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    tension: 0.4
-                }]
-            };
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Sample sales data
+        const salesData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+                label: 'Monthly Sales',
+                data: [120, 150, 180, 200, 170, 220],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.4
+            }]
+        };
 
-            const salesConfig = {
-                type: 'line',
-                data: salesData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
+        const salesConfig = {
+            type: 'line',
+            data: salesData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sales Over the Last 6 Months'
+                    }
+                },
+                scales: {
+                    x: {
                         title: {
                             display: true,
-                            text: 'Sales Over the Last 6 Months'
+                            text: 'Months'
                         }
                     },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Months'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Sales (Units)'
-                            }
-                        }
-                    }
-                }
-            };
-
-            const salesChart = new Chart(
-                document.getElementById('salesChart'),
-                salesConfig
-            );
-        </script>
-
-        <script>
-            const medicinesDispensedData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                datasets: [{
-                    label: 'Medicines Dispensed',
-                    data: [200, 180, 250, 300, 220, 260],
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            };
-
-            const medicinesDispensedConfig = {
-                type: 'bar',
-                data: medicinesDispensedData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        },
+                    y: {
                         title: {
                             display: true,
-                            text: 'Monthly Medicines Dispensed'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Months'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Medicines Dispensed'
-                            },
-                            beginAtZero: true
+                            text: 'Sales (Units)'
                         }
                     }
                 }
-            };
+            }
+        };
 
-            const medicinesDispensedChart = new Chart(
-                document.getElementById('medicinesDispensedChart'),
-                medicinesDispensedConfig
-            );
-        </script>
+        const salesChart = new Chart(
+            document.getElementById('salesChart'),
+            salesConfig
+        );
+    </script>
 
-        <script>
-            const inventoryStockData = {
-                labels: ['Tablets', 'Syrups', 'Injections', 'Ointments', 'Supplements'],
-                datasets: [{
-                    label: 'Stock Levels',
-                    data: [500, 300, 150, 200, 100],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            };
+    <script>
+        const medicinesDispensedData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+            datasets: [{
+                label: 'Medicines Dispensed',
+                data: [200, 180, 250, 300, 220, 260],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
 
-            const inventoryStockConfig = {
-                type: 'bar',
-                data: inventoryStockData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        },
+        const medicinesDispensedConfig = {
+            type: 'bar',
+            data: medicinesDispensedData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly Medicines Dispensed'
+                    }
+                },
+                scales: {
+                    x: {
                         title: {
                             display: true,
-                            text: 'Current Inventory Stock Levels by Type'
+                            text: 'Months'
                         }
                     },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Medicine Type'
-                            }
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Medicines Dispensed'
                         },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Stock Levels (Units)'
-                            },
-                            beginAtZero: true
-                        }
+                        beginAtZero: true
                     }
                 }
-            };
+            }
+        };
 
-            const inventoryStockChart = new Chart(
-                document.getElementById('inventoryStockChart'),
-                inventoryStockConfig
-            );
-        </script>
+        const medicinesDispensedChart = new Chart(
+            document.getElementById('medicinesDispensedChart'),
+            medicinesDispensedConfig
+        );
+    </script>
 
-        <script>
-            // Data for Added Medicines Line Chart
-            const addedMedicinesDataLine = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'], // Replace with dynamic data if needed
-                datasets: [{
-                    label: 'Medicines Added',
-                    data: [20, 35, 50, 45, 60, 70], // Example data
-                    fill: false,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    tension: 0.1
-                }]
-            };
+    <script>
+        const inventoryStockData = {
+            labels: ['Tablets', 'Syrups', 'Injections', 'Ointments', 'Supplements'],
+            datasets: [{
+                label: 'Stock Levels',
+                data: [500, 300, 150, 200, 100],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
 
-            // Config for Added Medicines Line Chart
-            const addedMedicinesConfigLine = {
-                type: 'line', // Line chart
-                data: addedMedicinesDataLine,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: true },
-                        tooltip: { enabled: true }
+        const inventoryStockConfig = {
+            type: 'bar',
+            data: inventoryStockData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
                     },
-                    scales: {
-                        x: { title: { display: true, text: 'Month' } },
-                        y: { title: { display: true, text: 'Medicines Added' }, beginAtZero: true }
+                    title: {
+                        display: true,
+                        text: 'Current Inventory Stock Levels by Type'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Medicine Type'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Stock Levels (Units)'
+                        },
+                        beginAtZero: true
                     }
                 }
-            };
+            }
+        };
 
-            // Render the Added Medicines Line Chart
-            const addedMedicinesLineChartCtx = document.getElementById('addedMedicinesLineChart').getContext('2d');
-            const addedMedicinesLineChart = new Chart(addedMedicinesLineChartCtx, addedMedicinesConfigLine);
-        </script>
+        const inventoryStockChart = new Chart(
+            document.getElementById('inventoryStockChart'),
+            inventoryStockConfig
+        );
+    </script>
+
+    <script>
+        // Data for Added Medicines Line Chart
+        const addedMedicinesDataLine = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June'], // Replace with dynamic data if needed
+            datasets: [{
+                label: 'Medicines Added',
+                data: [20, 35, 50, 45, 60, 70], // Example data
+                fill: false,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                tension: 0.1
+            }]
+        };
+
+        // Config for Added Medicines Line Chart
+        const addedMedicinesConfigLine = {
+            type: 'line', // Line chart
+            data: addedMedicinesDataLine,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true },
+                    tooltip: { enabled: true }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Month' } },
+                    y: { title: { display: true, text: 'Medicines Added' }, beginAtZero: true }
+                }
+            }
+        };
+
+        // Render the Added Medicines Line Chart
+        const addedMedicinesLineChartCtx = document.getElementById('addedMedicinesLineChart').getContext('2d');
+        const addedMedicinesLineChart = new Chart(addedMedicinesLineChartCtx, addedMedicinesConfigLine);
+    </script>
 
 
 
-    }
-    }
+}
