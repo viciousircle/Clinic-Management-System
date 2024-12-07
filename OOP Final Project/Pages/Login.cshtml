@@ -1,99 +1,31 @@
 ﻿@page
 @model LoginModel
 @{
-    ViewData["Title"] = "Đăng nhập";
+    ViewData["Title"] = "Log In";
 }
 
-<style>
-    /* Toàn bộ trang */
-    body {
-        background-color: #f4f7fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .container {
-        @* margin-top: 100px; *@
-    }
-
-    /* Chỉnh sửa giao diện card */
-    .card {
-        border-radius: 15px;
-        border: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-    }
-
-    .card-header {
-        background-color: #007bff;
-        color: white;
-        text-align: center;
-        font-size: 1.5rem;
-        border-radius: 15px 15px 0 0;
-        padding: 20px;
-    }
-
-    .card-body {
-        padding: 30px;
-    }
-
-    /* Chỉnh sửa các form input */
-    .form-group label {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .form-control {
-        border-radius: 10px;
-        border: 1px solid #ced4da;
-        padding: 15px;
-        font-size: 1rem;
-    }
-
-    /* Hiệu ứng khi người dùng nhập */
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-
-
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-primary:focus {
-        outline: none;
-    }
-
-    /* Giới hạn kích thước card */
-    .col-md-6 {
-        max-width: 400px;
-    }
-
-    .btn-section {
-        text-align: center;
-        margin-top: 20px;
-    }
-</style>
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Đăng nhập</div>
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-center fw-bold fs-4 bg-dark text-white">
+                    Log In
+                </div>
                 <div class="card-body">
                     <form method="post">
-                        <div class="form-group">
-                            <label for="Username">Tên người dùng</label>
-                            <input type="text" class="form-control" id="Username" name="Username" required />
+                        <div class="mb-3">
+                            <label for="Username" class="form-label">ID or Username</label>
+                            <input type="text" class="form-control" id="Username" name="Username"
+                                placeholder="Enter your username" required />
                         </div>
-                        <div class="form-group">
-                            <label for="Password">Mật khẩu</label>
-                            <input type="password" class="form-control" id="Password" name="Password" required />
+                        <div class="mb-3">
+                            <label for="Password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="Password" name="Password"
+                                placeholder="Enter your password" required />
                         </div>
-                        <div class="btn-section">
-                            <button type="submit" class="btn btn-primary">Đăng nhập</button>
-
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-dark">Log In</button>
                         </div>
                     </form>
                 </div>
