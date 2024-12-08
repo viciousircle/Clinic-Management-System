@@ -11,38 +11,59 @@
 </head>
 
 <style>
-    /* Navbar custom styles */
+    /* Modern navbar styling */
     .navbar {
-        background: linear-gradient(90deg, #1e2939, #6610f2);
-        color: #fff;
+        background: linear-gradient(135deg, #1d3557, #457b9d);
+        padding: 1rem 1.5rem;
     }
 
-    /* Dropdown menu alignment */
+    .navbar-brand {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        color: #f1faee !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-family: 'Roboto', sans-serif;
+        color: #f8f9fa !important;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #a8dadc !important;
+    }
+
     .dropdown-menu {
-        top: 100%;
-        /* Align dropdown to be just below the navbar */
-        margin-top: 0;
-        /* Remove extra spacing */
-        border-radius: 0.25rem;
-        transition: all 0.3s ease-in-out;
+        background: #1d3557;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Show dropdown menu on hover */
-    .nav-item.dropdown:hover .dropdown-menu {
-        display: block;
-        opacity: 1;
+    .dropdown-menu .dropdown-item {
+        color: #f8f9fa !important;
+        font-family: 'Roboto', sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Dropdown item hover effect */
-    .dropdown-item:hover {
-        background-color: #6610f2;
-        color: #fff;
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #457b9d !important;
+        color: #f1faee !important;
+    }
+
+    .navbar-toggler {
+        border: none;
+        color: #f8f9fa;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns%3D%22http://www.w3.org/2000/svg%22 viewBox%3D%220 0 30 30%22%3E%3Cpath stroke%3D%22rgba%28248, 249, 250, 1%29%22 stroke-width%3D%222%22 stroke-linecap%3D%22round%22 stroke-miterlimit%3D%2210%22 d%3D%22M4 7h22M4 15h22M4 23h22%22/%3E%3C/svg%3E');
     }
 </style>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-lg">
+        <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container">
                 <a class="navbar-brand fw-bold text-uppercase" asp-area="" asp-page="/Index">Viciousircle Clinic</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -54,12 +75,12 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item dropdown position-static">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="doctorDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Doctors
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="doctorDropdown">
+                            <ul class="dropdown-menu" aria-labelledby="doctorDropdown">
                                 <li><a class="dropdown-item" asp-area=""
                                         asp-page="/Doctors/DoctorDashboard">Dashboard</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Doctors/DoctorList">Doctor List</a>
@@ -81,18 +102,12 @@
         </nav>
     </header>
 
-
-    <div class="container">
+    <div class="container my-4 py-5">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    @* <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - OOP_Final_Project - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer> *@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
