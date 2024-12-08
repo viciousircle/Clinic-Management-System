@@ -10,91 +10,61 @@
     <link rel="stylesheet" href="~/OOP_Final_Project.styles.css" asp-append-version="true" />
 </head>
 
-<style>
-    /* Modern navbar styling */
-    .navbar {
-        background: linear-gradient(135deg, #1d3557, #457b9d);
-        padding: 1rem 1.5rem;
-    }
-
-    .navbar-brand {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.5rem;
-        color: #f1faee !important;
-    }
-
-    .navbar-nav .nav-link {
-        font-family: 'Roboto', sans-serif;
-        color: #f8f9fa !important;
-        padding: 0.5rem 1rem;
-        transition: color 0.3s ease;
-    }
-
-    .navbar-nav .nav-link:hover {
-        color: #a8dadc !important;
-    }
-
-    .dropdown-menu {
-        background: #1d3557;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .dropdown-menu .dropdown-item {
-        color: #f8f9fa !important;
-        font-family: 'Roboto', sans-serif;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .dropdown-menu .dropdown-item:hover {
-        background-color: #457b9d !important;
-        color: #f1faee !important;
-    }
-
-    .navbar-toggler {
-        border: none;
-        color: #f8f9fa;
-    }
-
-    .navbar-toggler-icon {
-        background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns%3D%22http://www.w3.org/2000/svg%22 viewBox%3D%220 0 30 30%22%3E%3Cpath stroke%3D%22rgba%28248, 249, 250, 1%29%22 stroke-width%3D%222%22 stroke-linecap%3D%22round%22 stroke-miterlimit%3D%2210%22 d%3D%22M4 7h22M4 15h22M4 23h22%22/%3E%3C/svg%3E');
-    }
-</style>
-
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg fixed-top">
-            <div class="container">
-                <a class="navbar-brand fw-bold text-uppercase" asp-area="" asp-page="/Index">Viciousircle Clinic</a>
+        <nav class="navbar navbar-expand-lg fixed-top px-3"
+            style="background: linear-gradient(135deg, #1d3557, #457b9d);">
+            <div class="d-flex">
+                <a class="navbar-brand fw-bold text-uppercase" asp-area="" asp-page="/Index"
+                    style="color: #f1faee !important; font-family: 'Poppins', sans-serif; ">Viciousircle
+                    Clinic</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                    style="border: none; color: #f8f9fa;">
+                    <span class="navbar-toggler-icon"
+                        style="background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns%3D%22http://www.w3.org/2000/svg%22 viewBox%3D%220 0 30 30%22%3E%3Cpath stroke%3D%22rgba%28248, 249, 250, 1%29%22 stroke-width%3D%222%22 stroke-linecap%3D%22round%22 stroke-miterlimit%3D%2210%22 d%3D%22M4 7h22M4 15h22M4 23h22%22/%3E%3C/svg%3E');"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link active" asp-area="" asp-page="/Index"
+                                style="font-family: 'Roboto', sans-serif; color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Home</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="doctorDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                                data-bs-toggle="dropdown" aria-expanded="false"
+                                style="font-family: 'Roboto', sans-serif; color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">
                                 Doctors
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="doctorDropdown">
-                                <li><a class="dropdown-item" asp-area=""
-                                        asp-page="/Doctors/DoctorDashboard">Dashboard</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Doctors/DoctorList">Doctor List</a>
+                            <ul class="dropdown-menu"
+                                style="background: #1d3557; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Doctors/DoctorDashboard"
+                                        style="color: #f8f9fa !important; font-family: 'Roboto', sans-serif; transition: background-color 0.3s ease, color 0.3s ease;">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-page="/Doctors/DoctorList"
+                                        style="color: #f8f9fa !important; font-family: 'Roboto', sans-serif; transition: background-color 0.3s ease, color 0.3s ease;">Doctor
+                                        List</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Inventory/InventoryDashboard">Inventory</a>
+                            <a class="nav-link" asp-area="" asp-page="/Inventory/InventoryDashboard"
+                                style="font-family: 'Roboto', sans-serif; color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Inventory</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-page="/Privacy"
+                                style="font-family: 'Roboto', sans-serif; color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/LogIn">Log In</a>
+                            <a class="nav-link" asp-area="" asp-page="/LogIn"
+                                style="font-family: 'Roboto', sans-serif; color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Log
+                                In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Doctors/Test"
+                                style="font-family: 'Roboto', sans-serif; color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Test</a>
                         </li>
                     </ul>
                 </div>
@@ -102,13 +72,9 @@
         </nav>
     </header>
 
-
     <main role="main">
         @RenderBody()
     </main>
-
-
-
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

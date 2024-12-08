@@ -1,0 +1,74 @@
+﻿@page
+@model OOP_Final_Project.Pages.Doctors.TestModel
+@{
+    ViewData["Title"] = "Doctor Dashboard Test";
+}
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-dark mt-5" style="width: 280px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none mt-5">
+        <span class="fs-4">Doctor</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link active" aria-current="page">
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white">
+
+                Appointments
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-white">
+
+                Patients
+            </a>
+        </li>
+
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+    </div>
+</div>
+@* 
+<div class="mt-5 py-5 d-flex">
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/Doctors/Index">Dashboard</a></li>
+                <li><a href="/Doctors/Appointments">Appointments</a></li>
+                <li><a href="/Doctors/Patients">Patients</a></li>
+                <li><a href="/Doctors/Profile">Profile</a></li>
+                <li><a href="/Doctors/Settings">Settings</a></li>
+                <li><a href="/Account/Logout">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="content">
+        <h1>@ViewData["Title"]</h1>
+        <p>Welcome to the Doctor Dashboard!</p>
+    </div>
+</div> *@
