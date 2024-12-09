@@ -1,0 +1,105 @@
+﻿@page
+@model OOP_Final_Project.Pages.Doctors.DoctorScheduleModel
+@{
+}
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<style>
+    body {
+        background-color: #f7f8ff;
+        color: #195478;
+
+    }
+
+    .rounded-12px {
+        border-radius: 12px;
+    }
+
+    .rounded-16px {
+        border-radius: 16px;
+    }
+
+    .rounded-24px {
+        border-radius: 24px;
+    }
+
+    .hover-effect:hover {
+        background-color: #d7dbe1;
+    }
+
+    th {
+        font-weight: 600;
+    }
+</style>
+
+<div class=" pt-3 mt-5" style="background-color: #f7f8ff; font-family: Poppins, sans-serif; ">
+    <div class="d-flex gap-3 min-vh-100">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-flex flex-column ps-5">
+            <div class="pt-2 mt-5">
+                <div class="mb-4 text-center" style="font-family: Libre Baskerville, serif;">
+                    <h4><i>Welcome back, <b>Dr. Doe</b></i></h4>
+                </div>
+                <hr class="">
+                <div class="nav flex-column ">
+                    <a href="@Url.Page("/Doctors/DoctorDashboard")"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex gap-4 align-items-sm-center"
+                        style="color: #195478;">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                    <a href="@Url.Page("/Appointments/DoctorAppointment")"
+                        class="nav-link px-3 py-2 mb-2  hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-calendar-check"></i> Appointments
+                    </a>
+                    <a href="@Url.Page("/Doctors/PatientManagement")"
+                        class="nav-link px-3 py-2 mb-2  hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-user-injured"></i> Patients
+                    </a>
+                    <a href="@Url.Page("/Doctors/DoctorSchedule")"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="far fa-clock"></i> Schedule
+                    </a>
+                    <a href="#"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-sign-out-alt"></i> Log out
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class=" pt-3 mx-5 mt-5 shadow-lg w-100" style="border-top-left-radius: 48px; border-top-right-radius: 48px; background-color: #fefefe;
+        box-shadow: 0 0 10px rgba(23, 23, 27, 0.1); 
+            ">
+            <div class="px-5">
+                <!-- Header Section -->
+                <div class=" " style="padding-top: 64px;">
+                    <div class="  d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0">Schedule</h3>
+
+
+                        <div class="btn btn-outline-dark shadow-sm ">Make new appointment</div>
+
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Schedule Table -->
+                <div>
+                    <div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
