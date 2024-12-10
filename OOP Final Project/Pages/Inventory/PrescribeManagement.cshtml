@@ -4,243 +4,259 @@
     ViewData["Title"] = "Prescribe Management";
 }
 
-<div class="container-fluid mt-5">
-    <div class="row">
-        <!-- Sidebar Section -->
-        <div class="col-md-3 col-lg-2 p-3 text-dark">
-            <div class="list-group">
-                <a href="@Url.Page("/Inventory/InventoryDashBoard")" class="list-group-item list-group-item-action">
-                    Dashboard
-                </a>
-                <a href="@Url.Page("/Inventory/InventoryManagement")" class="list-group-item list-group-item-action">
-                    Inventory
-                </a>
-                <a href="@Url.Page("/Inventory/PrescribeManagement")" class="list-group-item list-group-item-secondary">
-                    Prescribe
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    Doctors
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    Reports
-                </a>
-                <a href="#" class="list-group-item list-group-item-action">
-                    Settings
-                </a>
-            </div>
-        </div>
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
 
-        <!-- Main Content Section -->
-        <div class="col-md-9 col-lg-10">
-            <div class="text-center mb-4">
-                <h1 class="fw-bold">Prescribe Management</h1>
-            </div>
+<style>
+    body {
+        background-color: #f7f8ff;
+        color: #195478;
 
-            <!-- Search Bar Section (with Search Button) -->
-            <div class="container mb-4 mt-4 d-flex">
-                <input type="text" id="searchInput" class="form-control me-2"
-                    placeholder="Search for prescriptions by ID, Prescribed By, or Date">
-                <button class="btn btn-outline-dark" onclick="searchPrescriptions()">Search</button>
-            </div>
+    }
 
-            <!-- Prescriptions Table Section for Today -->
-            <div class="container mt-4">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card shadow border-0 rounded-3">
-                            <div class="card-header bg-dark text-white text-center">
-                                <i class="fas fa-prescription me-2"></i> Prescription List Today
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-striped" id="prescriptionTableToday">
-                                    <thead>
-                                        <tr class="text-lg-center">
-                                            <th scope="col">ID Appointment</th>
-                                            <th scope="col">Prescribed By</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var group in Model.PrescriptionGroups.Where(g =>
-                                        DateTime.Parse(g.Prescriptions.First().Date) == DateTime.Now.Date))
-                                        {
-                                            <tr class="text-lg-center align-middle">
-                                                <td>@group.IDAppointment</td>
-                                                <td>@group.Prescriptions.First().PrescribedBy</td>
-                                                <td>@group.Prescriptions.First().Date</td>
-                                                <td>
-                                                    <button class="btn btn-outline-dark" data-bs-toggle="modal"
-                                                        data-bs-target="#detailsModal"
-                                                        data-idappointment="@group.IDAppointment"
-                                                        data-prescriptions='@Html.Raw(Json.Serialize(group.Prescriptions))'>
-                                                        See Details
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+    .rounded-12px {
+        border-radius: 12px;
+    }
+
+    .rounded-16px {
+        border-radius: 16px;
+    }
+
+    .rounded-24px {
+        border-radius: 24px;
+    }
+
+    .hover-effect:hover {
+        background-color: #d7dbe1;
+    }
+
+    th {
+        font-weight: 600;
+    }
+</style>
+
+<div class=" pt-3 mt-5" style="background-color: #f7f8ff; font-family: Poppins, sans-serif; ">
+    <div class="d-flex gap-3 min-vh-100">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-flex flex-column ps-5">
+            <div class="pt-2 mt-5">
+                <div class="mb-4 text-center" style="font-family: Libre Baskerville, serif;">
+                    <h4><i>Welcome back, <b>Dr. Doe</b></i></h4>
+                </div>
+                <hr class="">
+                <div class="nav flex-column ">
+                    <a href="@Url.Page("/Inventory/InventoryDashBoard")"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex gap-4 align-items-sm-center"
+                        style="color: #195478;">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+
+                    <a href="@Url.Page("/Inventory/PrescribeManagement")"
+                        class="nav-link px-3 py-2 mb-2  hover-effect rounded-16px d-flex align-items-sm-center gap-4 "
+                        style="color: #195478;">
+                        <i class="fas fa-prescription-bottle-alt"></i> Prescribe
+                    </a>
+                    <a href="@Url.Page("/Inventory/InventoryManagement")"
+                        class="nav-link px-3 py-2 mb-2  hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-box-open me-2"></i> Warehouse
+                    </a>
+                    <a href="@Url.Page("/Doctors/DoctorSchedule")"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="far fa-clock"></i> Schedule
+                    </a>
+                    <a href="#"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-sign-out-alt"></i> Log out
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class=" pt-3 mx-5 mt-5 shadow-lg w-100" style="border-top-left-radius: 48px; border-top-right-radius: 48px; background-color: #fefefe;
+        box-shadow: 0 0 10px rgba(23, 23, 27, 0.1); 
+            ">
+            <div class="px-5">
+                <!-- Header Section -->
+                <div class=" " style="padding-top: 64px;">
+                    <div class="  d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0">Prescribe</h3>
+
+
+                        @* <div class="btn btn-outline-dark shadow-sm ">Make new appointment</div> *@
+
+                    </div>
+                </div>
+
+                <hr>
+
+
+                <!-- Statistics Section -->
+                <div class="my-4 d-flex flex-wrap gap-md-3" style="justify-content:flex-start; align-items: center;">
+                    <h5 class="text-muted mb-0">Today</h5>
+
+                    <!-- Total Appointments -->
+                    <div class="col-md-2 d-flex flex-column">
+                        <div class="card quick-access-card  shadow-sm"
+                            style="background-color: white; border-radius: 16px;">
+                            <div class="card-body py-2 ">
+                                <div class="d-flex  align-items-center gap-md-2"
+                                    style="justify-content: space-between;">
+                                    <div class="text-muted">Total</div>
+                                    <h3 class="mb-0 pb-0 ">500</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Prescriptions Table Section for Past Days (Hidden by default) -->
-            <div class="container mt-4" id="pastPrescriptionsContainer" style="display:none;">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card shadow border-0 rounded-3">
-                            <div class="card-header bg-dark text-white text-center">
-                                <i class="fas fa-prescription me-2"></i> Prescription List (Past Days)
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-striped" id="prescriptionTablePast">
-                                    <thead>
-                                        <tr class="text-lg-center">
-                                            <th scope="col">ID Appointment</th>
-                                            <th scope="col">Prescribed By</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var group in Model.PrescriptionGroups.Where(g =>
-                                        DateTime.Parse(g.Prescriptions.First().Date) < DateTime.Now.Date))
-                                        {
-                                            <tr class="text-lg-center align-middle">
-                                                <td>@group.IDAppointment</td>
-                                                <td>@group.Prescriptions.First().PrescribedBy</td>
-                                                <td>@group.Prescriptions.First().Date</td>
-                                                <td>
-                                                    <button class="btn btn-outline-dark" data-bs-toggle="modal"
-                                                        data-bs-target="#detailsModal"
-                                                        data-idappointment="@group.IDAppointment"
-                                                        data-prescriptions='@Html.Raw(Json.Serialize(group.Prescriptions))'>
-                                                        See Details
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                    <!-- Total Appointments -->
+                    <div class="col-md-2 d-flex flex-column">
+                        <div class="card quick-access-card  shadow-sm"
+                            style="background-color: white; border-radius: 16px;">
+                            <div class="card-body py-2 ">
+                                <div class="d-flex  align-items-center gap-md-2"
+                                    style="justify-content: space-between;">
+                                    <div class="text-success">Done</div>
+                                    <h3 class="mb-0 pb-0 text-success">500</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Total Appointments -->
+                    <div class="col-md-2 d-flex flex-column">
+                        <div class="card quick-access-card  shadow-sm"
+                            style="background-color: white; border-radius: 16px;">
+                            <div class="card-body py-2 ">
+                                <div class="d-flex  align-items-center gap-md-2"
+                                    style="justify-content: space-between;">
+                                    <div class="text-warning">Pick up</div>
+                                    <h3 class="mb-0 pb-0 text-warning">500</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Total Appointments -->
+                    <div class="col-md-3 d-flex flex-column">
+                        <div class="card quick-access-card  shadow-sm"
+                            style="background-color: white; border-radius: 16px;">
+                            <div class="card-body py-2 ">
+                                <div class="d-flex  align-items-center gap-md-2"
+                                    style="justify-content: space-between;">
+                                    <div class="text-danger">Waiting prepare</div>
+                                    <h3 class="mb-0 pb-0 text-danger">500</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
                 </div>
+
+                <!-- Upcoming Appointments Section -->
+                <div class="card rounded-16px mb-4 shadow-sm p-4" style="background-color: #ffffff;">
+                    <!-- Filters and Buttons -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex gap-md-2">
+                            <!-- View Options -->
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn   btn-dark">Prepare</button>
+                                <button type="button" class="btn btn-outline-dark  ">Pick up</button>
+                                <button type="button" class="btn btn-outline-dark ">Done</button>
+                            </div>
+
+                            <!-- Date Filter -->
+                            <div>
+                                <input type="date" class="form-control d-inline-block w-auto "
+                                    onchange="filterAppointmentsByDate()">
+                            </div>
+                        @* TODO *@
+
+                            <!-- Sort Options -->
+                            <div>
+                                <select id="sortTime" class="form-select w-auto " onchange="sortAppointments()">
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Search Input -->
+                        <div class="input-group w-25">
+                            <span class="input-group-text text-muted">
+                                <i class="fas fa-search"></i>
+                            </span>
+
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- Patients List Section -->
+                @* TODO: Nếu mà bệnh nhân đã được chữa khỏi sẽ có tag màu xanh, tương tự với các TH khác  *@
+                    <div class="d-flex flex-wrap  mb-3 text-dark " style="gap: 36px;">
+
+                        <div class="card rounded-12px shadow-sm" style="padding: 6px;">
+                            <div class="card-body col-md-3" style="width: 100%;">
+                                <div class="d-flex  align-items-center gap-md-3">
+                                    <div class="d-flex  align-items-center gap-md-1">
+                                        <i class="fas fa-user-tag"></i>
+                                        <h5 class="card-title mb-0">David</h5>
+
+                                    </div>
+
+                                    <div class=" btn-sm btn  btn-outline-dark">
+                                        Details</div>
+
+                                </div>
+
+                                <hr>
+
+                                <div class="d-flex gap-md-2 flex-column">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            ID:
+                                        </div>
+
+                                        <div class="text-dark btn-sm" style="background-color:#f4f4f4;">2020290
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex  align-items-center" style="justify-content: space-between;">
+                                        <div>
+                                            Date:
+                                        </div>
+                                        <div class="">
+                                            2021-10-10
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                </div>
+
             </div>
         </div>
     </div>
 </div>
-
-<!-- Modal Structure -->
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Prescription Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <!-- Prescription details will appear here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">Complete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Include Bootstrap JavaScript for the modal to work -->
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // Get the modal elements
-        var detailsModal = document.getElementById('detailsModal');
-        detailsModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget; // Button that triggered the modal
-            var idappointment = button.getAttribute('data-idappointment');
-            var prescriptionsJson = button.getAttribute('data-prescriptions');
-            var prescriptions = JSON.parse(prescriptionsJson); // Parse the prescriptions data
-
-            // Set modal title and body content dynamically
-            var modalBody = document.getElementById('modal-body');
-            modalBody.innerHTML = ''; // Clear previous content
-
-            // Create a list of prescriptions and display them in the modal
-            prescriptions.forEach(function (prescription) {
-                var prescriptionDetails = `
-                                                                    <p><strong>Medicine:</strong> ${prescription.Medicine || 'N/A'}</p>
-                                                                    <p><strong>Dosage:</strong> ${prescription.Dosage || 'N/A'}</p>
-                                                                    <p><strong>Quantity:</strong> ${prescription.Quantity || 'N/A'}</p>
-                                                                    <p><strong>Prescribed By:</strong> ${prescription.PrescribedBy || 'N/A'}</p>
-                                                                    <p><strong>Date:</strong> ${prescription.Date || 'N/A'}</p>
-                                                                    <hr>
-                                                                `;
-                modalBody.innerHTML += prescriptionDetails;
-            });
-        });
-
-        // Search function
-        function searchPrescriptions() {
-            var input, filter, todayTable, pastTable, trToday, trPast, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            todayTable = document.getElementById("prescriptionTableToday");
-            pastTable = document.getElementById("prescriptionTablePast");
-            trToday = todayTable.getElementsByTagName("tr");
-            trPast = pastTable.getElementsByTagName("tr");
-
-            // Search Today Table
-            let todayFound = false;
-            for (i = 1; i < trToday.length; i++) {
-                td = trToday[i].getElementsByTagName("td");
-                let found = false;
-                for (let j = 0; j < td.length - 1; j++) { // Exclude the last column (the button)
-                    if (td[j]) {
-                        txtValue = td[j].textContent || td[j].innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                trToday[i].style.display = found ? "" : "none";
-                if (found) todayFound = true;
-            }
-
-            // Search Past Table
-            let pastFound = false;
-            for (i = 1; i < trPast.length; i++) {
-                td = trPast[i].getElementsByTagName("td");
-                let found = false;
-                for (let j = 0; j < td.length - 1; j++) { // Exclude the last column (the button)
-                    if (td[j]) {
-                        txtValue = td[j].textContent || td[j].innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                trPast[i].style.display = found ? "" : "none";
-                if (found) pastFound = true;
-            }
-
-            // Show Past Prescriptions section if any match is found
-            if (pastFound) {
-                document.getElementById("pastPrescriptionsContainer").style.display = "block";
-            } else {
-                document.getElementById("pastPrescriptionsContainer").style.display = "none";
-            }
-
-            // Show only if any prescriptions were found
-            if (!todayFound && !pastFound) {
-                alert("No matching prescriptions found.");
-            }
-        }
-    </script>
-}
