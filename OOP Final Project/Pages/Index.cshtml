@@ -104,7 +104,9 @@
                                         data-bs-toggle="modal" data-bs-target="#detailModal">
                                         <i class="fas fa-window-restore"></i> See Details
                                     </a>
-                                    <a href="@Url.Page("Appointments/MakeAnAppointment")" class="btn btn-outline-dark">
+                                    <!-- Book New Button -->
+                                    <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal"
+                                        data-bs-target="#bookNewModal">
                                         <i class="fas fa-calendar-plus"></i> Book New
                                     </a>
                                 </div>
@@ -121,9 +123,14 @@
                                 <p class="card-text text-muted">
                                     View your medical history and past appointments
                                 </p>
-                                <a href="@Url.Page("Patients/MedicalHistory")" class="btn"
-                                    style="background-color: #457b9d; color: aliceblue;">
-                                    <i class="fas fa-history"></i> View History
+                                <!-- View History Button -->
+                                <a href="#" class="btn d-flex align-items-center gap-md-3 justify-content-center"
+                                    style="background-color: #457b9d; color: aliceblue;" data-bs-toggle="modal"
+                                    data-bs-target="#viewHistoryModal">
+                                    <i class="fas fa-notes-medical"></i>
+                                    <div>
+                                        View History
+                                    </div>
                                 </a>
                             </div>
                         </div>
@@ -157,6 +164,80 @@
                     <button type="button" class="btn btn-outline-danger">Cancel</button>
                     <button type="button" class="btn btn-dark">Reschedule</button>
                 </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Book New Modal -->
+<div class="modal fade" id="bookNewModal" tabindex="-1" aria-labelledby="bookNewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookNewModalLabel">Book a New Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Modal Content -->
+                <form>
+                    <div class="mb-3">
+                        <label for="appointmentDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="appointmentDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointmentTime" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="appointmentTime">
+                    </div>
+                    <div class="mb-3">
+                        <label for="doctorSelect" class="form-label">Select Doctor</label>
+                        <select class="form-select" id="doctorSelect">
+                            <option selected>Choose...</option>
+                            <option value="1">Dr. Emily Smith</option>
+                            <option value="2">Dr. John Doe</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Book Appointment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View History Modal -->
+<div class="modal fade" id="viewHistoryModal" tabindex="-1" aria-labelledby="viewHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewHistoryModalLabel">Medical History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Modal Content -->
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Appointment on 2024-10-01 with Dr. Emily Smith
+                        <span class="badge bg-primary rounded-pill">Check-up</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Appointment on 2023-08-15 with Dr. John Doe
+                        <span class="badge bg-success rounded-pill">Follow-up</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Appointment on 2023-01-20 with Dr. Anna White
+                        <span class="badge bg-warning rounded-pill">Surgery</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
