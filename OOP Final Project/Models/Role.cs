@@ -26,4 +26,7 @@ public class Role
     [Required]
     public required string Name { get; set; }
 
+    // Navigation property: A role can have many employees
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
 }

@@ -22,4 +22,6 @@ public class Department
 
     [Required]
     public required string Name { get; set; }
+
+    public required virtual Clinic Clinic { get; set; }
 }

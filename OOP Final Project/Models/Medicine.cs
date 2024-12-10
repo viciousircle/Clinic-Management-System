@@ -35,4 +35,8 @@ public class Medicine
     public DateTime ImportDate { get; set; }
 
     public int Quantity { get; set; }
+
+    public required virtual MedicineType MedicineType { get; set; }
+    public required virtual Employee Employee { get; set; }
+
 }

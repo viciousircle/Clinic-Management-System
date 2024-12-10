@@ -26,4 +26,6 @@ public class DocumentType
 
     [Required]
     public required string Name { get; set; }
+
+
 }
