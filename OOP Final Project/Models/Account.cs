@@ -23,5 +23,12 @@ namespace OOP_Final_Project.Models
 
         // Navigation property
         public virtual required AccountType AccountType { get; set; }
+
+        // !Account will be associated with either an Employee or a Patient
+        // !Polymorphic relationship between Employee/Patient// Relationship: 
+        // - If the AccountType is Employee, then Employee will be associated.
+        // - If the AccountType is Patient, then Patient will be associated.
+        public virtual Employee? Employee { get; set; }  // Nullable for Patient accounts
+        public virtual Patient? Patient { get; set; }    // Nullable for Employee accounts
     }
 }
