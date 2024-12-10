@@ -100,8 +100,8 @@
                                     You have an appointment on 15 Nov 2024 at 10:00 AM
                                 </p>
                                 <div class="d-flex gap-3" style="justify-content: flex-end;">
-                                    <a href="@Url.Page("Appointments/InfoAppointment")" class="btn"
-                                        style="background-color: #457b9d; color: aliceblue;">
+                                    <a href="#" class="btn" style="background-color: #457b9d; color: aliceblue;"
+                                        data-bs-toggle="modal" data-bs-target="#detailModal">
                                         <i class="fas fa-window-restore"></i> See Details
                                     </a>
                                     <a href="@Url.Page("Appointments/MakeAnAppointment")" class="btn btn-outline-dark">
@@ -136,7 +136,32 @@
     </div>
 </div>
 
-
+<!-- Modal Structure -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg text-dark">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center ">
+                <h5 class="modal-title" id="detailModalLabel">Upcoming Appointment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Modal Content -->
+                <p><strong>Date:</strong> 15 Nov 2024</p>
+                <p><strong>Time:</strong> 10:00 AM</p>
+                <p><strong>Doctor:</strong> Dr. Emily Smith</p>
+                <p><strong>Location:</strong> Viciousircle Clinic, Room 101</p>
+                <p><strong>Notes:</strong> Regular check-up.</p>
+            </div>
+            <div class="modal-footer d-flex" style="justify-content: space-between;">
+                <div>
+                    <button type="button" class="btn btn-outline-danger">Cancel</button>
+                    <button type="button" class="btn btn-dark">Reschedule</button>
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
