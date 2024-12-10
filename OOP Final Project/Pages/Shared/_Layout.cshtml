@@ -49,28 +49,16 @@
                             <a class="nav-link active" asp-area="" asp-page="/Index"
                                 style=" color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Home</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="doctorDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false"
-                                style="   color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">
-                                Doctors
-                            </a>
-                            <ul class="dropdown-menu"
-                                style="background: #1d3557; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Doctors/DoctorDashboard"
-                                        style="color: #f8f9fa !important;    transition: background-color 0.3s ease, color 0.3s ease;">Dashboard</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-page="/Doctors/DoctorList"
-                                        style="color: #f8f9fa !important;    transition: background-color 0.3s ease, color 0.3s ease;">Doctor
-                                        List</a>
-                                </li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-page="/Doctors/DoctorDashboard"
+                                style=" color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Dashboard
+                                Doctor</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Inventory/InventoryDashboard"
-                                style="   color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Inventory</a>
+                                style="   color: #f8f9fa !important; padding: 0.5rem 1rem; transition: color 0.3s ease;">Dashboard
+                                Pharmacist</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Privacy"
