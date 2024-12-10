@@ -17,4 +17,7 @@ public class MedicineType
 
     [Required]
     public required string Name { get; set; }
+
+    // Navigation property: A medicine type can have many medicines
+    public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
 }

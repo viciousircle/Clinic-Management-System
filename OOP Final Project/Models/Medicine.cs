@@ -29,7 +29,7 @@ public class Medicine
 
     public DateTime ExpiredDate { get; set; }
 
-    [ForeignKey("Employee")]
+    [ForeignKey("Importer")]
     public int ImporterId { get; set; }
 
     public DateTime ImportDate { get; set; }
@@ -37,6 +37,6 @@ public class Medicine
     public int Quantity { get; set; }
 
     public required virtual MedicineType MedicineType { get; set; }
-    public required virtual Employee Employee { get; set; }
+    public required virtual Employee Importer { get; set; }
 
 }

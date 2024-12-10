@@ -23,5 +23,10 @@ public class Department
     [Required]
     public required string Name { get; set; }
 
+    // Navigation property: A department belongs to a clinic
     public required virtual Clinic Clinic { get; set; }
+
+    // Navigation property: A department can have many employees
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
 }

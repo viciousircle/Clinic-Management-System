@@ -19,4 +19,8 @@ public class AccountType
 
     [Required]
     public required string Name { get; set; }
+
+    // Navigation property: An account type can have many accounts
+    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 }
+

@@ -27,5 +27,12 @@ public class DocumentType
     [Required]
     public required string Name { get; set; }
 
-
+    // Navigation properties for different document types
+    public virtual ICollection<DocumentBill> DocumentBills { get; set; } = new List<DocumentBill>();
+    public virtual ICollection<DocumentDiagnose> DocumentDiagnoses { get; set; } = new List<DocumentDiagnose>();
+    public virtual ICollection<DocumentAppointment> DocumentAppointments { get; set; } = new List<DocumentAppointment>();
+    public virtual ICollection<DocumentCancel> DocumentCancels { get; set; } = new List<DocumentCancel>();
+    public virtual ICollection<DocumentPrescribe> DocumentPrescribes { get; set; } = new List<DocumentPrescribe>();
 }
+
+

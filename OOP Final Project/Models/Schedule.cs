@@ -25,4 +25,7 @@ public class Schedule
 
     [Required]
     public required TimeSpan TimeEnd { get; set; }
+
+    // Navigation property: A schedule can have many employee schedules
+    public virtual ICollection<EmployeeSchedule> EmployeeSchedules { get; set; } = new List<EmployeeSchedule>();
 }

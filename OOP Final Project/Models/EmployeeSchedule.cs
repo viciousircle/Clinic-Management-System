@@ -26,8 +26,9 @@ public class EmployeeSchedule
     [ForeignKey("Employee")]
     public int EmployeeId { get; set; }
 
+    [Required]
     public DateTime TimeFrom { get; set; }
-
+    [Required]
     public DateTime TimeTo { get; set; }
 
     public bool IsActive { get; set; } = true;

@@ -50,9 +50,11 @@ public class Employee
 
     public bool IsActive { get; set; } = true;
 
-    public required virtual Department Department { get; set; }
-    public required virtual Role Role { get; set; }
+    public virtual required Department Department { get; set; }
+    public virtual required Role Role { get; set; }
 
     // Navigation property: An employee can have many employee schedules
     public virtual ICollection<EmployeeSchedule> EmployeeSchedules { get; set; } = new List<EmployeeSchedule>();
+
+
 }

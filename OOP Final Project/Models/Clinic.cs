@@ -25,4 +25,7 @@ public class Clinic
 
     [Required]
     public required string Details { get; set; }
+
+    // Navigation property: A clinic can have many departments
+    public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
 }
