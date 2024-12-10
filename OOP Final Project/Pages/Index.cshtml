@@ -9,64 +9,134 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<div class="container mt-5 pt-5">
-    <!-- Dashboard Header -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold" style="color:#457b9d; font-family: Tangerine, cursive; font-size: 80pt;">
-            Viciousircle Clinic</h1>
-        <h5 style="color:#1d3557;">Healthy body - Healthy mind - Healthy soul </h5>
-    </div>
+<style>
+    body {
+        background-color: #f7f8ff;
+        color: #195478;
 
-    <!-- Main Content -->
-    <div class="row">
-        <!-- Overview Cards -->
-        <div class="col-md-12">
-            <div class="row d-flex justify-content-center align-items-stretch">
-                <!-- Upcoming Appointments -->
-                <div class="col-sm-4">
-                    <div class="card shadow border-1 h-100">
-                        <div class="card-header text-white" style="background-color: #457b9d;">
-                            <h3 class="fs-6 mb-0">Appointments</h3>
+    }
+
+
+    .rounded-16px {
+        border-radius: 16px;
+    }
+
+    .hover-effect:hover {
+        background-color: #d7dbe1;
+    }
+</style>
+
+<div class="pt-5 mt-5">
+    <div class="container mt-5 pt-5 pb-5   shadow" style="background-color: white; border-radius: 36px;">
+        <!-- Dashboard Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold" style="color:#457b9d; font-family: Tangerine, cursive; font-size: 80pt;">
+                Viciousircle Clinic</h1>
+            <h5 style="color:#1d3557;">Healthy body - Healthy mind - Healthy soul </h5>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Overview Cards -->
+            <div class="col-md-12">
+                <div class="row d-flex justify-content-center align-items-stretch">
+                    <!-- Info -->
+                    <div class="col-sm-3">
+                        <div class="card shadow-sm border-1 h-100 rounded-16px">
+
+                            <div class="card-body d-flex flex-column" style="justify-content: space-between;">
+
+                                <div class=" py-2 d-flex align-items-center" style="justify-content: space-between;">
+                                    <i class="fas fa-user-tag"></i>
+                                    <h5 class="card-title mb-0">David</h5>
+                                </div>
+
+
+                                <div class="d-flex gap-md-2 flex-column">
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            ID:
+                                        </div>
+
+                                        <div class="text-dark btn-sm" style="background-color:#f4f4f4;">2020290
+                                        </div>
+
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            Status:
+                                        </div>
+
+                                        <div class=" btn-sm" style="background-color:#fff3b0; color: #8a7405 ;">Obeseved
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="d-flex gap-md-3 justify-content-between   align-items-center">
+                                        <div>
+                                            Last visit:
+                                        </div>
+                                        <div class="">
+                                            2021-10-10
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
                         </div>
-                        <div class="card-body py-4">
-                            <h5 class="card-title">1 Upcoming Appointment</h5>
-                            <p class="card-text text-muted">
-                                Please arrange time to come on time for your appointment.
-                            </p>
-                            <div class="d-flex gap-2">
-                                <a href="@Url.Page("Appointments/InfoAppointment")" class="btn"
+                    </div>
+                    <!-- Upcoming Appointments -->
+                    <div class="col-sm-4">
+                        <div class="card shadow-sm border-1 h-100 rounded-16px">
+
+                            <div class="card-body py-4 d-flex flex-column">
+                                <h5 class="card-title">Upcoming Appointment</h5>
+                                <p class="card-text text-muted">
+                                    You have an appointment on 15 Nov 2024 at 10:00 AM
+                                </p>
+                                <div class="d-flex gap-3" style="justify-content: flex-end;">
+                                    <a href="@Url.Page("Appointments/InfoAppointment")" class="btn"
+                                        style="background-color: #457b9d; color: aliceblue;">
+                                        <i class="fas fa-window-restore"></i> See Details
+                                    </a>
+                                    <a href="@Url.Page("Appointments/MakeAnAppointment")" class="btn btn-outline-dark">
+                                        <i class="fas fa-calendar-plus"></i> Book New
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical History -->
+                    <div class="col-sm-4">
+                        <div class="card shadow-sm border-1 h-100 rounded-16px">
+
+                            <div class="card-body py-4 d-flex flex-column">
+                                <h5 class="card-title">Medical History</h5>
+                                <p class="card-text text-muted">
+                                    View your medical history and past appointments
+                                </p>
+                                <a href="@Url.Page("Patients/MedicalHistory")" class="btn"
                                     style="background-color: #457b9d; color: aliceblue;">
-                                    <i class="fas fa-info-circle"></i> See Details
-                                </a>
-                                <a href="@Url.Page("Appointments/MakeAnAppointment")" class="btn btn-outline-dark">
-                                    <i class="fas fa-calendar-plus"></i> Book New
+                                    <i class="fas fa-history"></i> View History
                                 </a>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Medical History -->
-                <div class="col-sm-4">
-                    <div class="card shadow border-1 h-100">
-                        <div class="card-header text-white" style="background-color: #457b9d">
-                            <h3 class="fs-6 mb-0">Medical History</h3>
-                        </div>
-                        <div class="card-body py-4">
-                            <h5 class="card-title">Latest Visit: 15 Nov 2024</h5>
-                            <p class="card-text text-muted">
-                                View your complete medical history from past visits.
-                            </p>
-                            <a href="@Url.Page("Patients/MedicalHistory")" class="btn btn-dark">
-                                <i class="fas fa-history"></i> View History
-                            </a>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 @section Scripts {
     <script>
