@@ -41,4 +41,6 @@ public class Patient
 
     [Required]
     public required string Password { get; set; }
+
+
 }

@@ -14,7 +14,7 @@ namespace OOP_Final_Project.Models
         [ForeignKey("Appointment")]
         public int AppointmentId { get; set; }
 
-        [ForeignKey("Employee")]
+        [ForeignKey("Receptionist")]
         public int ReceptionistId { get; set; }
 
         [Required]

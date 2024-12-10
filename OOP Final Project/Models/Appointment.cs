@@ -8,14 +8,14 @@ namespace OOP_Final_Project.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Employee")]
+        [ForeignKey("Doctor")]
         public int DoctorId { get; set; }
 
         [ForeignKey("Patient")]
         public int PatientId { get; set; }
 
         // Navigation properties
-        public virtual Employee Employee { get; set; }
-        public virtual Patient Patient { get; set; }
+        public virtual required Employee Doctor { get; set; }
+        public virtual required Patient Patient { get; set; }
     }
 }
