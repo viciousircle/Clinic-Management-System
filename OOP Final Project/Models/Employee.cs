@@ -52,9 +52,15 @@ public class Employee
 
     public virtual required Department Department { get; set; }
     public virtual required Role Role { get; set; }
+    public virtual required Account Account { get; set; }
+
 
     // Navigation property: An employee can have many employee schedules
     public virtual ICollection<EmployeeSchedule> EmployeeSchedules { get; set; } = new List<EmployeeSchedule>();
+    public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
 
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
+    public virtual ICollection<DocumentPrescribe> DocumentPrescribes { get; set; } = new List<DocumentPrescribe>();
+    public virtual ICollection<DocumentBill> DocumentBills { get; set; } = new List<DocumentBill>();
 }

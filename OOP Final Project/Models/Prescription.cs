@@ -14,7 +14,10 @@ namespace OOP_Final_Project.Models
         // Navigation property: A prescription is associated with an appointment
         public virtual required Appointment Appointment { get; set; }
 
+        public virtual required DocumentPrescribe? DocumentPrescribe { get; set; }
+
         // Navigation property: A prescription can have many prescription medicines
         public virtual ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; } = new List<PrescriptionMedicine>();
+
     }
 }

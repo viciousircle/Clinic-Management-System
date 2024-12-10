@@ -39,4 +39,6 @@ public class Medicine
     public required virtual MedicineType MedicineType { get; set; }
     public required virtual Employee Importer { get; set; }
 
+    public virtual required ICollection<PrescriptionMedicine> PrescriptionMedicines { get; set; }
+
 }

@@ -43,4 +43,9 @@ public class Patient
     public required string Password { get; set; }
 
 
+    // Navigation property: A patient can have many appointments
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+    public virtual required Account Account { get; set; }
+
 }
