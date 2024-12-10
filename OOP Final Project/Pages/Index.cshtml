@@ -26,8 +26,8 @@
     }
 </style>
 
-<div class="pt-5 mt-5">
-    <div class="container mt-5 pt-5 pb-5   shadow" style="background-color: white; border-radius: 36px;">
+<div class="pt-5 mt-5 mx-5">
+    <div class=" mx-5 mt-5 pt-5 pb-5   shadow" style="background-color: white; border-radius: 36px;">
         <!-- Dashboard Header -->
         <div class="text-center mb-5">
             <h1 class="display-4 fw-bold" style="color:#457b9d; font-family: Tangerine, cursive; font-size: 80pt;">
@@ -106,7 +106,10 @@
                                     </a>
                                     <!-- Book New Button -->
                                     <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal"
-                                        data-bs-target="#bookNewModal">
+                                        data-bs-target="#bookNewModal"
+                                        style=" border: 1px solid #195478; background-color: transparent; color: #195478;"
+                                        onmouseover="this.style.background='linear-gradient(135deg,#457b9d, #28436a )'; this.style.color='white';"
+                                        onmouseout="this.style.background='transparent'; this.style.color='#195478';">
                                         <i class="fas fa-calendar-plus"></i> Book New
                                     </a>
                                 </div>
@@ -118,7 +121,7 @@
                     <div class="col-sm-4">
                         <div class="card shadow-sm border-1 h-100 rounded-16px">
 
-                            <div class="card-body py-4 d-flex flex-column">
+                            <div class="card-body py-4 d-flex flex-column" style="justify-content: space-between;">
                                 <h5 class="card-title">Medical History</h5>
                                 <p class="card-text text-muted">
                                     View your medical history and past appointments
