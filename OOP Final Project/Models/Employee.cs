@@ -30,11 +30,8 @@ public class Employee
     [Required]
     public required string LastName { get; set; }
 
-    [Required]
-    public required string UserName { get; set; }
-
-    [Required]
-    public required string Password { get; set; }
+    [ForeignKey("Account")]
+    public int AccountId { get; set; }
 
     [ForeignKey("Department")]
     public int DepartmentId { get; set; }

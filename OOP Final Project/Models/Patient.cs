@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace OOP_Final_Project.Models;
 
@@ -36,16 +38,15 @@ public class Patient
     [Required]
     public required string Address { get; set; }
 
-    [Required]
-    public required string UserName { get; set; }
 
-    [Required]
-    public required string Password { get; set; }
-
+    // Foreign key to Account
+    [ForeignKey("Account")]
+    public int AccountId { get; set; }
 
     // Navigation property: A patient can have many appointments
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual required Account Account { get; set; }
+
 
 }
