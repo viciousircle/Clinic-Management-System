@@ -12,6 +12,14 @@ public class AccountType
     ? Different account types determine the permissions of the users.
     - Employees account is indefinitely account type.
     - Patients account is a limited account type. (6 months)
+
+    ? Have 5 roles in Indefinitely account type:
+    - Admin: The admin has full access to the system.
+    
+    - Manager: The manager can CRUD the employees' information and reschedule appointments.
+    - Doctor: The doctor can view the patients' information and add new patients.
+    - Receptionist: The receptionist can view the patients' information and make appointments.
+    - Pharmacist: The pharmacist can view some patients' information and prescribe medications.
     */
 
     [Key]

@@ -337,17 +337,12 @@ namespace OOP_Final_Project.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId")
                         .IsUnique();
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Employees");
                 });
@@ -528,21 +523,6 @@ namespace OOP_Final_Project.Migrations
                     b.HasIndex("PrescriptionId");
 
                     b.ToTable("PrescriptionMedicines");
-                });
-
-            modelBuilder.Entity("OOP_Final_Project.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.Schedule", b =>
@@ -735,17 +715,9 @@ namespace OOP_Final_Project.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OOP_Final_Project.Models.Role", "Role")
-                        .WithMany("Employees")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
 
                     b.Navigation("Department");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.EmployeeSchedule", b =>
@@ -910,11 +882,6 @@ namespace OOP_Final_Project.Migrations
                     b.Navigation("DocumentPrescribe");
 
                     b.Navigation("PrescriptionMedicines");
-                });
-
-            modelBuilder.Entity("OOP_Final_Project.Models.Role", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.Schedule", b =>

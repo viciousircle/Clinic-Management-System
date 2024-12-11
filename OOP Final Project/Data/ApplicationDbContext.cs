@@ -68,12 +68,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                         .HasForeignKey(es => es.ScheduleId)
                         .OnDelete(DeleteBehavior.SetNull);
 
-                //- 1 - N relationship between Role and Employee
-                modelBuilder.Entity<Employee>()
-                        .HasOne(e => e.Role)
-                        .WithMany(r => r.Employees)
-                        .HasForeignKey(e => e.RoleId)
-                        .OnDelete(DeleteBehavior.Cascade);
 
                 //- 1 - N relationship between Clinic and Department
                 modelBuilder.Entity<Department>()
@@ -232,45 +226,41 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
 
 
-                //? Level 1
+                // //? Level 1
 
-                //! Seeding the clinics
-                var clinics = DataSeeder.SeedClinics(10); // Generate 10 fake clinics
-                modelBuilder.Entity<Clinic>().HasData(clinics);
+                // //! Seeding the clinics
+                // var clinics = DataSeeder.SeedClinics(10); // Generate 10 fake clinics
+                // modelBuilder.Entity<Clinic>().HasData(clinics);
 
-                //! Seeding the roles
-                var roles = DataSeeder.SeedRoles();
-                modelBuilder.Entity<Role>().HasData(roles);
+                // //! Seeding the schedules
+                // var schedules = DataSeeder.SeedSchedules();
+                // modelBuilder.Entity<Schedule>().HasData(schedules);
 
-                //! Seeding the schedules
-                var schedules = DataSeeder.SeedSchedules();
-                modelBuilder.Entity<Schedule>().HasData(schedules);
+                // //! Seeding the account types
+                // var accountTypes = DataSeeder.SeedAccountTypes();
+                // modelBuilder.Entity<AccountType>().HasData(accountTypes);
 
-                //! Seeding the account types
-                var accountTypes = DataSeeder.SeedAccountTypes();
-                modelBuilder.Entity<AccountType>().HasData(accountTypes);
+                // //! Seeding the medicine types
+                // var medicineTypes = DataSeeder.SeedMedicineTypes();
+                // modelBuilder.Entity<MedicineType>().HasData(medicineTypes);
 
-                //! Seeding the medicine types
-                var medicineTypes = DataSeeder.SeedMedicineTypes();
-                modelBuilder.Entity<MedicineType>().HasData(medicineTypes);
+                // //! Seeding the document types
+                // var documentTypes = DataSeeder.SeedDocumentTypes();
+                // modelBuilder.Entity<DocumentType>().HasData(documentTypes);
 
-                //! Seeding the document types
-                var documentTypes = DataSeeder.SeedDocumentTypes();
-                modelBuilder.Entity<DocumentType>().HasData(documentTypes);
-
-                //! Seeding the patients
+                // //! Seeding the patients
 
 
 
-                // ? Level 2
+                // // ? Level 2
 
-                //! Seeding the departments
-                var departments = DataSeeder.SeedDepartments(clinics); // Generate departments for the seeded clinics
-                modelBuilder.Entity<Department>().HasData(departments);
+                // //! Seeding the departments
+                // var departments = DataSeeder.SeedDepartments(clinics); // Generate departments for the seeded clinics
+                // modelBuilder.Entity<Department>().HasData(departments);
 
-                //! Seeding the accounts
-                // var accounts = DataSeeder.SeedAccounts(accountTypes);
-                // modelBuilder.Entity<Account>().HasData(accounts);
+                // //! Seeding the accounts
+                // // var accounts = DataSeeder.SeedAccounts(accountTypes);
+                // // modelBuilder.Entity<Account>().HasData(accounts);
 
 
 

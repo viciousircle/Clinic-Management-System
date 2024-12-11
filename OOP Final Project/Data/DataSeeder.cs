@@ -24,20 +24,20 @@ public class DataSeeder
     }
 
     //! Create a Faker instance for Role
-    public static List<Role> SeedRoles()
-    {
-        // Explicitly defining the roles
-        var roles = new List<Role>
-        {
-            new Role { Id = 1, Name = "Admin" },
-            new Role { Id = 2, Name = "Manager" },
-            new Role { Id = 3, Name = "Doctor" },
-            new Role { Id = 4, Name = "Receptionist" },
-            new Role { Id = 5, Name = "Pharmacist" }
-        };
+    // public static List<Role> SeedRoles()
+    // {
+    //     // Explicitly defining the roles
+    //     var roles = new List<Role>
+    //     {
+    //         new Role { Id = 1, Name = "Admin" },
+    //         new Role { Id = 2, Name = "Manager" },
+    //         new Role { Id = 3, Name = "Doctor" },
+    //         new Role { Id = 4, Name = "Receptionist" },
+    //         new Role { Id = 5, Name = "Pharmacist" }
+    //     };
 
-        return roles;
-    }
+    //     return roles;
+    // }
 
     //! Create a Faker instance for Schedule
     public static List<Schedule> SeedSchedules()

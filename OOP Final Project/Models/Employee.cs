@@ -36,8 +36,7 @@ public class Employee
     [ForeignKey("Department")]
     public int DepartmentId { get; set; }
 
-    [ForeignKey("Role")]
-    public int RoleId { get; set; }
+
 
     [Required]
     public required string Email { get; set; }
@@ -48,7 +47,6 @@ public class Employee
     public bool IsActive { get; set; } = true;
 
     public virtual required Department Department { get; set; }
-    public virtual required Role Role { get; set; }
     public virtual required Account Account { get; set; }
 
 
