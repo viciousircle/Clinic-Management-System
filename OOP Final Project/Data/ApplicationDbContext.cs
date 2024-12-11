@@ -8,7 +8,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
 
         //! DbSets for the models
-        public required DbSet<Role> Roles { get; set; }
+        // public required DbSet<Role> Roles { get; set; }
         public required DbSet<AccountType> AccountTypes { get; set; }
         public required DbSet<Clinic> Clinics { get; set; }
         public required DbSet<Department> Departments { get; set; }
@@ -41,6 +41,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                         .WithMany(at => at.Accounts)
                         .HasForeignKey(a => a.AccountTypeId)
                         .OnDelete(DeleteBehavior.Cascade);
+
+                // Define a unique constraint for the combination of UserName and Password
+                modelBuilder.Entity<Account>()
+                    .HasIndex(a => new { a.UserName, a.Password })
+                    .IsUnique();
 
                 //- 1 - N relationship between Department and Employee
                 modelBuilder.Entity<Employee>()
@@ -227,6 +232,45 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
 
 
+                //? Level 1
+
+                //! Seeding the clinics
+                var clinics = DataSeeder.SeedClinics(10); // Generate 10 fake clinics
+                modelBuilder.Entity<Clinic>().HasData(clinics);
+
+                //! Seeding the roles
+                var roles = DataSeeder.SeedRoles();
+                modelBuilder.Entity<Role>().HasData(roles);
+
+                //! Seeding the schedules
+                var schedules = DataSeeder.SeedSchedules();
+                modelBuilder.Entity<Schedule>().HasData(schedules);
+
+                //! Seeding the account types
+                var accountTypes = DataSeeder.SeedAccountTypes();
+                modelBuilder.Entity<AccountType>().HasData(accountTypes);
+
+                //! Seeding the medicine types
+                var medicineTypes = DataSeeder.SeedMedicineTypes();
+                modelBuilder.Entity<MedicineType>().HasData(medicineTypes);
+
+                //! Seeding the document types
+                var documentTypes = DataSeeder.SeedDocumentTypes();
+                modelBuilder.Entity<DocumentType>().HasData(documentTypes);
+
+                //! Seeding the patients
+
+
+
+                // ? Level 2
+
+                //! Seeding the departments
+                var departments = DataSeeder.SeedDepartments(clinics); // Generate departments for the seeded clinics
+                modelBuilder.Entity<Department>().HasData(departments);
+
+                //! Seeding the accounts
+                // var accounts = DataSeeder.SeedAccounts(accountTypes);
+                // modelBuilder.Entity<Account>().HasData(accounts);
 
 
 
