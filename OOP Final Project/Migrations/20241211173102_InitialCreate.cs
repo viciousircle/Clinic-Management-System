@@ -40,7 +40,7 @@ namespace OOP_Final_Project.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DocumentType",
+                name: "DocumentTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -49,7 +49,7 @@ namespace OOP_Final_Project.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentType", x => x.Id);
+                    table.PrimaryKey("PK_DocumentTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -293,9 +293,9 @@ namespace OOP_Final_Project.Migrations
                         principalTable: "Appointments",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_DocumentAppointments_DocumentType_DocumentTypeId",
+                        name: "FK_DocumentAppointments_DocumentTypes_DocumentTypeId",
                         column: x => x.DocumentTypeId,
-                        principalTable: "DocumentType",
+                        principalTable: "DocumentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -322,9 +322,9 @@ namespace OOP_Final_Project.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DocumentBills_DocumentType_DocumentTypeId",
+                        name: "FK_DocumentBills_DocumentTypes_DocumentTypeId",
                         column: x => x.DocumentTypeId,
-                        principalTable: "DocumentType",
+                        principalTable: "DocumentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -356,9 +356,9 @@ namespace OOP_Final_Project.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DocumentCancels_DocumentType_DocumentTypeId",
+                        name: "FK_DocumentCancels_DocumentTypes_DocumentTypeId",
                         column: x => x.DocumentTypeId,
-                        principalTable: "DocumentType",
+                        principalTable: "DocumentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -385,9 +385,9 @@ namespace OOP_Final_Project.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DocumentDiagnoses_DocumentType_DocumentTypeId",
+                        name: "FK_DocumentDiagnoses_DocumentTypes_DocumentTypeId",
                         column: x => x.DocumentTypeId,
-                        principalTable: "DocumentType",
+                        principalTable: "DocumentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -425,9 +425,9 @@ namespace OOP_Final_Project.Migrations
                 {
                     table.PrimaryKey("PK_DocumentPrescribes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DocumentPrescribes_DocumentType_DocumentTypeId",
+                        name: "FK_DocumentPrescribes_DocumentTypes_DocumentTypeId",
                         column: x => x.DocumentTypeId,
-                        principalTable: "DocumentType",
+                        principalTable: "DocumentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -650,7 +650,7 @@ namespace OOP_Final_Project.Migrations
                 name: "PrescriptionMedicines");
 
             migrationBuilder.DropTable(
-                name: "DocumentType");
+                name: "DocumentTypes");
 
             migrationBuilder.DropTable(
                 name: "Schedules");

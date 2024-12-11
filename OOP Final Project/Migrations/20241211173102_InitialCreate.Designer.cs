@@ -11,7 +11,7 @@ using OOP_Final_Project.Data;
 namespace OOP_Final_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241211130143_InitialCreate")]
+    [Migration("20241211173102_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -306,7 +306,7 @@ namespace OOP_Final_Project.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentType");
+                    b.ToTable("DocumentTypes");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.Employee", b =>
@@ -882,7 +882,8 @@ namespace OOP_Final_Project.Migrations
 
             modelBuilder.Entity("OOP_Final_Project.Models.Prescription", b =>
                 {
-                    b.Navigation("DocumentPrescribe");
+                    b.Navigation("DocumentPrescribe")
+                        .IsRequired();
 
                     b.Navigation("PrescriptionMedicines");
                 });

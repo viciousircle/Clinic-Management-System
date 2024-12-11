@@ -303,7 +303,7 @@ namespace OOP_Final_Project.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentType");
+                    b.ToTable("DocumentTypes");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.Employee", b =>
@@ -879,7 +879,8 @@ namespace OOP_Final_Project.Migrations
 
             modelBuilder.Entity("OOP_Final_Project.Models.Prescription", b =>
                 {
-                    b.Navigation("DocumentPrescribe");
+                    b.Navigation("DocumentPrescribe")
+                        .IsRequired();
 
                     b.Navigation("PrescriptionMedicines");
                 });
