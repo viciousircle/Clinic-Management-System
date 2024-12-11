@@ -10,34 +10,35 @@ public class DataSeeder
 
     // ? Level 1
 
+    //! Create a Faker instance for AccountType
+    public static List<AccountType> SeedAccountTypes()
+    {
+        // Explicitly defining the account types
+        var accountTypes = new List<AccountType>
+        {
+            new AccountType { Id = 1, Name = "Manager" },
+            new AccountType { Id = 2, Name = "Receptionist" },
+            new AccountType { Id = 3, Name = "Pharmacist" },
+            new AccountType { Id = 4, Name = "Doctor" },
+            new AccountType { Id = 5, Name = "Patient" },
+        };
+
+        return accountTypes;
+    }
+
+
     //! Create a Faker instance for Clinic
     public static List<Clinic> SeedClinics(int count)
     {
         var faker = new Faker<Clinic>()
-            .RuleFor(c => c.Id, f => f.IndexFaker + 1) // Auto-increment Id
-            .RuleFor(c => c.Name, f => f.Company.CompanyName()) // Random company name
-            .RuleFor(c => c.Address, f => f.Address.FullAddress()) // Random address
-            .RuleFor(c => c.Details, f => f.Lorem.Paragraph()); // Random details
+            .RuleFor(c => c.Id, f => f.IndexFaker + 1)
+            .RuleFor(c => c.Name, f => f.Company.CompanyName())
+            .RuleFor(c => c.Address, f => f.Address.FullAddress())
+            .RuleFor(c => c.Details, f => f.Lorem.Paragraph());
 
-        // Generate the specified number of clinics
         return faker.Generate(count);
     }
 
-    //! Create a Faker instance for Role
-    // public static List<Role> SeedRoles()
-    // {
-    //     // Explicitly defining the roles
-    //     var roles = new List<Role>
-    //     {
-    //         new Role { Id = 1, Name = "Admin" },
-    //         new Role { Id = 2, Name = "Manager" },
-    //         new Role { Id = 3, Name = "Doctor" },
-    //         new Role { Id = 4, Name = "Receptionist" },
-    //         new Role { Id = 5, Name = "Pharmacist" }
-    //     };
-
-    //     return roles;
-    // }
 
     //! Create a Faker instance for Schedule
     public static List<Schedule> SeedSchedules()
@@ -198,18 +199,7 @@ public class DataSeeder
         return schedules;
     }
 
-    //! Create a Faker instance for AccountType
-    public static List<AccountType> SeedAccountTypes()
-    {
-        // Explicitly defining the account types
-        var accountTypes = new List<AccountType>
-        {
-            new AccountType { Id = 1, Name = "Indefinitely" },
-            new AccountType { Id = 2, Name = "Limited" }
-        };
 
-        return accountTypes;
-    }
 
     //! Create a Faker instance for MedicineType
     public static List<MedicineType> SeedMedicineTypes()
@@ -244,7 +234,6 @@ public class DataSeeder
         return documentTypes;
     }
 
-    //! Create a Faker instance for Patient
 
     // ? Level 2
 
@@ -275,71 +264,378 @@ public class DataSeeder
     }
 
     //! Create a Faker instance for Account
-    // public static List<Account> SeedAccounts(List<Clinic> clinics, List<Role> roles)
-    // {
-    //     var accounts = new List<Account>();
-    //     var faker = new Faker();
-    //     int accountId = 1;
+    public static List<Account> SeedAccounts(List<AccountType> accountTypes, List<Clinic> clinics, int patientCount)
+    {
+        var accounts = new List<Account>();
+        int idCounter = 1;
 
-    //     foreach (var clinic in clinics)
-    //     {
-    //         // Add 1 Manager
-    //         accounts.Add(new Account
-    //         {
-    //             Id = accountId++,
-    //             UserName = faker.Internet.UserName(),
-    //             Password = faker.Internet.Password(8),
-    //             AccountTypeId = faker.Random.Number(1, 2), // Random AccountTypeId (e.g., 1 or 2)
-    //             RoleId = roles.First(r => r.Name == "Manager").Id,
-    //             ClinicId = clinic.Id
-    //         });
+        // - Clinic Accounts
 
-    //         // Add 2 Receptionists
-    //         for (int i = 0; i < 2; i++)
-    //         {
-    //             accounts.Add(new Account
-    //             {
-    //                 Id = accountId++,
-    //                 UserName = faker.Internet.UserName(),
-    //                 Password = faker.Internet.Password(8),
-    //                 AccountTypeId = faker.Random.Number(1, 2),
-    //                 RoleId = roles.First(r => r.Name == "Receptionist").Id,
-    //                 ClinicId = clinic.Id
-    //             });
-    //         }
+        foreach (var clinic in clinics)
+        {
+            accounts.Add(new Account { Id = idCounter++, AccountTypeId = 1, AccountType = accountTypes.First(at => at.Id == 1), UserName = $"{clinic.Name}_manager", Password = "Manager123" });
 
-    //         // Add 2 Pharmacists
-    //         for (int i = 0; i < 2; i++)
-    //         {
-    //             accounts.Add(new Account
-    //             {
-    //                 Id = accountId++,
-    //                 UserName = faker.Internet.UserName(),
-    //                 Password = faker.Internet.Password(8),
-    //                 AccountTypeId = faker.Random.Number(1, 2),
-    //                 RoleId = roles.First(r => r.Name == "Pharmacist").Id,
-    //                 ClinicId = clinic.Id
-    //             });
-    //         }
+            accounts.AddRange(Enumerable.Range(0, 2).Select(_ => new Account
+            {
+                Id = idCounter++,
+                AccountTypeId = 2,
+                AccountType = accountTypes.First(at => at.Id == 2),
+                UserName = $"{clinic.Name}_receptionist{_ + 1}",
+                Password = $"Receptionist{_ + 1}",
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)) // Random date within the past year
+            }));
 
-    //         // Add 5 Doctors
-    //         for (int i = 0; i < 5; i++)
-    //         {
-    //             accounts.Add(new Account
-    //             {
-    //                 Id = accountId++,
-    //                 UserName = faker.Internet.UserName(),
-    //                 Password = faker.Internet.Password(8),
-    //                 AccountTypeId = faker.Random.Number(1, 2),
-    //                 RoleId = roles.First(r => r.Name == "Doctor").Id,
-    //                 ClinicId = clinic.Id
-    //             });
-    //         }
-    //     }
+            accounts.AddRange(Enumerable.Range(0, 2).Select(_ => new Account
+            {
+                Id = idCounter++,
+                AccountTypeId = 3,
+                AccountType = accountTypes.First(at => at.Id == 3),
+                UserName = $"{clinic.Name}_pharmacist{_ + 1}",
+                Password = $"Pharmacist{_ + 1}",
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)) // Random date within the past year
+            }));
 
-    //     return accounts;
-    // }
+            accounts.AddRange(Enumerable.Range(0, 5).Select(_ => new Account
+            {
+                Id = idCounter++,
+                AccountTypeId = 4,
+                AccountType = accountTypes.First(at => at.Id == 4),
+                UserName = $"{clinic.Name}_doctor{_ + 1}",
+                Password = $"Doctor{_ + 1}",
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365))   // Random date within the past year
+            }));
+        }
+
+        // - Patient Accounts
+        var faker = new Faker<Account>()
+            .RuleFor(a => a.Id, f => idCounter++)
+            .RuleFor(a => a.AccountTypeId, f => 5) // 5 represents Patient account type
+            .RuleFor(a => a.UserName, f => f.Internet.UserName())
+            .RuleFor(a => a.Password, f => f.Internet.Password(8))
+            .RuleFor(a => a.CreateDate, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now));
+
+        accounts.AddRange(faker.Generate(patientCount)); // Add patient accounts
+
+        return accounts;
+    }
 
 
+    //! Create a Faker instance for Patient
+    // TODO: Xme lai, chuyen cai generate sang applicationdbcontext
+    public static List<Patient> SeedPatients(List<Clinic> clinics, List<Account> accounts)
+    {
+        var faker = new Faker<Patient>()
+            .RuleFor(p => p.Id, f => f.IndexFaker + 1)
+            .RuleFor(p => p.FirstName, f => f.Name.FirstName())
+            .RuleFor(p => p.LastName, f => f.Name.LastName())
+            .RuleFor(p => p.Email, (f, p) => f.Internet.Email(p.FirstName, p.LastName))
+            .RuleFor(p => p.Phone, f => f.Phone.PhoneNumber())
+            .RuleFor(p => p.Address, f => f.Address.FullAddress())
+            .RuleFor(p => p.AccountId, f =>
+        {
+            // 80% chance to assign an account, 20% chance to leave it null
+            return f.Random.Bool(0.8f)
+                ? f.PickRandom(accounts.Where(a => a.AccountTypeId == 5)).Id
+                : (int?)null;
+        });
+
+        return faker.Generate(new Random().Next(3000, 5000));
+    }
+
+    // ? Level 3
+
+    //! Create a Faker instance for Employee
+    public static List<Employee> SeedEmployees(
+     List<Account> accounts,
+     List<Clinic> clinics,
+     List<Department> departments)
+    {
+        var employees = new List<Employee>();
+
+        var faker = new Faker<Employee>()
+               .RuleFor(e => e.FirstName, f => f.Name.FirstName()) // Random first name
+               .RuleFor(e => e.LastName, f => f.Name.LastName())   // Random last name
+               .RuleFor(e => e.Email, f => f.Internet.Email())      // Random email
+               .RuleFor(e => e.Phone, f => f.Phone.PhoneNumber())   // Random phone number
+               .RuleFor(e => e.IsActive, f => f.Random.Bool());
+
+        int idCounter = 1;
+
+        foreach (var clinic in clinics)
+        {
+            var clinicDepartments = departments.Where(d => d.ClinicId == clinic.Id).ToList();
+
+            // Manager
+            var managerAccount = accounts.First(a => a.UserName == $"{clinic.Name}_manager");
+            employees.Add(new Employee
+            {
+                Id = idCounter++,
+                FirstName = faker.Generate().FirstName,
+                LastName = faker.Generate().LastName,
+                AccountId = managerAccount.Id,
+                DepartmentId = clinicDepartments.First(d => d.Name == "Management").Id,
+                Email = $"{clinic.Name.ToLower()}_manager@clinic.com",
+                Phone = faker.Generate().Phone,
+                IsActive = true,
+                Department = clinicDepartments.First(d => d.Name == "Management"),
+                Account = managerAccount
+            });
+
+            // Receptionists
+            for (int i = 1; i <= 2; i++)
+            {
+                var receptionistAccount = accounts.First(a => a.UserName == $"{clinic.Name}_receptionist{i}");
+                employees.Add(new Employee
+                {
+                    Id = idCounter++,
+                    FirstName = faker.Generate().FirstName,
+                    LastName = clinic.Name,
+                    AccountId = receptionistAccount.Id,
+                    DepartmentId = clinicDepartments.First(d => d.Name.Contains("Reception")).Id,
+                    Email = $"{clinic.Name.ToLower()}_receptionist{i}@clinic.com",
+                    Phone = faker.Generate().Phone,
+                    IsActive = true,
+                    Department = clinicDepartments.First(d => d.Name.Contains("Reception")),
+                    Account = receptionistAccount
+                });
+            }
+
+            // Pharmacists
+            for (int i = 1; i <= 2; i++)
+            {
+                var pharmacistAccount = accounts.First(a => a.UserName == $"{clinic.Name}_pharmacist{i}");
+                employees.Add(new Employee
+                {
+                    Id = idCounter++,
+                    FirstName = faker.Generate().FirstName,
+                    LastName = clinic.Name,
+                    AccountId = pharmacistAccount.Id,
+                    DepartmentId = clinicDepartments.First(d => d.Name.Contains("Pharmacy")).Id,
+                    Email = $"{clinic.Name.ToLower()}_pharmacist{i}@clinic.com",
+                    Phone = faker.Generate().Phone,
+                    IsActive = true,
+                    Department = clinicDepartments.First(d => d.Name.Contains("Pharmacy")),
+                    Account = pharmacistAccount
+                });
+            }
+
+            // Doctors
+            for (int i = 1; i <= 5; i++)
+            {
+                var doctorAccount = accounts.First(a => a.UserName == $"{clinic.Name}_doctor{i}");
+                employees.Add(new Employee
+                {
+                    Id = idCounter++,
+                    FirstName = faker.Generate().FirstName,
+                    LastName = clinic.Name,
+                    AccountId = doctorAccount.Id,
+                    DepartmentId = clinicDepartments.First(d => d.Name.Contains("Medical")).Id,
+                    Email = $"{clinic.Name.ToLower()}_doctor{i}@clinic.com",
+                    Phone = faker.Generate().Phone,
+                    IsActive = true,
+                    Department = clinicDepartments.First(d => d.Name.Contains("Medical")),
+                    Account = doctorAccount
+                });
+            }
+
+        }
+
+        return employees;
+    }
+
+    //! Create a Faker instance for Medicine
+    public static List<Medicine> SeedMedicines(List<MedicineType> medicineTypes, List<Employee> employees, int medicineCount)
+    {
+        // Filter the list of employees to only include pharmacists
+        var pharmacists = employees.Where(e => e.Account.AccountTypeId == 3).ToList(); // Assuming AccountTypeId = 3 is for Pharmacists
+
+        var faker = new Faker<Medicine>()
+            .RuleFor(m => m.Id, f => f.IndexFaker + 1) // Auto-increment Id
+            .RuleFor(m => m.Name, f => f.Commerce.ProductName()) // Random product name
+            .RuleFor(m => m.MedicineTypeId, f => f.PickRandom(medicineTypes).Id) // Random medicine type
+            .RuleFor(m => m.ImporterId, f => f.PickRandom(pharmacists).Id) // Random pharmacist as importer
+            .RuleFor(m => m.ExpiredDate, f => f.Date.Future(2)) // Random expiration date within 2 years
+            .RuleFor(m => m.ImportDate, f => f.Date.Past(1)) // Random import date within the past year
+            .RuleFor(m => m.Quantity, f => f.Random.Int(1, 500)); // Random quantity between 1 and 500
+
+        // Generate the specified number of medicines
+        return faker.Generate(medicineCount);
+    }
+
+
+    //! Create a Faker instance for Appointment
+    public static List<Appointment> SeedAppointments(List<Employee> doctors, List<Patient> patients)
+    {
+        var faker = new Faker<Appointment>()
+            .RuleFor(a => a.Id, f => f.IndexFaker + 1)
+            .RuleFor(a => a.DoctorId, f => f.PickRandom(doctors.Where(e => e.Department.Name == "Dental")).Id)
+            .RuleFor(a => a.PatientId, f => f.PickRandom(patients).Id);
+
+
+        // TODO Adjust the number of appointments as needed
+        return faker.Generate(1000);
+    }
+
+    //! Create a Faker instance for Prescription
+    public static List<Prescription> SeedPrescriptions(List<Appointment> appointments)
+    {
+        var faker = new Faker<Prescription>()
+            .RuleFor(p => p.Id, f => f.IndexFaker + 1)
+            .RuleFor(p => p.AppointmentId, f => f.PickRandom(appointments).Id);
+
+        // TODO Adjust the number of appointments as needed
+        return faker.Generate(800);
+    }
+
+    // ? Level 4
+
+    //! Create a Faker instance for EmployeeSchedule
+    public static List<EmployeeSchedule> SeedEmployeeSchedules(List<Schedule> schedules, List<Employee> employees)
+    {
+        var faker = new Faker<EmployeeSchedule>();
+        var employeeSchedules = new List<EmployeeSchedule>();
+
+        foreach (var employee in employees)
+        {
+            // Randomly select one schedule for the employee to be active
+            var activeSchedule = faker.RuleFor(es => es.ScheduleId, f => f.PickRandom(schedules).Id)
+                                      .RuleFor(es => es.EmployeeId, f => f.PickRandom(employees).Id)
+                                      .RuleFor(es => es.TimeFrom, f => f.Date.Recent())
+                                      .RuleFor(es => es.TimeTo, f => f.Date.Soon())
+                                      .RuleFor(es => es.IsActive, f => true) // Active schedule
+                                      .RuleFor(es => es.WorkLocation, f => f.Address.City())
+                                      .Generate(1)
+                                      .First();
+
+            employeeSchedules.Add(activeSchedule);
+
+            // For the remaining schedules, set them as inactive
+            var inactiveSchedules = faker.RuleFor(es => es.ScheduleId, f => f.PickRandom(schedules.Where(s => s.Id != activeSchedule.ScheduleId)).Id)
+                                          .RuleFor(es => es.EmployeeId, f => f.PickRandom(employees).Id)
+                                          .RuleFor(es => es.TimeFrom, f => f.Date.Recent())
+                                          .RuleFor(es => es.TimeTo, f => f.Date.Soon())
+                                          .RuleFor(es => es.IsActive, f => false) // Inactive schedule
+                                          .RuleFor(es => es.WorkLocation, f => f.Address.City())
+                                          .Generate(schedules.Count - 1);
+
+            employeeSchedules.AddRange(inactiveSchedules);
+        }
+
+        return employeeSchedules;
+    }
+
+    //! Create a Faker instance for PrescriptionMedicine
+    public static List<PrescriptionMedicine> SeedPrescriptionMedicines(List<Prescription> prescriptions, List<Medicine> medicines)
+    {
+        var faker = new Faker<PrescriptionMedicine>()
+            .RuleFor(pm => pm.PrescriptionId, f => f.PickRandom(prescriptions).Id)
+            .RuleFor(pm => pm.MedicineId, f => f.PickRandom(medicines).Id)
+            .RuleFor(pm => pm.DosageAmount, f => f.Random.Int(1, 5).ToString())
+            .RuleFor(pm => pm.Frequency, f => f.Random.Int(1, 4).ToString())
+            .RuleFor(pm => pm.FrequencyUnit, f => f.PickRandom(new[] { "day", "week", "hour" }))
+            .RuleFor(pm => pm.Route, f => f.PickRandom(new[] { "oral", "injection", "topical" }))
+            .RuleFor(pm => pm.Instructions, f => f.Lorem.Sentence());
+        return faker.Generate(2000);
+    }
+
+    // ? Level 5
+
+    //! Create a Faker instance for DocumentAppointment
+    public static List<DocumentAppointment> SeedDocumentAppointments(List<Appointment> appointments, List<EmployeeSchedule> employeeSchedules)
+    {
+        var faker = new Faker<DocumentAppointment>()
+            .RuleFor(da => da.Id, f => f.IndexFaker + 1)
+            .RuleFor(da => da.DocumentTypeId, f => 1) // 1 represents Appointment document type
+            .RuleFor(da => da.AppointmentId, f => f.PickRandom(appointments).Id)
+            .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date, can be in the past or future
+            .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // TimeBook can be in the past (not more than 1 week ago), or up to 30 minutes after Date
+            .RuleFor(da => da.Location, f => f.Address.FullAddress());
+
+        // Generate the document appointments
+        var documentAppointments = faker.Generate(1300);
+
+        // Now, we need to adjust TimeStart and TimeEnd based on doctor's schedule
+        foreach (var docAppointment in documentAppointments)
+        {
+            // Get the doctor for the appointment (assuming doctor is associated with the appointment)
+            var doctor = appointments.First(a => a.Id == docAppointment.AppointmentId).Doctor; // Retrieve doctor from appointment
+
+            // Get the doctor's schedule for that day
+            var doctorSchedule = employeeSchedules.FirstOrDefault(es => es.EmployeeId == doctor.Id && es.Schedule.Date == docAppointment.Date.DayOfWeek); // Compare DayOfWeek
+
+            if (doctorSchedule != null)
+            {
+                // Ensure TimeStart is within the working hours for the doctor
+                var startTime = doctorSchedule.Schedule.TimeStart;
+
+                // Ensure TimeStart is within working hours and randomly choose a time within that range
+                var timeSpan = new Faker().Date.Between(DateTime.Today.Add(startTime), DateTime.Today.Add(doctorSchedule.Schedule.TimeEnd)); // Random time within working hours
+
+                docAppointment.TimeStart = timeSpan.TimeOfDay;
+                docAppointment.TimeEnd = docAppointment.TimeStart.Add(TimeSpan.FromHours(1)); // TimeEnd = TimeStart + 1 hour
+            }
+            else
+            {
+                // If no schedule found, you can default to a random time or handle it as needed
+                var dateFaker = new Faker();
+                docAppointment.TimeStart = dateFaker.Date.Soon().TimeOfDay;
+                docAppointment.TimeEnd = docAppointment.TimeStart.Add(TimeSpan.FromHours(1));
+            }
+        }
+
+        return documentAppointments;
+    }
+
+
+    //! Create a Faker instance for DocumentDiagnosis
+    public static List<DocumentDiagnose> SeedDocumentDiagnoses(List<Appointment> appointments)
+    {
+        var faker = new Faker<DocumentDiagnose>()
+            .RuleFor(dd => dd.Id, f => f.IndexFaker + 1)
+            .RuleFor(dd => dd.DocumentTypeId, f => 2)
+            .RuleFor(dd => dd.AppointmentId, f => f.PickRandom(appointments).Id)
+            .RuleFor(dd => dd.PatientStatus, f => f.PickRandom(new[] { "stable", "critical", "recovering" }))
+            .RuleFor(dd => dd.IsSick, f => f.Random.Bool())
+            .RuleFor(dd => dd.DiagnoseDetails, f => f.Lorem.Paragraph());
+        return faker.Generate(400);
+    }
+
+
+    //! Create a Faker instance for DocumentPrescribe
+    public static List<DocumentPrescribe> SeedDocumentPrescribes(List<Prescription> prescriptions, List<Employee> pharmacists)
+    {
+        var faker = new Faker<DocumentPrescribe>()
+            .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
+            .RuleFor(dp => dp.DocumentTypeId, f => 3)
+            .RuleFor(dp => dp.PrescriptionId, f => f.PickRandom(prescriptions).Id)
+            .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(pharmacists).Id);
+        return faker.Generate(800);
+    }
+
+    //! Create a Faker instance for DocumentBill
+    public static List<DocumentBill> SeedDocumentBills(List<Appointment> appointments, List<Employee> employees)
+    {
+        var faker = new Faker<DocumentBill>()
+            .RuleFor(db => db.Id, f => f.IndexFaker + 1)
+            .RuleFor(db => db.DocumentTypeId, f => 4) // Assuming DocumentTypeId is 4
+            .RuleFor(db => db.AppointmentId, f => f.PickRandom(appointments).Id) // Random Appointment
+            .RuleFor(db => db.ReceptionistId, f => f.PickRandom(employees.Where(e => e.Department?.Name == "Reception")).Id) // Random Receptionist
+            .RuleFor(db => db.TotalCost, f => f.Finance.Amount(100, 1000)) // Random Total Cost between 100 and 1000
+            .RuleFor(db => db.AmountPaid, (f, db) => f.Finance.Amount(0, db.TotalCost)); // AmountPaid less than or equal to TotalCost
+
+        return faker.Generate(1000); // Generates 300 DocumentBills
+    }
+
+    //! Create a Faker instance for DocumentCancel
+    public static List<DocumentCancel> SeedDocumentCancels(List<Appointment> appointments)
+    {
+        var faker = new Faker<DocumentCancel>()
+            .RuleFor(dc => dc.Id, f => f.IndexFaker + 1)
+            .RuleFor(dc => dc.DocumentTypeId, f => 5) // Assuming a fixed DocumentType for cancellations
+            .RuleFor(dc => dc.AppointmentId, f => f.PickRandom(appointments).Id)
+            .RuleFor(dc => dc.Reason, f => f.Lorem.Sentence())
+            .RuleFor(dc => dc.TimeCancel, f => f.Date.Recent());
+        return faker.Generate(50);
+    }
 
 }
