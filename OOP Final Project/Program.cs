@@ -9,6 +9,7 @@ using OOP_Final_Project.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
+
 Console.WriteLine("Application is starting...");
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,8 @@ builder.Services.AddControllers();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddSwaggerGen();
 
 
 
@@ -42,6 +45,9 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers(); // Map API controllers
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseAuthentication();  // Enable authentication
