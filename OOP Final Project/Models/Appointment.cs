@@ -1,16 +1,31 @@
-using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OOP_Final_Project.Models;
-
-public class Appointment
+namespace OOP_Final_Project.Models
 {
-    public int Id { get; set; }
-    public int PatientCaseId { get; set; }
-    public int InDepartmentId { get; set; }
-    public DateTime TimeCreated { get; set; }
-    public DateTime AppointmentStartTime { get; set; }
-    public DateTime AppointmentEndTime { get; set; }
-    public int AppointmentStatusId { get; set; }
-    public AppointmentStatus AppointmentStatus { get; set; }
-}
+    public class Appointment
+    {
+        [Key]
+        public int Id { get; set; }
 
+        [ForeignKey("Doctor")]
+        public int DoctorId { get; set; }
+
+        [ForeignKey("Patient")]
+        public int PatientId { get; set; }
+
+        // Navigation properties
+        public virtual required Employee Doctor { get; set; }
+        public virtual required Patient Patient { get; set; }
+
+        // 1-to-1 relationship with Prescription
+        public virtual Prescription? Prescription { get; set; }
+        public virtual DocumentAppointment? DocumentAppointment { get; set; }
+        public virtual DocumentCancel? DocumentCancel { get; set; }
+        public virtual DocumentDiagnose? DocumentDiagnose { get; set; }
+        public virtual DocumentBill? DocumentBill { get; set; }
+
+
+        public virtual ICollection<DocumentAppointment> DocumentAppointments { get; set; } = new List<DocumentAppointment>();
+    }
+}
