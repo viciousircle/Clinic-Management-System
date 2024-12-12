@@ -1,11 +1,14 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OOP_Final_Project.Data;
 using OOP_Final_Project.Models;
 
 
+
 namespace OOP_Final_Project.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase

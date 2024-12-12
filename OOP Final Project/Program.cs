@@ -3,10 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
-using System.Linq;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using OOP_Final_Project.Models;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 
@@ -21,11 +21,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add controllers support (for API)
 builder.Services.AddControllers();
 
-
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerGen();
+
+// Add JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var secretKey = builder.Configuration["Jwt:SecretKey"];
+        if (string.IsNullOrEmpty(secretKey))
+        {
+            throw new InvalidOperationException("JWT SecretKey is not configured.");
+        }
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"], // Your issuer, e.g., "https://localhost:5001"
+            ValidAudience = builder.Configuration["Jwt:Audience"], // Your audience, e.g., "https://localhost:5001"
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)) // Secret key used for signing tokens
+        };
+    });
+
+
+// Add Authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+});
 
 
 
@@ -51,6 +80,7 @@ app.UseSwaggerUI();
 
 
 app.UseAuthentication();  // Enable authentication
+app.UseAuthorization();   // Enable authorization
 
 // using (var scope = app.Services.CreateScope())
 // {
