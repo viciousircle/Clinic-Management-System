@@ -44,7 +44,7 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    dbContext.Database.ExecuteSqlRaw("DELETE FROM Employees");
+    // dbContext.Database.ExecuteSqlRaw("DELETE FROM Employees");
 
     // Apply any pending migrations
     dbContext.Database.Migrate();
@@ -104,7 +104,7 @@ static void SeedData(IServiceProvider serviceProvider)
     // Level 2
     if (!dbContext.Departments.Any())
     {
-        var departments = DataSeeder.SeedDepartments(dbContext.Clinics.ToList());
+        var departments = DataSeeder.SeedDepartments(dbContext.Clinics.ToList(), dbContext.AccountTypes.ToList());
         dbContext.Departments.AddRange(departments);
     }
 
@@ -129,67 +129,69 @@ static void SeedData(IServiceProvider serviceProvider)
     }
 
     // TODO - Fix this shit/
-    // if (!dbContext.Medicines.Any())
-    // {
-    //     var medicines = DataSeeder.SeedMedicines(dbContext.MedicineTypes.ToList(), dbContext.Employees.ToList(), 1000);
-    //     dbContext.Medicines.AddRange(medicines);
-    // }
+    if (!dbContext.Medicines.Any())
+    {
+        var medicines = DataSeeder.SeedMedicines(dbContext.MedicineTypes.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList(), 1000);
+        dbContext.Medicines.AddRange(medicines);
+    }
 
     if (!dbContext.Appointments.Any())
     {
-        var appointments = DataSeeder.SeedAppointments(dbContext.Employees.ToList(), dbContext.Patients.ToList());
+        var appointments = DataSeeder.SeedAppointments(dbContext.Employees.ToList(), dbContext.Patients.ToList(), dbContext.Accounts.ToList());
         dbContext.Appointments.AddRange(appointments);
     }
 
-    // if (!dbContext.Prescriptions.Any())
-    // {
-    //     var prescriptions = DataSeeder.SeedPrescriptions(dbContext.Appointments.ToList());
-    //     dbContext.Prescriptions.AddRange(prescriptions);
-    // }
+    if (!dbContext.Prescriptions.Any())
+    {
+        var prescriptions = DataSeeder.SeedPrescriptions(dbContext.Appointments.ToList());
+        dbContext.Prescriptions.AddRange(prescriptions);
+    }
 
-    // // Level 4
-    // if (!dbContext.EmployeeSchedules.Any())
-    // {
-    //     var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList());
-    //     dbContext.EmployeeSchedules.AddRange(employeeSchedules);
-    // }
+    // Level 4
 
-    // if (!dbContext.PrescriptionMedicines.Any())
-    // {
-    //     var prescriptionMedicines = DataSeeder.SeedPrescriptionMedicines(dbContext.Prescriptions.ToList(), dbContext.Medicines.ToList());
-    //     dbContext.PrescriptionMedicines.AddRange(prescriptionMedicines);
-    // }
+    if (!dbContext.EmployeeSchedules.Any())
+    {
+        var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList());
+        dbContext.EmployeeSchedules.AddRange(employeeSchedules);
+    }
 
-    // // Level 5
-    // if (!dbContext.DocumentAppointments.Any())
-    // {
-    //     var documentAppointments = DataSeeder.SeedDocumentAppointments(dbContext.Appointments.ToList(), dbContext.EmployeeSchedules.ToList());
-    //     dbContext.DocumentAppointments.AddRange(documentAppointments);
-    // }
+    if (!dbContext.PrescriptionMedicines.Any())
+    {
+        var prescriptionMedicines = DataSeeder.SeedPrescriptionMedicines(dbContext.Prescriptions.ToList(), dbContext.Medicines.ToList());
+        dbContext.PrescriptionMedicines.AddRange(prescriptionMedicines);
+    }
 
-    // if (!dbContext.DocumentDiagnoses.Any())
-    // {
-    //     var documentDiagnoses = DataSeeder.SeedDocumentDiagnoses(dbContext.Appointments.ToList());
-    //     dbContext.DocumentDiagnoses.AddRange(documentDiagnoses);
-    // }
+    // Level 5
 
-    // if (!dbContext.DocumentPrescribes.Any())
-    // {
-    //     var documentPrescribes = DataSeeder.SeedDocumentPrescribes(dbContext.Prescriptions.ToList(), dbContext.Employees.ToList());
-    //     dbContext.DocumentPrescribes.AddRange(documentPrescribes);
-    // }
+    if (!dbContext.DocumentAppointments.Any())
+    {
+        var documentAppointments = DataSeeder.SeedDocumentAppointments(dbContext.Appointments.ToList(), dbContext.EmployeeSchedules.ToList());
+        dbContext.DocumentAppointments.AddRange(documentAppointments);
+    }
 
-    // if (!dbContext.DocumentBills.Any())
-    // {
-    //     var documentBills = DataSeeder.SeedDocumentBills(dbContext.Appointments.ToList(), dbContext.Employees.ToList());
-    //     dbContext.DocumentBills.AddRange(documentBills);
-    // }
+    if (!dbContext.DocumentDiagnoses.Any())
+    {
+        var documentDiagnoses = DataSeeder.SeedDocumentDiagnoses(dbContext.Appointments.ToList());
+        dbContext.DocumentDiagnoses.AddRange(documentDiagnoses);
+    }
 
-    // if (!dbContext.DocumentCancels.Any())
-    // {
-    //     var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
-    //     dbContext.DocumentCancels.AddRange(documentCancels);
-    // }
+    if (!dbContext.DocumentPrescribes.Any())
+    {
+        var documentPrescribes = DataSeeder.SeedDocumentPrescribes(dbContext.Prescriptions.ToList(), dbContext.Employees.ToList());
+        dbContext.DocumentPrescribes.AddRange(documentPrescribes);
+    }
+
+    if (!dbContext.DocumentBills.Any())
+    {
+        var documentBills = DataSeeder.SeedDocumentBills(dbContext.Appointments.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList());
+        dbContext.DocumentBills.AddRange(documentBills);
+    }
+
+    if (!dbContext.DocumentCancels.Any())
+    {
+        var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
+        dbContext.DocumentCancels.AddRange(documentCancels);
+    }
 
     Console.WriteLine("Data seeding complete.");
     // Save changes once all data is added

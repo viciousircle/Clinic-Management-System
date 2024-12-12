@@ -30,5 +30,9 @@ public class AccountType
 
     //! Navigation property: An account type can have many accounts
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+
+    public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
+
+
 }
 

@@ -238,30 +238,30 @@ public class DataSeeder
     // ? Level 2
 
     //! Create a Faker instance for Department
-    public static List<Department> SeedDepartments(List<Clinic> clinics)
+    public static List<Department> SeedDepartments(List<Clinic> clinics, List<AccountType> accountTypes)
     {
-        // Predefined department names
-        var departmentNames = new List<string> { "Reception", "Dental", "Medical", "Management" };
         var departments = new List<Department>();
-
-        int departmentId = 1; // Start department ID counter
+        int idCounter = 1;
 
         foreach (var clinic in clinics)
         {
-            foreach (var name in departmentNames)
+            // Create a department for each of the first 4 account types
+            foreach (var accountType in accountTypes.Where(at => at.Id >= 1 && at.Id <= 4))
             {
                 departments.Add(new Department
                 {
-                    Id = departmentId++,
+                    Id = idCounter++,
                     ClinicId = clinic.Id,
+                    AccountTypeId = accountType.Id,
                     Clinic = clinic,
-                    Name = name
+                    AccountType = accountType
                 });
             }
         }
 
         return departments;
     }
+
 
     //! Create a Faker instance for Account
     public static List<Account> SeedAccounts(List<AccountType> accountTypes, List<Clinic> clinics, int patientCount)
@@ -351,17 +351,12 @@ public class DataSeeder
 
     //! Create a Faker instance for Employee
     public static List<Employee> SeedEmployees(
-        List<Account> accounts,
-        List<Clinic> clinics,
-        List<Department> departments)
+    List<Account> accounts,
+    List<Clinic> clinics,
+    List<Department> departments)
     {
         var employees = new List<Employee>();
-        var faker = new Faker<Employee>()
-            .RuleFor(e => e.FirstName, f => f.Name.FirstName()) // Random first name
-            .RuleFor(e => e.LastName, f => f.Name.LastName())   // Random last name
-            .RuleFor(e => e.Email, f => f.Internet.Email())     // Random email
-            .RuleFor(e => e.Phone, f => f.Phone.PhoneNumber())  // Random phone number
-            .RuleFor(e => e.IsActive, f => f.Random.Bool());
+        var faker = new Faker();
 
         int idCounter = 1;
 
@@ -371,22 +366,20 @@ public class DataSeeder
 
             // Manager
             var managerAccount = accounts.FirstOrDefault(a => a.UserName == $"{clinic.Name}_manager");
-            var managementDepartment = clinicDepartments.FirstOrDefault(d => d.Name == "Management");
+            var managementDepartment = clinicDepartments.FirstOrDefault(d => d.AccountTypeId == 1);
 
             if (managerAccount != null && managementDepartment != null)
             {
                 employees.Add(new Employee
                 {
                     Id = idCounter++,
-                    FirstName = faker.Generate().FirstName,
-                    LastName = faker.Generate().LastName,
+                    FirstName = faker.Name.FirstName(),
+                    LastName = faker.Name.LastName(),
                     AccountId = managerAccount.Id,
-                    DepartmentId = managementDepartment.Id,
+                    Account = managerAccount,
                     Email = $"{clinic.Name.ToLower()}_manager@clinic.com",
-                    Phone = faker.Generate().Phone,
-                    IsActive = true,
-                    Department = managementDepartment,
-                    Account = managerAccount
+                    Phone = faker.Phone.PhoneNumber(),
+                    IsActive = true
                 });
             }
 
@@ -394,22 +387,20 @@ public class DataSeeder
             for (int i = 1; i <= 2; i++)
             {
                 var receptionistAccount = accounts.FirstOrDefault(a => a.UserName == $"{clinic.Name}_receptionist{i}");
-                var receptionistDepartment = clinicDepartments.FirstOrDefault(d => d.Name.Contains("Reception"));
+                var receptionistDepartment = clinicDepartments.FirstOrDefault(d => d.AccountTypeId == 2);
 
                 if (receptionistAccount != null && receptionistDepartment != null)
                 {
                     employees.Add(new Employee
                     {
                         Id = idCounter++,
-                        FirstName = faker.Generate().FirstName,
-                        LastName = clinic.Name,
+                        FirstName = faker.Name.FirstName(),
+                        LastName = faker.Name.LastName(),
                         AccountId = receptionistAccount.Id,
-                        DepartmentId = receptionistDepartment.Id,
+                        Account = receptionistAccount,
                         Email = $"{clinic.Name.ToLower()}_receptionist{i}@clinic.com",
-                        Phone = faker.Generate().Phone,
-                        IsActive = true,
-                        Department = receptionistDepartment,
-                        Account = receptionistAccount
+                        Phone = faker.Phone.PhoneNumber(),
+                        IsActive = true
                     });
                 }
             }
@@ -418,22 +409,20 @@ public class DataSeeder
             for (int i = 1; i <= 2; i++)
             {
                 var pharmacistAccount = accounts.FirstOrDefault(a => a.UserName == $"{clinic.Name}_pharmacist{i}");
-                var pharmacyDepartment = clinicDepartments.FirstOrDefault(d => d.Name.Contains("Medical"));
+                var pharmacyDepartment = clinicDepartments.FirstOrDefault(d => d.AccountTypeId == 3);
 
                 if (pharmacistAccount != null && pharmacyDepartment != null)
                 {
                     employees.Add(new Employee
                     {
                         Id = idCounter++,
-                        FirstName = faker.Generate().FirstName,
-                        LastName = clinic.Name,
+                        FirstName = faker.Name.FirstName(),
+                        LastName = faker.Name.LastName(),
                         AccountId = pharmacistAccount.Id,
-                        DepartmentId = pharmacyDepartment.Id,
+                        Account = pharmacistAccount,
                         Email = $"{clinic.Name.ToLower()}_pharmacist{i}@clinic.com",
-                        Phone = faker.Generate().Phone,
-                        IsActive = true,
-                        Department = pharmacyDepartment,
-                        Account = pharmacistAccount
+                        Phone = faker.Phone.PhoneNumber(),
+                        IsActive = true
                     });
                 }
             }
@@ -442,22 +431,20 @@ public class DataSeeder
             for (int i = 1; i <= 5; i++)
             {
                 var doctorAccount = accounts.FirstOrDefault(a => a.UserName == $"{clinic.Name}_doctor{i}");
-                var medicalDepartment = clinicDepartments.FirstOrDefault(d => d.Name.Contains("Dental"));
+                var medicalDepartment = clinicDepartments.FirstOrDefault(d => d.AccountTypeId == 4);
 
                 if (doctorAccount != null && medicalDepartment != null)
                 {
                     employees.Add(new Employee
                     {
                         Id = idCounter++,
-                        FirstName = faker.Generate().FirstName,
-                        LastName = clinic.Name,
+                        FirstName = faker.Name.FirstName(),
+                        LastName = faker.Name.LastName(),
                         AccountId = doctorAccount.Id,
-                        DepartmentId = medicalDepartment.Id,
+                        Account = doctorAccount,
                         Email = $"{clinic.Name.ToLower()}_doctor{i}@clinic.com",
-                        Phone = faker.Generate().Phone,
-                        IsActive = true,
-                        Department = medicalDepartment,
-                        Account = doctorAccount
+                        Phone = faker.Phone.PhoneNumber(),
+                        IsActive = true
                     });
                 }
             }
@@ -467,17 +454,17 @@ public class DataSeeder
     }
 
 
-
-
     //! Create a Faker instance for Medicine
-    public static List<Medicine> SeedMedicines(List<MedicineType> medicineTypes, List<Employee> employees, int medicineCount)
+    public static List<Medicine> SeedMedicines(List<MedicineType> medicineTypes, List<Employee> employees, List<Account> accounts, int medicineCount)
     {
         // Filter the list of employees to only include pharmacists with valid Account and Department
+        var pharmacistAccounts = accounts
+         .Where(a => a.AccountTypeId == 3) // AccountTypeId 3 corresponds to "Pharmacist"
+         .ToList();
+
+        // Filter employees to only include those with a pharmacist account
         var pharmacists = employees
-            .Where(e => e.Department != null &&
-                        !string.IsNullOrEmpty(e.Department.Name) &&
-                        e.Department.Name.Contains("Medical", StringComparison.OrdinalIgnoreCase) &&
-                        e.Account != null)
+            .Where(e => pharmacistAccounts.Any(a => a.Id == e.AccountId))
             .ToList();
 
         // Check if any pharmacists are found
@@ -492,7 +479,7 @@ public class DataSeeder
             .RuleFor(m => m.Id, f => f.IndexFaker + 1) // Auto-increment Id
             .RuleFor(m => m.Name, f => f.Commerce.ProductName()) // Random product name
             .RuleFor(m => m.MedicineTypeId, f => f.PickRandom(medicineTypes).Id) // Random medicine type
-            .RuleFor(m => m.ImporterId, f => f.PickRandom(pharmacists).Id) // Random pharmacist as importer
+            .RuleFor(m => m.ImporterId, f => f.PickRandom(pharmacists).AccountId) // Random pharmacist as importer
             .RuleFor(m => m.ExpiredDate, f => f.Date.Future(2)) // Random expiration date within 2 years
             .RuleFor(m => m.ImportDate, f => f.Date.Past(1)) // Random import date within the past year
             .RuleFor(m => m.Quantity, f => f.Random.Int(1, 500)); // Random quantity between 1 and 500
@@ -503,19 +490,22 @@ public class DataSeeder
 
 
     //! Create a Faker instance for Appointment
-    public static List<Appointment> SeedAppointments(List<Employee> doctors, List<Patient> patients)
+    public static List<Appointment> SeedAppointments(List<Employee> employees, List<Patient> patients, List<Account> accounts)
     {
         // Debug: Log all doctors
-        foreach (var doctor in doctors)
+        foreach (var employee in employees)
         {
-            Console.WriteLine($"Doctor ID: {doctor.Id}, Department: {doctor.Department?.Name ?? "No Department"}");
+            var accountType = accounts.FirstOrDefault(a => a.Id == employee.AccountId)?.UserName;
+            Console.WriteLine($"Employee ID: {employee.Id}, Account Type: {accountType ?? "Unknown"}");
         }
 
-        // Filter doctors to ensure valid data
-        var validDoctors = doctors
-            .Where(e => e.Department != null &&
-                        !string.IsNullOrEmpty(e.Department.Name) &&
-                        e.Department.Name.Contains("Dental", StringComparison.OrdinalIgnoreCase))
+        // Filter employees to only include doctors based on AccountTypeId
+        var doctorAccounts = accounts
+            .Where(a => a.AccountTypeId == 4) // Assuming AccountTypeId 4 corresponds to "Doctor"
+            .ToList();
+
+        var validDoctors = employees
+            .Where(e => doctorAccounts.Any(a => a.Id == e.AccountId))
             .ToList();
 
         if (!validDoctors.Any())
@@ -527,18 +517,16 @@ public class DataSeeder
         if (!patients.Any())
         {
             Console.WriteLine("No patients found for appointments.");
-            return new List<Appointment>();
+            return new List<Appointment>(); // Return an empty list if no patients
         }
 
         var faker = new Faker<Appointment>()
             .RuleFor(a => a.Id, f => f.IndexFaker + 1)
-            .RuleFor(a => a.DoctorId, f => f.PickRandom(validDoctors).Id)
-            .RuleFor(a => a.PatientId, f => f.PickRandom(patients).Id);
+            .RuleFor(a => a.DoctorId, f => f.PickRandom(validDoctors).Id) // Random doctor from valid doctors
+            .RuleFor(a => a.PatientId, f => f.PickRandom(patients).Id);   // Random patient
 
-        return faker.Generate(1000);
+        return faker.Generate(1000); // Generate 1000 appointments
     }
-
-
 
     //! Create a Faker instance for Prescription
     public static List<Prescription> SeedPrescriptions(List<Appointment> appointments)
@@ -611,44 +599,56 @@ public class DataSeeder
             .RuleFor(da => da.Id, f => f.IndexFaker + 1)
             .RuleFor(da => da.DocumentTypeId, f => 1) // 1 represents Appointment document type
             .RuleFor(da => da.AppointmentId, f => f.PickRandom(appointments).Id)
-            .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date, can be in the past or future
-            .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // TimeBook can be in the past (not more than 1 week ago), or up to 30 minutes after Date
+            .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date
+            .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // Random TimeBook
             .RuleFor(da => da.Location, f => f.Address.FullAddress());
 
-        // Generate the document appointments
         var documentAppointments = faker.Generate(1300);
 
-        // Now, we need to adjust TimeStart and TimeEnd based on doctor's schedule
         foreach (var docAppointment in documentAppointments)
         {
-            // Get the doctor for the appointment (assuming doctor is associated with the appointment)
-            var doctor = appointments.First(a => a.Id == docAppointment.AppointmentId).Doctor; // Retrieve doctor from appointment
-
-            // Get the doctor's schedule for that day
-            var doctorSchedule = employeeSchedules.FirstOrDefault(es => es.EmployeeId == doctor.Id && es.Schedule.Date == docAppointment.Date.DayOfWeek); // Compare DayOfWeek
-
-            if (doctorSchedule != null)
+            // Safely retrieve the doctor associated with the appointment
+            var appointment = appointments.FirstOrDefault(a => a.Id == docAppointment.AppointmentId);
+            if (appointment == null || appointment.DoctorId == 0)
             {
-                // Ensure TimeStart is within the working hours for the doctor
+                // Handle missing appointment or doctor gracefully
+                Console.WriteLine($"No valid appointment or doctor found for DocumentAppointment Id {docAppointment.Id}");
+                continue;
+            }
+
+            // Get the doctor's schedule for the day
+            var doctorSchedule = employeeSchedules
+                .FirstOrDefault(es => es.EmployeeId == appointment.DoctorId && es.Schedule?.Date == docAppointment.Date.DayOfWeek);
+
+            if (doctorSchedule != null && doctorSchedule.Schedule != null)
+            {
+                // Generate TimeStart and TimeEnd within the doctor's working hours
                 var startTime = doctorSchedule.Schedule.TimeStart;
+                var endTime = doctorSchedule.Schedule.TimeEnd;
 
-                // Ensure TimeStart is within working hours and randomly choose a time within that range
-                var timeSpan = new Faker().Date.Between(DateTime.Today.Add(startTime), DateTime.Today.Add(doctorSchedule.Schedule.TimeEnd)); // Random time within working hours
-
-                docAppointment.TimeStart = timeSpan.TimeOfDay;
-                docAppointment.TimeEnd = docAppointment.TimeStart.Add(TimeSpan.FromHours(1)); // TimeEnd = TimeStart + 1 hour
+                if (startTime < endTime) // Ensure the time range is valid
+                {
+                    var timeSpan = new Faker().Date.Between(
+                        DateTime.Today.Add(startTime),
+                        DateTime.Today.Add(endTime));
+                    docAppointment.TimeStart = timeSpan.TimeOfDay;
+                    docAppointment.TimeEnd = docAppointment.TimeStart.Add(TimeSpan.FromHours(1)); // 1-hour duration
+                }
             }
             else
             {
-                // If no schedule found, you can default to a random time or handle it as needed
+                // Default TimeStart and TimeEnd when no schedule is found
+                Console.WriteLine($"No schedule found for DoctorId {appointment.DoctorId} on {docAppointment.Date.DayOfWeek}");
                 var dateFaker = new Faker();
-                docAppointment.TimeStart = dateFaker.Date.Soon().TimeOfDay;
-                docAppointment.TimeEnd = docAppointment.TimeStart.Add(TimeSpan.FromHours(1));
+                var randomTime = dateFaker.Date.Soon().TimeOfDay;
+                docAppointment.TimeStart = randomTime;
+                docAppointment.TimeEnd = randomTime.Add(TimeSpan.FromHours(1));
             }
         }
 
         return documentAppointments;
     }
+
 
 
     //! Create a Faker instance for DocumentDiagnosis
@@ -677,18 +677,41 @@ public class DataSeeder
     }
 
     //! Create a Faker instance for DocumentBill
-    public static List<DocumentBill> SeedDocumentBills(List<Appointment> appointments, List<Employee> employees)
+    public static List<DocumentBill> SeedDocumentBills(List<Appointment> appointments, List<Employee> employees, List<Account> accounts)
     {
+        // Filter employees to include only those with AccountTypeId corresponding to "Receptionist"
+        var receptionistAccounts = accounts
+            .Where(a => a.AccountTypeId == 2) // Assuming AccountTypeId 2 corresponds to "Receptionist"
+            .ToList();
+
+        var validReceptionists = employees
+            .Where(e => receptionistAccounts.Any(a => a.Id == e.AccountId))
+            .ToList();
+
+        if (!validReceptionists.Any())
+        {
+            Console.WriteLine("No valid receptionists found for Document Bills.");
+            return new List<DocumentBill>(); // Return an empty list if no valid receptionists
+        }
+
+        if (!appointments.Any())
+        {
+            Console.WriteLine("No appointments found for Document Bills.");
+            return new List<DocumentBill>(); // Return an empty list if no appointments
+        }
+
+        // Generate DocumentBills using Faker
         var faker = new Faker<DocumentBill>()
-            .RuleFor(db => db.Id, f => f.IndexFaker + 1)
-            .RuleFor(db => db.DocumentTypeId, f => 4) // Assuming DocumentTypeId is 4
-            .RuleFor(db => db.AppointmentId, f => f.PickRandom(appointments).Id) // Random Appointment
-            .RuleFor(db => db.ReceptionistId, f => f.PickRandom(employees.Where(e => e.Department?.Name == "Reception")).Id) // Random Receptionist
+            .RuleFor(db => db.Id, f => f.IndexFaker + 1) // Auto-increment Id
+            .RuleFor(db => db.DocumentTypeId, f => 4) // Assuming DocumentTypeId is always 4
+            .RuleFor(db => db.AppointmentId, f => f.PickRandom(appointments).Id) // Random appointment
+            .RuleFor(db => db.ReceptionistId, f => f.PickRandom(validReceptionists).Id) // Random valid receptionist
             .RuleFor(db => db.TotalCost, f => f.Finance.Amount(100, 1000)) // Random Total Cost between 100 and 1000
             .RuleFor(db => db.AmountPaid, (f, db) => f.Finance.Amount(0, db.TotalCost)); // AmountPaid less than or equal to TotalCost
 
-        return faker.Generate(1000); // Generates 300 DocumentBills
+        return faker.Generate(1000); // Generate 1000 Document Bills
     }
+
 
     //! Create a Faker instance for DocumentCancel
     public static List<DocumentCancel> SeedDocumentCancels(List<Appointment> appointments)

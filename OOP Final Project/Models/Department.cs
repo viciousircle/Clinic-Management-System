@@ -20,13 +20,14 @@ public class Department
     [ForeignKey("Clinic")]
     public int ClinicId { get; set; }
 
-    [Required]
-    public required string Name { get; set; }
+    [ForeignKey("AccountType")]
+    public int AccountTypeId { get; set; }
 
     // Navigation property: A department belongs to a clinic
     public required virtual Clinic Clinic { get; set; }
 
-    // Navigation property: A department can have many employees
-    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+    // Navigation property: A department has an account type
+    public required virtual AccountType AccountType { get; set; }
+
 
 }

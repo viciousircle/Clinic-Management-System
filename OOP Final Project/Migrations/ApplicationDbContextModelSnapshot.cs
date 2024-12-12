@@ -112,14 +112,15 @@ namespace OOP_Final_Project.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AccountTypeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ClinicId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountTypeId");
 
                     b.HasIndex("ClinicId");
 
@@ -315,9 +316,6 @@ namespace OOP_Final_Project.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -341,8 +339,6 @@ namespace OOP_Final_Project.Migrations
 
                     b.HasIndex("AccountId")
                         .IsUnique();
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
                 });
@@ -577,11 +573,19 @@ namespace OOP_Final_Project.Migrations
 
             modelBuilder.Entity("OOP_Final_Project.Models.Department", b =>
                 {
+                    b.HasOne("OOP_Final_Project.Models.AccountType", "AccountType")
+                        .WithMany("Departments")
+                        .HasForeignKey("AccountTypeId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.HasOne("OOP_Final_Project.Models.Clinic", "Clinic")
                         .WithMany("Departments")
                         .HasForeignKey("ClinicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AccountType");
 
                     b.Navigation("Clinic");
                 });
@@ -709,15 +713,7 @@ namespace OOP_Final_Project.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OOP_Final_Project.Models.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.EmployeeSchedule", b =>
@@ -809,6 +805,8 @@ namespace OOP_Final_Project.Migrations
             modelBuilder.Entity("OOP_Final_Project.Models.AccountType", b =>
                 {
                     b.Navigation("Accounts");
+
+                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.Appointment", b =>
@@ -829,11 +827,6 @@ namespace OOP_Final_Project.Migrations
             modelBuilder.Entity("OOP_Final_Project.Models.Clinic", b =>
                 {
                     b.Navigation("Departments");
-                });
-
-            modelBuilder.Entity("OOP_Final_Project.Models.Department", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("OOP_Final_Project.Models.DocumentType", b =>

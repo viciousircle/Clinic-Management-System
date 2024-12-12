@@ -67,17 +67,17 @@ public class ApplicationDbContext : DbContext
                         .HasForeignKey(a => a.AccountTypeId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-                // Define a unique constraint for the combination of UserName and Password
+                //- Define a unique constraint for the combination of UserName and Password
                 modelBuilder.Entity<Account>()
                     .HasIndex(a => new { a.UserName, a.Password })
                     .IsUnique();
 
-                //- 1 - N relationship between Department and Employee
-                modelBuilder.Entity<Employee>()
-                        .HasOne(e => e.Department)
-                        .WithMany(d => d.Employees)
-                        .HasForeignKey(e => e.DepartmentId)
-                        .OnDelete(DeleteBehavior.Cascade);
+                // //- 1 - N relationship between AccountType and Department
+                modelBuilder.Entity<Department>()
+                        .HasOne(d => d.AccountType)
+                        .WithMany(e => e.Departments)
+                        .HasForeignKey(d => d.AccountTypeId)
+                        .OnDelete(DeleteBehavior.SetNull);
 
                 //- 1 - N relationship between Employee and EmployeeSchedule
                 modelBuilder.Entity<EmployeeSchedule>()
