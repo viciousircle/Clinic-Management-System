@@ -17,6 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add controllers support (for API)
+builder.Services.AddControllers();
+
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -37,6 +41,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
+app.MapControllers(); // Map API controllers
+
 
 app.UseAuthentication();  // Enable authentication
 
@@ -58,6 +64,8 @@ app.UseAuthentication();  // Enable authentication
 
 // }
 // Console.WriteLine("Application setup completed.");
+
+
 
 app.Run();
 
