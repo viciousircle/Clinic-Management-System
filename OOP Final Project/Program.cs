@@ -40,24 +40,24 @@ app.MapRazorPages();
 
 app.UseAuthentication();  // Enable authentication
 
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+// using (var scope = app.Services.CreateScope())
+// {
+//     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    // dbContext.Database.ExecuteSqlRaw("DELETE FROM Employees");
+//     // dbContext.Database.ExecuteSqlRaw("DELETE FROM Employees");
 
-    // Apply any pending migrations
-    dbContext.Database.Migrate();
+//     // Apply any pending migrations
+//     dbContext.Database.Migrate();
 
-    Console.WriteLine("Starting data seeding...");
+//     Console.WriteLine("Starting data seeding...");
 
-    // Seed the data after migrations are applied
-    SeedData(scope.ServiceProvider);
+//     // Seed the data after migrations are applied
+//     SeedData(scope.ServiceProvider);
 
-    Console.WriteLine("Data seeding completed.");
+//     Console.WriteLine("Data seeding completed.");
 
-}
-Console.WriteLine("Application setup completed.");
+// }
+// Console.WriteLine("Application setup completed.");
 
 app.Run();
 
