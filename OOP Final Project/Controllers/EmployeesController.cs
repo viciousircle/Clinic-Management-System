@@ -12,9 +12,9 @@ public class EmployeesController : ControllerBase
 {
 
 
-    // !GET /api/employees: List all employees.
-    // !GET /api/employees/{id}: Get a specific employee by ID.
-    // !POST /api/employees: Add a new employee.
+    // - GET /api/employees: List all employees.
+    // - GET /api/employees/{id}: Get a specific employee by ID.
+    // - POST /api/employees: Add a new employee.
 
     private readonly ApplicationDbContext _context;
 
