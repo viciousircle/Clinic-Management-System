@@ -40,6 +40,17 @@ public class EmployeesController : ControllerBase
         return Ok(employee);
     }
 
+
+    [HttpGet("byFirstName/{firstName}")]
+    public IActionResult GetByFirstName(string firstName)
+    {
+        var employee = _context.Employees.FirstOrDefault(e => e.FirstName == firstName);
+        if (employee == null)
+            return NotFound();
+
+        return Ok(employee);
+    }
+
     [HttpPost]
     public IActionResult Create(Employee employee)
     {
