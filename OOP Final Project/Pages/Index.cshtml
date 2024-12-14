@@ -39,56 +39,42 @@
             <!-- Overview Cards -->
             <div class="col-md-12">
                 <div class="row d-flex justify-content-center align-items-stretch">
-                    <!-- Info -->
-                    <div class="col-sm-3">
-                        <div class="card shadow-sm border-1 h-100 rounded-16px">
+                    @if (Model.PatientWithId1 != null)
+                    {
+                        <div class="col-sm-3">
+                            <div class="card shadow-sm border-1 h-100 rounded-16px">
+                                <div class="card-body d-flex flex-column" style="justify-content: space-between;">
+                                    <div class="py-2 d-flex align-items-center" style="justify-content: space-between;">
+                                        <i class="fas fa-user-tag"></i>
+                                        <h5 class="card-title mb-0">@Model.PatientWithId1.FirstName</h5>
+                                    </div>
 
-                            <div class="card-body d-flex flex-column" style="justify-content: space-between;">
+                                    <div class="d-flex gap-md-2 flex-column">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>ID:</div>
+                                            <div class="text-dark btn-sm" style="background-color:#f4f4f4;">
+                                                @Model.PatientWithId1.Id</div>
+                                        </div>
 
-                                <div class=" py-2 d-flex align-items-center" style="justify-content: space-between;">
-                                    <i class="fas fa-user-tag"></i>
-                                    <h5 class="card-title mb-0">David</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>Status:</div>
+                                            <div class="btn-sm" style="background-color:#fff3b0; color: #8a7405;">
+                                                @Model.PatientWithId1.LastName</div>
+                                        </div>
+
+                                        <div class="d-flex gap-md-3 justify-content-between align-items-center">
+                                            <div>Last visit:</div>
+                                            <div>@Model.PatientWithId1.LastName</div>
+                                        </div>
+                                    </div>
                                 </div>
-
-
-                                <div class="d-flex gap-md-2 flex-column">
-
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            ID:
-                                        </div>
-
-                                        <div class="text-dark btn-sm" style="background-color:#f4f4f4;">2020290
-                                        </div>
-
-                                    </div>
-
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            Status:
-                                        </div>
-
-                                        <div class=" btn-sm" style="background-color:#fff3b0; color: #8a7405 ;">Obeseved
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="d-flex gap-md-3 justify-content-between   align-items-center">
-                                        <div>
-                                            Last visit:
-                                        </div>
-                                        <div class="">
-                                            2021-10-10
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <p>No patient found with ID 1.</p>
+                    }
                     <!-- Upcoming Appointments -->
                     <div class="col-sm-4">
                         <div class="card shadow-sm border-1 h-100 rounded-16px">
