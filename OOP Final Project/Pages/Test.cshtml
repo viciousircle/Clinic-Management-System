@@ -1,0 +1,47 @@
+﻿@page
+@model OOP_Final_Project.Pages.TestModel
+@{
+}
+
+
+<h1>Employee List</h1>
+<table id="employeesTable" border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be dynamically inserted here -->
+    </tbody>
+</table>
+
+<script>
+    // Fetch data from the API and display it in the table
+    async function fetchEmployees() {
+        try {
+            const response = await fetch('/api/employees');
+            if (!response.ok) throw new Error('Failed to fetch data');
+
+            const employees = await response.json();
+            const tableBody = document.querySelector('#employeesTable tbody');
+
+            employees.forEach(emp => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${emp.id}</td>
+                    <td>${emp.phone}</td>
+                    <td>${emp.firstName}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Call the function when the page loads
+    window.onload = fetchEmployees;
+</script>
