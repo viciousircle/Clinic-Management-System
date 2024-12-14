@@ -27,6 +27,9 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient();
+
+
 
 
 // Build the app
