@@ -1,0 +1,43 @@
+﻿@page
+@model OOP_Final_Project.Models.ViewModels.LoginViewModel
+
+@{
+}
+
+<h2 class="mt-5 pt-5">Log In</h2>
+
+<form asp-action="Login" method="post" id="loginForm" onsubmit="showLoading()">
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="RememberMe"></label>
+        <input asp-for="RememberMe" type="checkbox" />
+    </div>
+    <button type="submit">Log In</button>
+</form>
+
+@if (!string.IsNullOrEmpty(ViewData["Error"] as string))
+{
+    <div class="error">
+    @ViewData["Error"]
+</div>
+}
+
+<div id="loading" style="display: none;">Logging in...</div>
+
+<script>
+    function showLoading() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("loginForm").submit();
+    }
+</script>

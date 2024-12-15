@@ -12,16 +12,19 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly ILogger<AccountController> _logger;
     private readonly ApplicationDbContext _context;
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
+        ILogger<AccountController> logger,
         ApplicationDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _context = context;
+        _logger = logger;
     }
 
     // GET: Register
@@ -84,6 +87,9 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
+            // Log the attempt to login
+            _logger.LogInformation("Attempting login for user: {UserName}", model.UserName);
+
             var user = await _userManager.FindByNameAsync(model.UserName);
 
             if (user != null)
@@ -97,7 +103,7 @@ public class AccountController : Controller
 
                     if (accountTypeId == 1) // Manager
                     {
-                        return RedirectToAction("Index", "Manager");
+                        return RedirectToAction("Index", "Home");
                     }
                     else if (accountTypeId == 2) // Doctor
                     {

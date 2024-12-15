@@ -14,9 +14,17 @@ Console.WriteLine("Application is starting...");
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging();  // Adds logging service
+
+
 // Use SQLite for the database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add Identity services
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // Add controllers support (for API)
 builder.Services.AddControllers();
@@ -55,6 +63,13 @@ app.UseSwaggerUI();
 
 app.UseAuthentication();  // Enable authentication
 
+
+
+
+
+app.Run();
+
+
 // using (var scope = app.Services.CreateScope())
 // {
 //     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -74,9 +89,6 @@ app.UseAuthentication();  // Enable authentication
 // }
 // Console.WriteLine("Application setup completed.");
 
-
-
-app.Run();
 
 static void SeedData(IServiceProvider serviceProvider)
 {
