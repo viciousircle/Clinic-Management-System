@@ -1,0 +1,52 @@
+﻿@page
+@model OOP_Final_Project.Pages.Employees.EmployeeLayoutModel
+@{
+}
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<style>
+    body {
+        background-color: #f7f8ff;
+        color: #195478;
+
+    }
+
+
+    .rounded-16px {
+        border-radius: 16px;
+    }
+
+    .hover-effect:hover {
+        background-color: #d7dbe1;
+    }
+</style>
+
+<div class=" pt-3 mt-5" style="background-color: #f7f8ff; font-family: Poppins, sans-serif; ">
+    <div class="d-flex gap-3 min-vh-100">
+
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-flex flex-column ps-5">
+
+            @* ? Doctor *@
+            <partial name="~/Pages/Employees/Doctors/_SideBar.cshtml" />
+        </nav>
+
+        <!-- Main Content -->
+        <div class=" pt-3 mx-5 mt-5 shadow-lg text-dark w-100"
+            style="border-top-left-radius: 48px; border-top-right-radius: 48px; background-color: #fefefe; box-shadow: 0 0 10px rgba(23, 23, 27, 0.1);">
+
+            @* <partial name="~/Pages/Employees/Doctors/_Dashboard.cshtml" /> *@
+
+            @* <partial name="~/Pages/Employees/Doctors/_Appointment.cshtml" /> *@
+
+            <partial name="~/Pages/Employees/Doctors/_Patient.cshtml" />
+
+
+
+        </div>
+
+    </div>
+</div>

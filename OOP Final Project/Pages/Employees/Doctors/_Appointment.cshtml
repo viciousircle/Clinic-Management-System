@@ -1,0 +1,272 @@
+﻿<div class="px-5">
+    <!-- Header Section -->
+    <div class=" " style="padding-top: 64px;">
+        <div class="  d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Appointments</h3>
+
+
+            <div class="btn btn-outline-dark shadow-sm ">Make new appointment</div>
+
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Statistics Section -->
+    <div class="my-4 d-flex flex-wrap" style="justify-content: space-between;">
+        <!-- Total Appointments -->
+        <div class="col-md-3 d-flex flex-column">
+            <div class="card quick-access-card text-center shadow-sm"
+                style="background-color: white; border-radius: 16px;">
+                <div class="card-body p-3 pb-2 d-flex flex-column g-2">
+                    <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
+                        <div class="text-muted">Total Appointments</div>
+                        <div class="d-flex gap-md-3 align-items-center">
+                            <h3 class="mb-0 pb-0 ">500</h3>
+                            <small class="text-success">
+                                <i class="fas fa-arrow-circle-up"></i> 10% last month
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Appointments -->
+        <div class="col-md-3 d-flex flex-column">
+            <div class="card quick-access-card text-center shadow-sm"
+                style="background-color: white; border-radius: 16px;">
+                <div class="card-body p-3 pb-2 d-flex flex-column g-2">
+                    <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
+                        <div class="text-muted">Future Appointments</div>
+                        <div class="d-flex gap-md-2 align-items-center">
+                            <h3 class="mb-0">200</h3>
+                            <small>in the next 30 days</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Completed Appointments -->
+        <div class="col-md-3 d-flex flex-column">
+            <div class="card quick-access-card text-center shadow-sm"
+                style="background-color: white; border-radius: 16px;">
+                <div class="card-body p-3 pb-2 d-flex flex-column g-2">
+                    <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
+                        <div class="text-muted">Completed Appointments</div>
+                        <div class="d-flex gap-md-4 align-items-center">
+                            <h3 class="mb-0 text-success">280</h3>
+                            <small class="text-success">
+                                <i class="fas fa-check-circle"></i> 95%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancelled Appointments -->
+        <div class="col-md-2 d-flex flex-column" style="flex: 0 0 auto; width: 16.66666667%;">
+            <div class="card quick-access-card text-center shadow-sm"
+                style="background-color: white; border-radius: 16px;">
+                <div class="card-body p-3 pb-2 d-flex flex-column ">
+                    <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
+                        <div class="text-muted">Cancelled</div>
+                        <div class="d-flex gap-md-2 align-items-center">
+                            <h3 class="mb-0 text-danger">20</h3>
+                            <small class="text-danger">
+                                <i class="fas fa-times-circle"></i> 4%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        @* <!-- Summary Section -->
+                    <div class=" my-4">
+                        <div class="card shadow-sm" style="border-radius: 16px; background-color: #f9f9f9;">
+                            <div class="card-body p-4">
+                                <h5 class="mb-3">Summary</h5>
+                                <p class="text-muted mb-1">Track your appointments' performance and insights:</p>
+                                <ul class="mb-0">
+                                    <li>Total appointments have increased by <strong>10%</strong> compared to last
+                                        month.
+                                    </li>
+                                    <li><strong>95%</strong> of appointments were successfully completed.</li>
+                                    <li>Only <strong>4%</strong> of appointments were cancelled.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> *@
+
+
+
+    </div>
+
+    <!-- Upcoming Appointments Section -->
+    <div class="card rounded-16px mb-4 shadow-sm p-4" style="background-color: #ffffff;">
+        <!-- Filters and Buttons -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex gap-md-2">
+                <!-- View Options -->
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-dark ">Today</button>
+                    <button type="button" class="btn btn-outline-dark ">View All</button>
+                    <button type="button" class="btn btn-outline-dark  ">Previous</button>
+                </div>
+
+                @* TODO: Cái này chỉ hiện khi ấn vào view all hoặc previous thôi *@
+                <!-- Date Filter -->
+                <div>
+                    <input type="date" class="form-control d-inline-block w-auto "
+                        onchange="filterAppointmentsByDate()">
+                </div>
+                @* TODO *@
+
+                <!-- Sort Options -->
+                <div>
+                    <select id="sortTime" class="form-select w-auto " onchange="sortAppointments()">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Search Input -->
+            <div class="input-group w-25">
+                <span class="input-group-text text-muted">
+                    <i class="fas fa-search"></i>
+                </span>
+
+                <input type="text" class="form-control" placeholder="Search">
+            </div>
+        </div>
+
+
+
+        <!-- Appointments Table -->
+        <table class="table table-hover table-bordered shadow-sm text-center " id="appointmentsTable">
+            <thead class="table-light">
+                <tr>
+                    <th style="font-weight: 600;">Patient Name</th>
+                    <th style="font-weight: 600;">Appointment Date</th>
+                    <th style="font-weight: 600;">Appointment Time</th>
+                    <th style="font-weight: 600;">Reason for Visit</th>
+                    <th style="font-weight: 600;">Status</th>
+                </tr>
+            </thead>
+            @* <tbody>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr class="align-middle">
+                        <td>@appointment.PatientName</td>
+                        <td>@appointment.AppointmentDate.ToString("yyyy-MM-dd")</td>
+                        <td>@appointment.AppointmentTime</td>
+                        <td>@appointment.Reason</td>
+                        <td>
+                            <button class="btn btn-outline-danger btn-sm" onclick="openHealthCheckModal(this)">Health Check
+                                Now</button>
+                        </td>
+                    </tr>
+                }
+            </tbody> *@
+
+
+        </table>
+    </div>
+
+</div>
+
+<div class="modal fade" id="healthCheckModal" tabindex="-1" aria-labelledby="healthCheckModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="healthCheckModalLabel">Health Check</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Perform the health check for the selected patient.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="markAsDone()">Mark as Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let selectedRow = null; // To store the selected row for marking as done
+
+
+    function searchAppointments() {
+        const searchInput = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+        rows.forEach(row => {
+            const rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(searchInput) ? "" : "none";
+        });
+    }
+
+    function filterAppointmentsByDate() {
+        const dateFilter = document.getElementById("dateFilter").value;
+        const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+        rows.forEach(row => {
+            const appointmentDate = row.cells[1].textContent; // Get appointment date from second column
+            row.style.display = dateFilter && appointmentDate !== dateFilter ? "none" : "";
+        });
+    }
+
+    function sortAppointments() {
+        const sortOption = document.getElementById("sortTime").value;
+        const table = document.getElementById("appointmentsTable");
+        const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+        rows.sort((rowA, rowB) => {
+            const timeA = rowA.cells[2].textContent; // Get appointment time from third column
+            const timeB = rowB.cells[2].textContent;
+
+            return sortOption === "asc" ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
+        });
+
+        const tbody = table.querySelector("tbody");
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+    function openHealthCheckModal(button) {
+        // Store the selected row
+        selectedRow = button.closest("tr");
+
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('healthCheckModal'));
+        modal.show();
+    }
+
+    function markAsDone() {
+        if (selectedRow) {
+            // Update the status cell to "Completed Health Check"
+            const statusCell = selectedRow.cells[4];
+            statusCell.innerHTML = '<span class="btn btn-sm btn-success">Completed</span>';
+
+            // Move the row to the end of the table body
+            const tableBody = selectedRow.parentElement;
+            tableBody.appendChild(selectedRow);
+
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('healthCheckModal'));
+            modal.hide();
+
+            // Reset the selected row
+            selectedRow = null;
+        }
+    }
+</script>
