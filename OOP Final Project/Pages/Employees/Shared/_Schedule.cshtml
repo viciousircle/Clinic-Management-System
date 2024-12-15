@@ -1,0 +1,422 @@
+﻿<style>
+    body {
+        background-color: #f7f8ff;
+        color: #195478;
+
+    }
+
+    .rounded-12px {
+        border-radius: 12px;
+    }
+
+    .rounded-16px {
+        border-radius: 16px;
+    }
+
+    .rounded-24px {
+        border-radius: 24px;
+    }
+
+    .hover-effect:hover {
+        background-color: #d7dbe1;
+    }
+
+    th {
+        font-weight: 600;
+    }
+
+    .work-with-tag {
+        background-color: #000000;
+        color: #ffffff;
+        border: 1px solid #195478;
+        padding: 6px 12px;
+        border-radius: 24px;
+    }
+</style>
+
+
+<div class="px-5">
+    <!-- Header Section -->
+    <div class=" " style="padding-top: 64px;">
+        <div class="  d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Schedule</h3>
+
+
+            <div class="btn btn-outline-dark shadow-sm ">History</div>
+
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="my-4 d-flex flex-wrap gap-md-3" style="justify-content:space-around;">
+
+        <div class="col-md-5 d-flex flex-column">
+            <div class="card quick-access-card text-center shadow-sm"
+                style="background-color: white; border-radius: 24px;">
+                <div class="card-body p-3 pb-2 d-flex flex-column g-2">
+                    <div class="d-flex flex-column align-items-start gap-md-2 mb-3" style="align-items: center;">
+                        <div class="d-flex w-100 " style="justify-content: space-between;">
+                            <div class="text-muted ">Schedule</div>
+                            <div class="text-muted ">01.06 - 30.09</div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-center align-items-center w-100 gap-3 week-widget text-dark">
+                            <div class="d-flex justify-content-center align-items-center gap-3 bg-dark shadow text-light py-0 px-4 "
+                                style="border-radius: 48px;">
+                                <!-- Monday -->
+                                <div class="day-card text-center rounded-12px">
+                                    Mon
+                                </div>
+                                <!-- Tuesday -->
+                                <div class="bg-danger px-2 py-2 my-2 rounded-24px">
+
+                                    <div class="day-card active text-center rounded-24px">
+                                        Tue
+                                    </div>
+                                </div>
+                                <!-- Wednesday -->
+                                <div class="day-card text-center rounded-12px">
+                                    Wed
+                                </div>
+                                <!-- Thursday -->
+                                <div class="day-card text-center rounded-12px">
+                                    Thu
+                                </div>
+                                <!-- Friday -->
+                                <div class="day-card text-center rounded-12px">
+                                    Fri
+                                </div>
+                            </div>
+
+                            <!-- Saturday -->
+                            <div class="day-card text-center rounded-12px">
+                                Sat
+                            </div>
+                            <!-- Sunday -->
+                            <div class="day-card text-center rounded-12px">
+                                Sun
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* TODO: Cung 1 lich, cung 1 phong thi se la dong nghiep cua nhau *@
+        <div class="col-md-6  ">
+            <div class=" d-flex flex-column ">
+                <div class="card quick-access-card text-center shadow-sm"
+                    style="background-color: white; border-radius: 24px;">
+                    <div class="card-body p-3 pb-2 d-flex flex-column g-2">
+                        <div class="d-flex flex-column align-items-start gap-md-2 mb-4 " style="align-items: center;">
+                            <div class="d-flex w-100 " style="justify-content: space-between;">
+                                <div class="text-muted ">Work with</div>
+                                <div class="text-muted ">Today</div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-center align-items-center w-100  gap-3 pt-2 text-dark">
+
+                                <div class="work-with-tag">Dr. Mick Jahn</div>
+                                <div class="work-with-tag">Dr. Mick Jahn</div>
+                                <div class="work-with-tag">Dr. Mick Jahn</div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="d-flex flex-wrap justify-content-start mb-3 mx-3 text-dark gap-md-3">
+
+        <div class="card rounded-12px shadow-sm" style="padding: 6px;">
+            <div class="card-body col-md-5" style="width: 100%;">
+                <div class="d-flex  align-items-center gap-md-3" style="justify-content: space-between;">
+                    <div class="d-flex  align-items-center gap-md-1">
+                        <h5 class="card-title mb-0">Monday</h5>
+                    </div>
+
+                    <div class=" btn-sm btn px-5 btn-outline-dark">
+                        Show</div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex" style="justify-content: space-between;">
+                    <div class="d-flex  flex-column" style="justify-content: space-between;">
+                        <div>Morning</div>
+                        <div>Afternoon</div>
+                    </div>
+                    <div class="d-flex  flex-column gap-md-2">
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    09:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    11:00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    09:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    04:00
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card rounded-12px shadow-sm" style="padding: 6px;">
+            <div class="card-body col-md-5" style="width: 100%;">
+                <div class="d-flex  align-items-center gap-md-3" style="justify-content: space-between;">
+                    <div class="d-flex  align-items-center gap-md-1">
+                        <h5 class="card-title mb-0">Tuesday</h5>
+                    </div>
+
+                    <div class=" btn-sm btn px-5 btn-outline-dark">
+                        Show</div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex" style="justify-content: space-between;">
+                    <div class="d-flex  flex-column" style="justify-content: space-between;">
+                        <div>Morning</div>
+                        <div>Afternoon</div>
+                    </div>
+                    <div class="d-flex  flex-column gap-md-2">
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    08:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    11:00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    09:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    03:00
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="card rounded-12px shadow-sm" style="padding: 6px;">
+            <div class="card-body col-md-5" style="width: 100%;">
+                <div class="d-flex  align-items-center gap-md-3" style="justify-content: space-between;">
+                    <div class="d-flex  align-items-center gap-md-1">
+                        <h5 class="card-title mb-0">Wednesday</h5>
+                    </div>
+
+                    <div class=" btn-sm btn px-5 btn-outline-dark">
+                        Show</div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex" style="justify-content: space-between;">
+                    <div class="d-flex  flex-column" style="justify-content: space-between;">
+                        <div>Morning</div>
+                        <div>Afternoon</div>
+                    </div>
+                    <div class="d-flex  flex-column gap-md-2">
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    08:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    11:00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    09:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    03:00
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="card rounded-12px shadow-sm" style="padding: 6px;">
+            <div class="card-body col-md-5" style="width: 100%;">
+                <div class="d-flex  align-items-center gap-md-3" style="justify-content: space-between;">
+                    <div class="d-flex  align-items-center gap-md-1">
+                        <h5 class="card-title mb-0">Thursday</h5>
+                    </div>
+
+                    <div class=" btn-sm btn px-5 btn-outline-dark">
+                        Show</div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex" style="justify-content: space-between;">
+                    <div class="d-flex  flex-column" style="justify-content: space-between;">
+                        <div>Morning</div>
+                        <div>Afternoon</div>
+                    </div>
+                    <div class="d-flex  flex-column gap-md-2">
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    08:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    11:00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    09:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    03:00
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="card rounded-12px shadow-sm" style="padding: 6px;">
+            <div class="card-body col-md-5" style="width: 100%;">
+                <div class="d-flex  align-items-center gap-md-3" style="justify-content: space-between;">
+                    <div class="d-flex  align-items-center gap-md-1">
+                        <h5 class="card-title mb-0">Friday</h5>
+                    </div>
+
+                    <div class=" btn-sm btn px-5 btn-outline-dark">
+                        Show</div>
+
+                </div>
+
+                <hr>
+
+                <div class="d-flex" style="justify-content: space-between;">
+                    <div class="d-flex  flex-column" style="justify-content: space-between;">
+                        <div>Morning</div>
+                        <div>Afternoon</div>
+                    </div>
+                    <div class="d-flex  flex-column gap-md-2">
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    08:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    11:00
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex gap-md-2 align-items-center " style="justify-content:space-between">
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    09:00
+                                </div>
+                                <div> - </div>
+                                <div class="text-dark btn-sm w-100 d-flex"
+                                    style="background-color:#f4f4f4; justify-content: center;">
+                                    03:00
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div>

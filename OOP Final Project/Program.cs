@@ -53,6 +53,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
+
 app.UseAuthentication();  // Enable authentication
 
 // using (var scope = app.Services.CreateScope())
