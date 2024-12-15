@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Models;
+using OOP_Final_Project.Models.Identity;
 
 namespace OOP_Final_Project.Data;
 
@@ -59,6 +60,13 @@ public class ApplicationDbContext : DbContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
                 base.OnModelCreating(modelBuilder);
+
+                //! Define identity for ApplicationUser
+                modelBuilder.Entity<ApplicationUser>()
+                        .HasOne(u => u.AccountType)
+                        .WithMany()
+                        .HasForeignKey(u => u.AccountTypeId)
+                        .OnDelete(DeleteBehavior.Restrict);
 
                 //- 1 - N relationship between AccountType and Account
                 modelBuilder.Entity<Account>()
@@ -248,100 +256,6 @@ public class ApplicationDbContext : DbContext
                     .WithOne(a => a.Employee)
                     .HasForeignKey<Employee>(e => e.AccountId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-
-
-                // //? Level 1
-                // int clinicNumber = 10;
-
-                // // //! Seeding the account types
-                // var accountTypes = DataSeeder.SeedAccountTypes();
-                // modelBuilder.Entity<AccountType>().HasData(accountTypes);
-
-                // // //! Seeding the clinics
-                // var clinics = DataSeeder.SeedClinics(clinicNumber);
-                // modelBuilder.Entity<Clinic>().HasData(clinics);
-
-                // // //! Seeding the schedules
-                // var schedules = DataSeeder.SeedSchedules();
-                // modelBuilder.Entity<Schedule>().HasData(schedules);
-
-                // // //! Seeding the medicine types
-                // var medicineTypes = DataSeeder.SeedMedicineTypes();
-                // modelBuilder.Entity<MedicineType>().HasData(medicineTypes);
-
-                // // //! Seeding the document types
-                // var documentTypes = DataSeeder.SeedDocumentTypes();
-                // modelBuilder.Entity<DocumentType>().HasData(documentTypes);
-
-                // // ? Level 2
-
-                // int patientNumber = 4000;
-                // int medicineCount = 1000;
-
-                // // //! Seeding the departments
-                // var departments = DataSeeder.SeedDepartments(clinics);
-                // modelBuilder.Entity<Department>().HasData(departments);
-
-                // // //! Seeding the accounts
-                // var accounts = DataSeeder.SeedAccounts(accountTypes, clinics, patientNumber);
-                // modelBuilder.Entity<Account>().HasData(accounts);
-
-                // // //! Seeding the patients
-                // var patients = DataSeeder.SeedPatients(clinics, accounts);
-                // modelBuilder.Entity<Patient>().HasData(patients);
-
-                // // ? Level 3
-
-                // // //! Seeding the employees
-                // var employees = DataSeeder.SeedEmployees(accounts, clinics, departments);
-                // modelBuilder.Entity<Employee>().HasData(employees);
-
-                // // //! Seeding the medicines
-                // var medicines = DataSeeder.SeedMedicines(medicineTypes, employees, medicineCount);
-                // modelBuilder.Entity<Medicine>().HasData(medicines);
-
-                // // //! Seeding the appointments
-                // var appointments = DataSeeder.SeedAppointments(employees, patients);
-                // modelBuilder.Entity<Appointment>().HasData(appointments);
-
-                // // //! Seeding the prescriptions
-                // var prescriptions = DataSeeder.SeedPrescriptions(appointments);
-                // modelBuilder.Entity<Prescription>().HasData(prescriptions);
-
-                // // ? Level 4
-
-                // // //! Seeding the employee schedules
-                // var employeeSchedules = DataSeeder.SeedEmployeeSchedules(schedules, employees);
-                // modelBuilder.Entity<EmployeeSchedule>().HasData(employeeSchedules);
-
-                // // //! Seeding the prescription medicines
-                // var prescriptionMedicines = DataSeeder.SeedPrescriptionMedicines(prescriptions, medicines);
-                // modelBuilder.Entity<PrescriptionMedicine>().HasData(prescriptionMedicines);
-
-                // // ? Level 5
-
-                // // //! Seeding the document appointments
-                // var documentAppointments = DataSeeder.SeedDocumentAppointments(appointments, employeeSchedules);
-                // modelBuilder.Entity<DocumentAppointment>().HasData(documentAppointments);
-
-                // // //! Seeding the document diagnosis
-                // var documentDiagnoses = DataSeeder.SeedDocumentDiagnoses(appointments);
-                // modelBuilder.Entity<DocumentDiagnose>().HasData(documentDiagnoses);
-
-                // // //! Seeding the document prescribes
-                // var documentPrescribes = DataSeeder.SeedDocumentPrescribes(prescriptions, employees);
-                // modelBuilder.Entity<DocumentPrescribe>().HasData(documentPrescribes);
-
-                // // //! Seeding the document bills
-                // var documentBills = DataSeeder.SeedDocumentBills(appointments, employees);
-                // modelBuilder.Entity<DocumentBill>().HasData(documentBills);
-
-                // // //! Seeding the document cancels
-                // var documentCancels = DataSeeder.SeedDocumentCancels(appointments);
-                // modelBuilder.Entity<DocumentCancel>().HasData(documentCancels);
-
-
 
         }
 

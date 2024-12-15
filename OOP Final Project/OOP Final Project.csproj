@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Interfaces/" />
+    <Folder Include="Pages/Account/" />
     <Folder Include="ViewModels/" />
   </ItemGroup>
 
