@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace OOP_Final_Project.Pages.Employees
 {
-    public class EmployeeLayoutModel : PageModel
+    public class TestPharmaModel : PageModel
     {
-        // Default handler for the page (no need for OnGet(), since we're dynamically loading content)
         public void OnGet()
         {
         }
@@ -16,16 +15,17 @@ namespace OOP_Final_Project.Pages.Employees
             switch (section)
             {
                 case "Dashboard":
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml"); // Ensure the correct path
-                case "Appointment":
-                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml"); // Ensure the correct path
+                case "Prescribe":
+                    return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml"); // Ensure the correct path
                 case "Patient":
-                    return Partial("~/Pages/Employees/Doctors/_Patient.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml"); // Ensure the correct path
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
                 default:
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml"); // Ensure the correct path
             }
         }
     }
 }
+

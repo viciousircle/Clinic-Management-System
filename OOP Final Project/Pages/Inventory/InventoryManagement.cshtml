@@ -268,6 +268,8 @@
 
             </div>
         </div>
+
+
     </div>
 </div>
 
@@ -288,76 +290,6 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    let selectedRow = null; // To store the selected row for marking as done
-
-
-    function searchAppointments() {
-        const searchInput = document.getElementById("searchInput").value.toLowerCase();
-        const rows = document.querySelectorAll("#appointmentsTable tbody tr");
-
-        rows.forEach(row => {
-            const rowText = row.textContent.toLowerCase();
-            row.style.display = rowText.includes(searchInput) ? "" : "none";
-        });
-    }
-
-    function filterAppointmentsByDate() {
-        const dateFilter = document.getElementById("dateFilter").value;
-        const rows = document.querySelectorAll("#appointmentsTable tbody tr");
-
-        rows.forEach(row => {
-            const appointmentDate = row.cells[1].textContent; // Get appointment date from second column
-            row.style.display = dateFilter && appointmentDate !== dateFilter ? "none" : "";
-        });
-    }
-
-    function sortAppointments() {
-        const sortOption = document.getElementById("sortTime").value;
-        const table = document.getElementById("appointmentsTable");
-        const rows = Array.from(table.querySelectorAll("tbody tr"));
-
-        rows.sort((rowA, rowB) => {
-            const timeA = rowA.cells[2].textContent; // Get appointment time from third column
-            const timeB = rowB.cells[2].textContent;
-
-            return sortOption === "asc" ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
-        });
-
-        const tbody = table.querySelector("tbody");
-        rows.forEach(row => tbody.appendChild(row));
-    }
-
-    function openHealthCheckModal(button) {
-        // Store the selected row
-        selectedRow = button.closest("tr");
-
-        // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById('healthCheckModal'));
-        modal.show();
-    }
-
-    function markAsDone() {
-        if (selectedRow) {
-            // Update the status cell to "Completed Health Check"
-            const statusCell = selectedRow.cells[4];
-            statusCell.innerHTML = '<span class="btn btn-sm btn-success">Completed</span>';
-
-            // Move the row to the end of the table body
-            const tableBody = selectedRow.parentElement;
-            tableBody.appendChild(selectedRow);
-
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('healthCheckModal'));
-            modal.hide();
-
-            // Reset the selected row
-            selectedRow = null;
-        }
-    }
-</script>
 
 
 
@@ -403,6 +335,76 @@
 </div>
 
 @section Scripts {
+
+    <script>
+        let selectedRow = null; // To store the selected row for marking as done
+
+
+        function searchAppointments() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+            rows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                row.style.display = rowText.includes(searchInput) ? "" : "none";
+            });
+        }
+
+        function filterAppointmentsByDate() {
+            const dateFilter = document.getElementById("dateFilter").value;
+            const rows = document.querySelectorAll("#appointmentsTable tbody tr");
+
+            rows.forEach(row => {
+                const appointmentDate = row.cells[1].textContent; // Get appointment date from second column
+                row.style.display = dateFilter && appointmentDate !== dateFilter ? "none" : "";
+            });
+        }
+
+        function sortAppointments() {
+            const sortOption = document.getElementById("sortTime").value;
+            const table = document.getElementById("appointmentsTable");
+            const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+            rows.sort((rowA, rowB) => {
+                const timeA = rowA.cells[2].textContent; // Get appointment time from third column
+                const timeB = rowB.cells[2].textContent;
+
+                return sortOption === "asc" ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
+            });
+
+            const tbody = table.querySelector("tbody");
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function openHealthCheckModal(button) {
+            // Store the selected row
+            selectedRow = button.closest("tr");
+
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('healthCheckModal'));
+            modal.show();
+        }
+
+        function markAsDone() {
+            if (selectedRow) {
+                // Update the status cell to "Completed Health Check"
+                const statusCell = selectedRow.cells[4];
+                statusCell.innerHTML = '<span class="btn btn-sm btn-success">Completed</span>';
+
+                // Move the row to the end of the table body
+                const tableBody = selectedRow.parentElement;
+                tableBody.appendChild(selectedRow);
+
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('healthCheckModal'));
+                modal.hide();
+
+                // Reset the selected row
+                selectedRow = null;
+            }
+        }
+    </script>
+
     <script>
         // Toggle More Actions visibility
         document.getElementById('moreActionsBtn').addEventListener('click', function () {
