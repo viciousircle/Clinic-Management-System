@@ -2,3 +2,112 @@
 @model OOP_Final_Project.Pages.Employees.Shared.LogInModel
 @{
 }
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<style>
+    body {
+        background-color: #f7f8ff;
+        color: #195478;
+    }
+
+    .rounded-16px {
+        border-radius: 16px;
+    }
+
+    .hover-effect:hover {
+        background-color: #d7dbe1;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .login-form-container {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease, padding 0.5s ease;
+    }
+
+    .login-form-container.expanded {
+        max-height: 400px;
+        /* Adjust this based on the form's height */
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .login-button-container {
+        display: block;
+    }
+
+    .login-button-container.hidden {
+        display: none;
+    }
+</style>
+
+<div class="pt-5 mt-5 mb-5">
+    <div id="main-container" class="container mt-5 pt-5 pb-5 shadow"
+        style="background-color: white; border-radius: 36px; transition: all 0.5s ease;">
+        <!-- Dashboard Header -->
+        <div class="text-center mb-5" style="justify-content: center;">
+            <h1 class="display-4 fw-bold" style="color:#457b9d; font-family: Tangerine, cursive; font-size: 80pt;">
+                Viciousircle Clinic
+            </h1>
+            <h3 class="mb-4">Employee</h3>
+            <h5 style="color:#1d3557;">Healthy body - Healthy mind - Healthy soul</h5>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <!-- Main Content -->
+            <div class="col-md-5 d-flex flex-column gap-md-3 login-button-container" id="login-button-container">
+                <!-- Log in as Employee Button -->
+                <button id="login-button" class="btn w-100 py-2 text-light"
+                    style="border-radius: 36px; background: linear-gradient(135deg, #28436a, #457b9d);">
+                    Log in as Employee
+                </button>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="login-form-container">
+            <form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter username" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter password" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-3">Submit</button>
+                <button type="button" id="cancel-button" class="btn btn-secondary btn-block mt-3">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#login-button').click(function () {
+            const formContainer = $('#login-form');
+            const loginButtonContainer = $('#login-button-container');
+
+            // Show the login form and hide the login button
+            formContainer.addClass('expanded');
+            loginButtonContainer.addClass('hidden');
+        });
+
+        $('#cancel-button').click(function () {
+            const formContainer = $('#login-form');
+            const loginButtonContainer = $('#login-button-container');
+
+            // Hide the form and show the login button again
+            formContainer.removeClass('expanded');
+            loginButtonContainer.removeClass('hidden');
+        });
+    });
+</script>
