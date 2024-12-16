@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // Handle sidebar link clicks
-  $(".nav-link").on("click", function (e) {
+  $(".side-link").on("click", function (e) {
     e.preventDefault(); // Prevent the default behavior
 
     const page = $(this).data("page"); // Get the data-page attribute
@@ -18,6 +18,8 @@ $(document).ready(function () {
       },
     );
   });
+  // Initialize the chart
+  initializeChart();
 });
 
 function initializeChart() {
@@ -47,31 +49,3 @@ function initializeChart() {
     },
   });
 }
-
-$(document).ready(function () {
-  // Initialize the chart on page load
-  initializeChart();
-
-  // Handle sidebar link clicks
-  $(".nav-link").on("click", function (e) {
-    e.preventDefault(); // Prevent the default behavior
-
-    const page = $(this).data("page"); // Get the data-page attribute
-
-    // Send an AJAX request to load the selected partial view
-    $("#main-content").load(
-      "/Employees/EmployeeLayout?handler=LoadPartial&section=" + page,
-      function (response, status, xhr) {
-        if (status === "error") {
-          console.error("Error loading content:", xhr.status, xhr.statusText);
-          $("#main-content").html(
-            '<div class="text-danger text-center">Error loading content.</div>',
-          );
-        } else {
-          // Re-initialize the chart after loading new content
-          initializeChart();
-        }
-      },
-    );
-  });
-});
