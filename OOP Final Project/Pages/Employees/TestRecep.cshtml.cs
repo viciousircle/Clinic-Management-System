@@ -23,6 +23,8 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Receptionists/_Client.cshtml"); // Ensure the correct path
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
+                case "Logout":
+                    return Partial("~/Pages/Employees/Shared/_Logout.cshtml"); // Ensure the correct path
                 default:
                     return Partial("~/Pages/Employees/Receptionists/_Dashboard.cshtml"); // Ensure the correct path
             }
