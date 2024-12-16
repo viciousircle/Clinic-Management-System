@@ -12,9 +12,7 @@
     body {
         background-color: #f7f8ff;
         color: #195478;
-
     }
-
 
     .rounded-16px {
         border-radius: 16px;
@@ -23,50 +21,160 @@
     .hover-effect:hover {
         background-color: #d7dbe1;
     }
+
+    .hidden {
+        display: none;
+    }
+
+    .login-form-container {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease, padding 0.5s ease;
+    }
+
+    .login-form-container.expanded {
+        max-height: 400px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .btn-custom {
+        border-radius: 36px;
+        background: linear-gradient(135deg, #28436a, #457b9d);
+        transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #457b9d, #28436a);
+        transform: scale(1.05);
+    }
+
+    .btn-transparent {
+        border-radius: 36px;
+        border: 1px solid #195478;
+        background-color: transparent;
+        color: #195478;
+        transition: all 0.3s ease;
+    }
+
+    .btn-transparent:hover {
+        background: linear-gradient(135deg, #457b9d, #28436a);
+        color: white;
+    }
 </style>
 
-<div class="pt-5 mt-5">
-    <div class="container mt-5 pt-5 pb-5   shadow" style="background-color: white; border-radius: 36px;">
+<div class="pt-5 mt-5 mb-5">
+    <div class="container mt-5 pt-5 pb-5 shadow" style="background-color: white; border-radius: 36px;">
         <!-- Dashboard Header -->
         <div class="text-center mb-5">
             <h1 class="display-4 fw-bold" style="color:#457b9d; font-family: Tangerine, cursive; font-size: 80pt;">
                 Viciousircle Clinic</h1>
-            <h5 style="color:#1d3557;">Healthy body - Healthy mind - Healthy soul </h5>
+            <h5 style="color:#1d3557;">Healthy body - Healthy mind - Healthy soul</h5>
         </div>
 
         <div class="d-flex justify-content-center">
             <!-- Main Content -->
             <div class="col-md-5 d-flex flex-column gap-md-3">
                 <!-- Log in as Patient Button -->
-                <button class="btn w-100 py-2 text-light"
-                    style="border-radius: 36px; background: linear-gradient(135deg, #28436a, #457b9d);">
+                <button id="login-button" class="btn w-100 py-2 text-light btn-custom">
                     Log in as Patient
                 </button>
 
+                <!-- Login Form -->
+                <div id="login-form" class="login-form-container hidden">
+                    <form>
+                        <div class="form-group">
+                            <label for="patientUsername">Username</label>
+                            <input type="text" class="form-control" id="patientUsername"
+                                placeholder="Enter your username">
+                        </div>
+                        <div class="form-group">
+                            <label for="patientPassword">Password</label>
+                            <input type="password" class="form-control" id="patientPassword"
+                                placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        <button type="button" id="cancel-button"
+                            class="btn btn-link btn-block text-danger mt-2">Cancel</button>
+                    </form>
+                </div>
+
                 <!-- Make a New Appointment Button -->
-                <button class="btn w-100 py-2 "
-                    style="border-radius: 36px; border: 1px solid #195478; background-color: transparent; color: #195478;"
-                    onmouseover="this.style.background='linear-gradient(135deg,#457b9d, #28436a )'; this.style.color='white';"
-                    onmouseout="this.style.background='transparent'; this.style.color='#195478';">
+                <button id="appointment-button" class="btn w-100 py-2 btn-transparent" data-toggle="modal"
+                    data-target="#appointmentModal">
                     Make a New Appointment
                 </button>
             </div>
         </div>
-
-
-
     </div>
 </div>
 
+<!-- Modal for New Appointment -->
+<div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalLabel">Create New Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Appointment Form -->
+                <form>
+                    <div class="form-group">
+                        <label for="patientName">Patient Name</label>
+                        <input type="text" class="form-control" id="patientName" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentDate">Appointment Date</label>
+                        <input type="date" class="form-control" id="appointmentDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentTime">Appointment Time</label>
+                        <input type="time" class="form-control" id="appointmentTime">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
-        // Placeholder for future scripts
+        $(document).ready(function () {
+            // Show the login form and hide the buttons when clicked
+            $('#login-button').click(function () {
+                const formContainer = $('#login-form');
+                const loginButton = $('#login-button');
+                const appointmentButton = $('#appointment-button');
+
+                // Show login form and hide both buttons
+                if (formContainer.hasClass('hidden')) {
+                    formContainer.removeClass('hidden').addClass('expanded');
+                    loginButton.addClass('hidden'); // Hide the login button
+                    appointmentButton.addClass('hidden'); // Hide the appointment button
+                }
+            });
+
+            // Cancel button to hide the form and show the buttons again
+            $('#cancel-button').click(function () {
+                const formContainer = $('#login-form');
+                const loginButton = $('#login-button');
+                const appointmentButton = $('#appointment-button');
+
+                // Hide the form and show both buttons
+                formContainer.removeClass('expanded').addClass('hidden');
+                loginButton.removeClass('hidden');
+                appointmentButton.removeClass('hidden');
+            });
+        });
     </script>
 }
 
 <!-- Bootstrap JS and Dependencies -->
-<script src=" https://code.jquery.com/jquery-3.5.1.slim.min.js">
-</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
