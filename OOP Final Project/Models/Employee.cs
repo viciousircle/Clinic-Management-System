@@ -25,25 +25,25 @@ public class Employee
     public int Id { get; set; }
 
     [Required]
-    public required string FirstName { get; set; }
+    public string FirstName { get; set; }
 
     [Required]
-    public required string LastName { get; set; }
+    public string LastName { get; set; }
 
     [ForeignKey("Account")]
     public int AccountId { get; set; }
 
 
     [Required]
-    public required string Email { get; set; }
+    public string Email { get; set; }
 
     [Required]
-    public required string Phone { get; set; }
+    public string Phone { get; set; }
 
     public bool IsActive { get; set; } = true;
 
     // public virtual required Department Department { get; set; }
-    public virtual required Account Account { get; set; }
+    public virtual Account Account { get; set; }
 
     // Navigation property: An employee can have many employee schedules
     public virtual ICollection<EmployeeSchedule> EmployeeSchedules { get; set; } = new List<EmployeeSchedule>();
