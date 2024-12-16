@@ -28,21 +28,49 @@
 
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-flex flex-column ps-5">
-            @* ? Doctor *@
-            <partial name="~/Pages/Employees/Doctors/_SideBar.cshtml" />
+            <div class="pt-2 mt-5">
+                <div class="mb-4 text-center" style="font-family: Libre Baskerville, serif;">
+                    <h4><i>Welcome back, <b>Dr. Doe</b></i></h4>
+                </div>
+                <hr class="">
+                <div class="nav flex-column">
+                    <a href="#" data-page="Dashboard"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex gap-4 align-items-sm-center"
+                        style="color: #195478;">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                    <a href="#" data-page="Appointment"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-calendar-check"></i> Appointment
+                    </a>
+                    <a href="#" data-page="Patients"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-user-injured"></i> Patients
+                    </a>
+                    <a href="#" data-page="Schedule"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="far fa-clock"></i> Schedule
+                    </a>
+                    <a href="#" data-page="Logout"
+                        class="nav-link px-3 py-2 mb-2 hover-effect rounded-16px d-flex align-items-sm-center gap-4"
+                        style="color: #195478;">
+                        <i class="fas fa-sign-out-alt"></i> Log out
+                    </a>
+                </div>
+            </div>
         </nav>
 
         <!-- Main Content -->
         <div id="main-content" class="pt-3 mx-5 mt-5 shadow-lg text-dark w-100"
             style="border-top-left-radius: 48px; border-top-right-radius: 48px; background-color: #fefefe; box-shadow: 0 0 10px rgba(23, 23, 27, 0.1);">
 
+            <!-- Default content -->
             <div id="default-content">
                 <partial name="~/Pages/Employees/Doctors/_Dashboard.cshtml" />
             </div>
-
-            @* <partial name="~/Pages/Employees/Doctors/_Appointment.cshtml" /> *@
-            @* <partial name="~/Pages/Employees/Doctors/_Patient.cshtml" /> *@
-            @* <partial name="~/Pages/Employees/Shared/_Schedule.cshtml" /> *@
         </div>
 
     </div>
@@ -57,7 +85,7 @@
             const page = $(this).data("page"); // Get the data-page attribute
 
             // Send an AJAX request to load the selected partial view
-            $("#main-content").load("/Employees/Shared/LoadPartial?section=" + page, function (response, status, xhr) {
+            $("#main-content").load("/Employees/EmployeeLayout?handler=LoadPartial&section=" + page, function (response, status, xhr) {
                 if (status === "error") {
                     console.error("Error loading content:", xhr.status, xhr.statusText);
                     $("#main-content").html('<div class="text-danger text-center">Error loading content.</div>');
