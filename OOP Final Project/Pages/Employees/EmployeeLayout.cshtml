@@ -32,7 +32,7 @@
     <div class="d-flex gap-3 min-vh-100">
         @* Side bar *@
         <nav class="col-md-3 col-lg-2 d-flex flex-column ps-5">
-            <partial name="~/Pages/Employees/Doctors/_SideBar.cshtml" />
+            <partial name="~/Pages/Employees/Doctors/_SideBar.cshtml" model="Model.DashboardData" />
         </nav>
 
         @* Main content *@
@@ -40,7 +40,7 @@
             style="border-top-left-radius: 48px; border-top-right-radius: 48px; background-color: #fefefe; box-shadow: 0 0 10px rgba(23, 23, 27, 0.1);">
             @* Default content *@
             <div id="default-content">
-                <partial name="~/Pages/Employees/Doctors/_Dashboard.cshtml" model="Model.Employee" />
+                <partial name="~/Pages/Employees/Doctors/_Dashboard.cshtml" model="Model.DashboardData" />
             </div>
         </div>
     </div>

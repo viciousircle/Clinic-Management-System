@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json.Serialization;
 
+using OOP_Final_Project.ViewModels;
+
 namespace OOP_Final_Project.Pages.Employees
 {
     public class EmployeeLayoutModel : PageModel
@@ -20,85 +22,88 @@ namespace OOP_Final_Project.Pages.Employees
         {
             _clientFactory = clientFactory;
             _logger = logger;
-            Employee = new Employee();
             _client = _clientFactory.CreateClient();
             _client.BaseAddress = new Uri("http://localhost:5298/"); // Replace with your actual base URL
+            DashboardData = new DashboardViewModel();
         }
 
-        public Employee Employee { get; set; }
+        public DashboardViewModel DashboardData { get; set; }
 
         public async Task OnGetAsync()
         {
-            try
-            {
-                _logger.LogInformation("Fetching employee details from API...");
-                var response = await _client.GetAsync("api/employees/6"); // The URI is now relative to the BaseAddress
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"API response: {json}");
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                        ReadCommentHandling = JsonCommentHandling.Skip,
-                        AllowTrailingCommas = true
-                    };
-                    Employee = JsonSerializer.Deserialize<Employee>(json, options) ?? new Employee();
-                    _logger.LogInformation($"Deserialized employee details.");
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch employee details. Status code: {response.StatusCode}");
-                    Employee = new Employee();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching employee details.");
-                Employee = new Employee();
-            }
+            await FetchEmployeeData();
         }
 
         public async Task<IActionResult> OnGetLoadPartialAsync(string section)
         {
+            await FetchEmployeeData();
+
+            switch (section)
+            {
+                case "Dashboard":
+                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DashboardData);
+                case "Appointment":
+                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DashboardData);
+                case "Patient":
+                    return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DashboardData);
+                case "Schedule":
+                    return Partial("~/Pages/Employees/Doctors/_Schedule.cshtml", DashboardData);
+                case "Logout":
+                    // Handle logout
+                    break;
+                default:
+                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DashboardData);
+            }
+
+            return Page();
+        }
+
+        private async Task FetchEmployeeData()
+        {
             try
             {
-                // Fetch the latest Employee data from the API
-                var response = await _client.GetAsync("api/employees/6"); // The URI is now relative to the BaseAddress
+                _logger.LogInformation("Fetching employee details from API...");
 
-                if (response.IsSuccessStatusCode)
+                //! Fetch employee details
+                //! [GET] /api/employees/6
+
+                var responseEmployee = await _client.GetAsync("api/employees/6");
+
+                if (responseEmployee.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    Employee = JsonSerializer.Deserialize<Employee>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new Employee();
+                    var employeeJson = await responseEmployee.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+                    DashboardData.Employee = JsonSerializer.Deserialize<Employee>(employeeJson, options) ?? new Employee();
                 }
                 else
                 {
-                    _logger.LogError("Failed to fetch employee data. Status code: {StatusCode}", response.StatusCode);
-                    Employee = new Employee(); // Fallback to a new Employee instance
+                    _logger.LogError($"Failed to fetch employee details. Status code: {responseEmployee.StatusCode}");
+                    DashboardData = new DashboardViewModel();
                 }
 
-                switch (section)
-                {
-                    case "Dashboard":
-                        return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", Employee);
-                    case "Appointment":
-                        return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", Employee);
-                    case "Patient":
-                        return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", Employee);
-                    case "Schedule":
-                        return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", Employee);
-                    case "Logout":
-                        return Partial("~/Pages/Employees/Shared/_Logout.cshtml", Employee);
-                    default:
-                        return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", Employee);
-                }
+                //! Fetch total appointments for the employee
+                //! [GET] /api/employees/6/appointments/count
+
+                // var responseAppointments = await _client.GetAsync("api/employees/6/appointments/count");
+
+                // if (responseAppointments.IsSuccessStatusCode)
+                // {
+                //     var appointmentsJson = await responseAppointments.Content.ReadAsStringAsync();
+                //     var appointmentsData = JsonSerializer.Deserialize<JsonElement>(appointmentsJson);
+                //     DashboardData.AppointmentCount = appointmentsData.GetProperty("TotalAppointments").GetInt32();
+                // }
+                // else
+                // {
+                //     _logger.LogError($"Failed to fetch appointments count. Status code: {responseAppointments.StatusCode}");
+                // }
+
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while loading the partial view.");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, "An error occurred while fetching employee details.");
+                DashboardData = new DashboardViewModel();
             }
         }
     }
