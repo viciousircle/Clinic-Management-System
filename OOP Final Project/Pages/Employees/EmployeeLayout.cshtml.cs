@@ -47,7 +47,7 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Patient":
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
-                    return Partial("~/Pages/Employees/Doctors/_Schedule.cshtml", DoctorData);
+                    return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
                     // Handle logout
                     break;
