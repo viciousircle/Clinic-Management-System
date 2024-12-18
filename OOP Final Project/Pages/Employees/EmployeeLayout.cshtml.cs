@@ -85,19 +85,32 @@ namespace OOP_Final_Project.Pages.Employees
                 //! Fetch total appointments for the employee
                 //! [GET] /api/employees/6/appointments/count
 
-                // var responseAppointments = await _client.GetAsync("api/employees/6/appointments/count");
+                var responseAppointments = await _client.GetAsync("api/employees/6/appointments/count");
 
-                // if (responseAppointments.IsSuccessStatusCode)
-                // {
-                //     var appointmentsJson = await responseAppointments.Content.ReadAsStringAsync();
-                //     var appointmentsData = JsonSerializer.Deserialize<JsonElement>(appointmentsJson);
-                //     DashboardData.AppointmentCount = appointmentsData.GetProperty("TotalAppointments").GetInt32();
-                // }
-                // else
-                // {
-                //     _logger.LogError($"Failed to fetch appointments count. Status code: {responseAppointments.StatusCode}");
-                // }
-
+                if (responseAppointments != null && responseAppointments.IsSuccessStatusCode)
+                {
+                    var appointmentsJson = await responseAppointments.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(appointmentsJson))
+                    {
+                        var appointmentsData = JsonSerializer.Deserialize<JsonElement>(appointmentsJson);
+                        if (appointmentsData.TryGetProperty("totalAppointments", out JsonElement totalAppointmentsElement))
+                        {
+                            DashboardData.AppointmentCount = totalAppointmentsElement.GetInt32();
+                        }
+                        else
+                        {
+                            _logger.LogError($"totalAppointments property not found in the response. Response: {appointmentsJson}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("Appointments JSON is null or empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch appointments count. Status code: {responseAppointments?.StatusCode}");
+                }
 
             }
             catch (Exception ex)

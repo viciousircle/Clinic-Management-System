@@ -10,6 +10,6 @@ public class DashboardViewModel
     public Patient Patient { get; set; }
     public Schedule Schedule { get; set; }
 
-    // public int AppointmentCount { get; set; } // Add this property
+    public int AppointmentCount { get; set; } // Add this property
 
 }
