@@ -50,7 +50,8 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
                     // Handle logout
-                    break;
+                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
+                // break;
                 default:
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
