@@ -24,10 +24,10 @@ namespace OOP_Final_Project.Pages.Employees
             _logger = logger;
             _client = _clientFactory.CreateClient();
             _client.BaseAddress = new Uri("http://localhost:5298/"); // Replace with your actual base URL
-            DashboardData = new DashboardViewModel();
+            DoctorData = new DoctorViewModel();
         }
 
-        public DashboardViewModel DashboardData { get; set; }
+        public DoctorViewModel DoctorData { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -41,18 +41,18 @@ namespace OOP_Final_Project.Pages.Employees
             switch (section)
             {
                 case "Dashboard":
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DashboardData);
+                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
                 case "Appointment":
-                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DashboardData);
+                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
                 case "Patient":
-                    return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DashboardData);
+                    return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
-                    return Partial("~/Pages/Employees/Doctors/_Schedule.cshtml", DashboardData);
+                    return Partial("~/Pages/Employees/Doctors/_Schedule.cshtml", DoctorData);
                 case "Logout":
                     // Handle logout
                     break;
                 default:
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DashboardData);
+                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
 
             return Page();
@@ -74,12 +74,12 @@ namespace OOP_Final_Project.Pages.Employees
                     var employeeJson = await responseEmployee.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                    DashboardData.Employee = JsonSerializer.Deserialize<Employee>(employeeJson, options) ?? new Employee();
+                    DoctorData.Employee = JsonSerializer.Deserialize<Employee>(employeeJson, options) ?? new Employee();
                 }
                 else
                 {
                     _logger.LogError($"Failed to fetch employee details. Status code: {responseEmployee.StatusCode}");
-                    DashboardData = new DashboardViewModel();
+                    DoctorData = new DoctorViewModel();
                 }
 
                 //! Fetch total appointments for the employee
@@ -95,7 +95,7 @@ namespace OOP_Final_Project.Pages.Employees
                         var appointmentsData = JsonSerializer.Deserialize<JsonElement>(appointmentsJson);
                         if (appointmentsData.TryGetProperty("totalAppointments", out JsonElement totalAppointmentsElement))
                         {
-                            DashboardData.AppointmentCount = totalAppointmentsElement.GetInt32();
+                            DoctorData.AppointmentCount = totalAppointmentsElement.GetInt32();
                         }
                         else
                         {
@@ -116,7 +116,7 @@ namespace OOP_Final_Project.Pages.Employees
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while fetching employee details.");
-                DashboardData = new DashboardViewModel();
+                DoctorData = new DoctorViewModel();
             }
         }
     }
