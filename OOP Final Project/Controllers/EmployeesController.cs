@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
 using OOP_Final_Project.Models;
 
@@ -59,5 +60,20 @@ public class EmployeesController : ControllerBase
         _context.SaveChanges();
         return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
     }
+
+    [HttpGet("{id}/appointments/count")]
+    public IActionResult GetTotalAppointmentsByEmployeeId(int id)
+    {
+        var employee = _context.Employees
+            .Include(e => e.Appointments) // Ensure Appointments are included
+            .FirstOrDefault(e => e.Id == id);
+
+        if (employee == null)
+            return NotFound();
+
+        var totalAppointments = employee.Appointments.Count;
+        return Ok(new { EmployeeId = id, TotalAppointments = totalAppointments });
+    }
+
 
 }
