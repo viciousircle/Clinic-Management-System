@@ -12,28 +12,27 @@ namespace OOP_Final_Project.Pages.Employees
 {
     public class EmployeeLayoutModel : PageModel
     {
-
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<EmployeeLayoutModel> _logger;
+        private readonly HttpClient _client;
 
         public EmployeeLayoutModel(IHttpClientFactory clientFactory, ILogger<EmployeeLayoutModel> logger)
         {
             _clientFactory = clientFactory;
             _logger = logger;
             Employee = new Employee();
+            _client = _clientFactory.CreateClient();
+            _client.BaseAddress = new Uri("http://localhost:5298/"); // Replace with your actual base URL
         }
-
 
         public Employee Employee { get; set; }
 
         public async Task OnGetAsync()
         {
-            var client = _clientFactory.CreateClient();
-
             try
             {
                 _logger.LogInformation("Fetching employee details from API...");
-                var response = await client.GetAsync("http://localhost:5298/api/employees/6"); // Replace '1' with the actual employee ID
+                var response = await _client.GetAsync("api/employees/6"); // The URI is now relative to the BaseAddress
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -62,25 +61,44 @@ namespace OOP_Final_Project.Pages.Employees
             }
         }
 
-
-
-        // Dynamic handler to load partial views based on the "section" parameter
-        public IActionResult OnGetLoadPartial(string section)
+        public async Task<IActionResult> OnGetLoadPartialAsync(string section)
         {
-            switch (section)
+            try
             {
-                case "Dashboard":
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml"); // Ensure the correct path
-                case "Appointment":
-                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml"); // Ensure the correct path
-                case "Patient":
-                    return Partial("~/Pages/Employees/Doctors/_Patient.cshtml"); // Ensure the correct path
-                case "Schedule":
-                    return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
-                case "Logout":
-                    return Partial("~/Pages/Employees/Shared/_Logout.cshtml"); // Ensure the correct path
-                default:
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml"); // Ensure the correct path
+                // Fetch the latest Employee data from the API
+                var response = await _client.GetAsync("api/employees/6"); // The URI is now relative to the BaseAddress
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    Employee = JsonSerializer.Deserialize<Employee>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new Employee();
+                }
+                else
+                {
+                    _logger.LogError("Failed to fetch employee data. Status code: {StatusCode}", response.StatusCode);
+                    Employee = new Employee(); // Fallback to a new Employee instance
+                }
+
+                switch (section)
+                {
+                    case "Dashboard":
+                        return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", Employee);
+                    case "Appointment":
+                        return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", Employee);
+                    case "Patient":
+                        return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", Employee);
+                    case "Schedule":
+                        return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", Employee);
+                    case "Logout":
+                        return Partial("~/Pages/Employees/Shared/_Logout.cshtml", Employee);
+                    default:
+                        return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", Employee);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while loading the partial view.");
+                return StatusCode(500, "Internal server error");
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿<div class="container " style="padding-left: 100px; padding-top: 64px; padding-right: 48px;">
+﻿@model OOP_Final_Project.Models.Employee
+
+<div class="container " style="padding-left: 100px; padding-top: 64px; padding-right: 48px;">
     <div>
         <h1 class="text-center" style="color: #195478;">Doctor Dashboard</h1>
         <div class=" text-muted text-center mb-5">Helping people at their most vulnerable is a privilege.
@@ -17,7 +19,7 @@
                 <div class="card-body p-4 d-flex flex-column g-2 ">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class=" rounded-3 px-2 py-1 text-muted  btn "
-                            style="border: 1px solid rgb(180, 180, 180); ">Appointments
+                            style="border: 1px solid rgb(180, 180, 180); ">Appointments @Model.FirstName
                         </div>
                         <div class="text-light px-2 py-1 rounded-1" style="background-color: #45687e;">
                             Today</div>
