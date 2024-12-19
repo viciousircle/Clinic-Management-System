@@ -132,6 +132,7 @@
 
 
 
+
         <!-- Appointments Table -->
         <table class="table table-hover table-bordered shadow-sm text-center " id="appointmentsTable">
             <thead class="table-light">
@@ -145,15 +146,7 @@
             </thead>
 
             <tbody>
-                @foreach (var appointment in Model.Appointments.Where(a => a.DocumentAppointment != null))
-                {
-                    <tr>
-                        <td>@appointment.Patient?.FirstName @appointment.Patient?.LastName</td>
-                        <td>@appointment.DocumentAppointment?.Date</td>
-                        <td>@appointment.DocumentAppointment?.TimeStart - @appointment.DocumentAppointment?.TimeEnd</td>
-                        <td>@appointment.DocumentDiagnose?.PatientStatus</td>
-                    </tr>
-                }
+
             </tbody>
 
 

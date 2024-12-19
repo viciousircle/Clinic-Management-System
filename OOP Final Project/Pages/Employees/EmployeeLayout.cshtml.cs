@@ -201,21 +201,45 @@ namespace OOP_Final_Project.Pages.Employees
                 //? Fetch all appointments for the employee
                 //? [GET] /api/employees/96/appointments
 
-                // var responseAllAppointments = await _client.GetAsync("api/employees/96/appointments");
+                var responseAllAppointments = await _client.GetAsync("api/employees/96/appointments");
 
-                // if (responseAllAppointments.IsSuccessStatusCode)
-                // {
-                //     var appointmentsJson = await responseAllAppointments.Content.ReadAsStringAsync();
-                //     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                if (responseAllAppointments != null && responseAllAppointments.IsSuccessStatusCode)
+                {
+                    var allAppointmentsJson = await responseAllAppointments.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(allAppointmentsJson))
+                    {
+                        try
+                        {
+                            var allAppointmentsData = JsonSerializer.Deserialize<JsonElement>(allAppointmentsJson);
 
-                //     DoctorData.Appointments = JsonSerializer.Deserialize<List<Appointment>>(appointmentsJson, options) ?? new List<Appointment>();
-                // }
-                // else
-                // {
-                //     _logger.LogError($"Failed to fetch employee appointments. Status code: {responseAllAppointments.StatusCode}");
-                //     DoctorData.Appointments = new List<Appointment>();
-                // }
+                            if (allAppointmentsData.TryGetProperty("appointments", out JsonElement appointmentsElement))
+                            {
+                                var appointmentsList = JsonSerializer.Deserialize<List<Appointment>>(
+                                    appointmentsElement.GetRawText(),
+                                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                                );
 
+                                DoctorData.Appointments = appointmentsList ?? new List<Appointment>();
+                            }
+                            else
+                            {
+                                _logger.LogError($"'appointments' property not found in response: {allAppointmentsJson}");
+                            }
+                        }
+                        catch (JsonException ex)
+                        {
+                            _logger.LogError(ex, "Error deserializing appointments JSON.");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("All Appointments JSON is null or empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch appointments. Status code: {responseAllAppointments?.StatusCode}");
+                }
 
 
 
