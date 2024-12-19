@@ -106,28 +106,20 @@ public class EmployeesController : ControllerBase
 
 
     // TODO: Fix this Total Cancelled Appointments method
-    // [HttpGet("{id}/appointments/cancelled/count")]
-    // public IActionResult GetTotalCancelledAppointmentsByEmployeeId(int id)
-    // {
-    //     // Retrieve the employee's schedules
-    //     var employeeSchedules = _context.EmployeeSchedules
-    //         .Include(es => es.Schedule)
-    //         .Where(es => es.EmployeeId == id && es.IsActive) // Ensure the schedule is active
-    //         .ToList();
+    [HttpGet("{id}/appointments/cancelled/count")]
+    public IActionResult GetTotalCancelledAppointmentsByEmployeeId(int id)
+    {
+        // Query to fetch total canceled appointments
+        var totalCancelledAppointments = _context.DocumentCancels
+            .Join(_context.Appointments, cancel => cancel.AppointmentId, appt => appt.Id, (cancel, appt) => new { cancel, appt })
+            .Where(joined => joined.appt.DoctorId == id)
+            .Count();
 
-    //     if (employeeSchedules == null || !employeeSchedules.Any())
-    //         return NotFound();
+        // Return the result
+        return Ok(new { EmployeeId = id, TotalCancelledAppointments = totalCancelledAppointments });
+    }
 
-    //     // Get all appointments related to the employee that have a 'cancelled' status
-    //     var cancelledAppointments = employeeSchedules
-    //         .SelectMany(es => es.Schedule.Appointments)
-    //         .Where(a => a.DocumentTypeId == < cancelled_document_type_id >) // Replace with the actual document type ID for cancelled
-    //         .ToList();
 
-    //     var totalCancelledAppointments = cancelledAppointments.Count;
-
-    //     return Ok(new { EmployeeId = id, TotalCancelledAppointments = totalCancelledAppointments });
-    // }
 
 
 

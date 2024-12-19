@@ -168,6 +168,36 @@ namespace OOP_Final_Project.Pages.Employees
                         _logger.LogError("Completed Appointments JSON is null or empty.");
                     }
                 }
+
+
+                //? Fetch total cancelled appointments for the employee
+                //? [GET] /api/employees/96/appointments/cancelled/count
+
+                var responseCancelledAppointments = await _client.GetAsync("api/employees/96/appointments/cancelled/count");
+
+                if (responseCancelledAppointments != null && responseCancelledAppointments.IsSuccessStatusCode)
+                {
+                    var cancelledAppointmentsJson = await responseCancelledAppointments.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(cancelledAppointmentsJson))
+                    {
+                        var cancelledAppointmentsData = JsonSerializer.Deserialize<JsonElement>(cancelledAppointmentsJson);
+
+                        if (cancelledAppointmentsData.TryGetProperty("totalCancelledAppointments", out JsonElement totalCancelledAppointmentsElement))
+                        {
+                            DoctorData.CancelledAppointmentCount = totalCancelledAppointmentsElement.GetInt32();
+                        }
+                        else
+                        {
+                            _logger.LogError($"totalCancelledAppointments property not found in the response. Response: {cancelledAppointmentsJson}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("Cancelled Appointments JSON is null or empty.");
+                    }
+                }
+
+
             }
             catch (Exception ex)
             {

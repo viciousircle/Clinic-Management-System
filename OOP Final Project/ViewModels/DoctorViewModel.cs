@@ -16,4 +16,6 @@ public class DoctorViewModel
 
     public int CompletedAppointmentCount { get; set; }
 
+    public int CancelledAppointmentCount { get; set; }
+
 }
