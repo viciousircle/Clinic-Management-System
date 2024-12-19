@@ -16,6 +16,7 @@ namespace OOP_Final_Project.Controllers;
 // - GET /api/appointments/byPatientId/{patientId}: Get all appointments for a patient.
 // - GET /api/appointments/byDoctorId/{doctorId}: Get all appointments for a doctor.
 
+// ...existing code...
 
 public class AppointmentsController : ControllerBase
 {
@@ -30,17 +31,9 @@ public class AppointmentsController : ControllerBase
     public IActionResult GetAll()
     {
         var appointments = _context.Appointments
-            .Include(a => a.Patient)
-            .Include(a => a.Doctor)
             .ToList();
 
-        var options = new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.Preserve,
-            WriteIndented = true
-        };
-
-        return new JsonResult(appointments, options);
+        return Ok(appointments);
     }
 
     [HttpGet("{id}")]
@@ -59,7 +52,7 @@ public class AppointmentsController : ControllerBase
 
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
             WriteIndented = true
         };
 
@@ -77,7 +70,7 @@ public class AppointmentsController : ControllerBase
 
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
             WriteIndented = true
         };
 
@@ -95,12 +88,11 @@ public class AppointmentsController : ControllerBase
 
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
             WriteIndented = true
         };
 
         return new JsonResult(appointments, options);
     }
-
-
 }
+
