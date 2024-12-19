@@ -201,20 +201,20 @@ namespace OOP_Final_Project.Pages.Employees
                 //? Fetch all appointments for the employee
                 //? [GET] /api/employees/96/appointments
 
-                var responseAllAppointments = await _client.GetAsync("api/employees/96/appointments");
+                // var responseAllAppointments = await _client.GetAsync("api/employees/96/appointments");
 
-                if (responseAllAppointments.IsSuccessStatusCode)
-                {
-                    var appointmentsJson = await responseAllAppointments.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                // if (responseAllAppointments.IsSuccessStatusCode)
+                // {
+                //     var appointmentsJson = await responseAllAppointments.Content.ReadAsStringAsync();
+                //     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                    DoctorData.Appointments = JsonSerializer.Deserialize<List<Appointment>>(appointmentsJson, options) ?? new List<Appointment>();
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch employee appointments. Status code: {responseAllAppointments.StatusCode}");
-                    DoctorData.Appointments = new List<Appointment>();
-                }
+                //     DoctorData.Appointments = JsonSerializer.Deserialize<List<Appointment>>(appointmentsJson, options) ?? new List<Appointment>();
+                // }
+                // else
+                // {
+                //     _logger.LogError($"Failed to fetch employee appointments. Status code: {responseAllAppointments.StatusCode}");
+                //     DoctorData.Appointments = new List<Appointment>();
+                // }
 
 
 

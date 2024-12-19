@@ -148,25 +148,33 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, Patients = patients });
     }
 
+
     [HttpGet("{id}/appointments")]
     public IActionResult GetAllAppointmentsByEmployeeId(int id)
     {
         var appointments = _context.Appointments
-            .Include(appt => appt.Patient)
-            .Include(appt => appt.Doctor)
-            .Include(appt => appt.DocumentAppointment)
-            .Include(appt => appt.DocumentCancel)
-            .Include(appt => appt.DocumentBill)
             .Where(appt => appt.DoctorId == id)
+            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+            .Select(appt => new
+            {
+                appt.appt.Id,
+                appt.appt.PatientId,
+                appt.appt.DoctorId,
+                appt.doc.TimeBook,
+                appt.doc.Date,
+                appt.doc.TimeStart,
+                appt.doc.TimeEnd,
+                appt.doc.Location,
+                appt.diag.IsSick,
+                appt.diag.PatientStatus,
+                appt.diag.DiagnoseDetails,
+            })
             .ToList();
 
-        return new JsonResult(appointments, new JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            WriteIndented = true
-        });
-    }
+        return Ok(new { Appointments = appointments });
 
+    }
 
 
     [HttpPost]
