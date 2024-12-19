@@ -155,6 +155,8 @@ public class EmployeesController : ControllerBase
     {
         var appointments = _context.Appointments
             .Where(appt => appt.DoctorId == id)
+             .Include(appt => appt.Doctor)  // Include Doctor data
+            .Include(appt => appt.Patient) // Include Patient data
             .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
             .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
             .Select(appt => new
@@ -170,6 +172,22 @@ public class EmployeesController : ControllerBase
                 appt.diag.IsSick,
                 appt.diag.PatientStatus,
                 appt.diag.DiagnoseDetails,
+                Doctor = new
+                {
+                    appt.appt.Doctor.Id, // Add Doctor's ID
+                    appt.appt.Doctor.FirstName, // Add other Doctor properties you need
+
+                },
+                Patient = new
+                {
+                    appt.appt.Patient.Id, // Add Patient's ID
+                    appt.appt.Patient.FirstName, // Add other Patient properties you need
+                    appt.appt.Patient.LastName,
+                },
+                DocumentAppointment = new
+                {
+                    appt.doc.Date
+                }
             })
             .ToList();
 

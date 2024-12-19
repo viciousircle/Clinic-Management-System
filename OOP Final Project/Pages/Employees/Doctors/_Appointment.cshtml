@@ -147,6 +147,17 @@
 
             <tbody>
 
+                @foreach (var appointment in Model.Appointments)
+                {
+
+                    <tr>
+                        <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
+                        <td>@appointment.DocumentAppointment.Date.ToShortDateString()</td>
+                    </tr>
+
+
+                }
+
             </tbody>
 
 

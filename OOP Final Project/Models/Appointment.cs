@@ -15,8 +15,8 @@ namespace OOP_Final_Project.Models
         public int PatientId { get; set; }
 
         // Navigation properties
-        public virtual required Employee Doctor { get; set; }
-        public virtual required Patient Patient { get; set; }
+        public virtual Employee Doctor { get; set; }
+        public virtual Patient Patient { get; set; }
 
         // 1-to-1 relationship with Prescription
         public virtual Prescription? Prescription { get; set; }

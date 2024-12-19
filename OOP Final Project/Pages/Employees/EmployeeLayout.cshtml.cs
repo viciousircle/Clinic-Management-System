@@ -111,6 +111,7 @@ namespace OOP_Final_Project.Pages.Employees
                     _logger.LogError($"Failed to fetch appointments count. Status code: {responseAppointments?.StatusCode}");
                 }
 
+
                 // - Fetch future, completed, and cancelled appointments count
                 // - GET /api/employees/96/appointments/future/count
                 // - GET /api/employees/96/appointments/completed/count
@@ -222,7 +223,45 @@ namespace OOP_Final_Project.Pages.Employees
                     _logger.LogError($"Failed to fetch patients. Status code: {responsePatients?.StatusCode}");
                 }
 
+                // - Fetch appointments
+                // - GET /api/employees/96/appointments
 
+                var responseAppointmentsList = await _client.GetAsync("api/employees/96/appointments");
+
+                if (responseAppointmentsList != null && responseAppointmentsList.IsSuccessStatusCode)
+                {
+                    var appointmentsJson = await responseAppointmentsList.Content.ReadAsStringAsync();
+                    _logger.LogInformation($"Appointments JSON: {appointmentsJson}"); // Log the JSON response
+                    if (!string.IsNullOrEmpty(appointmentsJson))
+                    {
+                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                        try
+                        {
+                            var appointmentResponse = JsonSerializer.Deserialize<AppointmentResponse>(appointmentsJson, options);
+                            if (appointmentResponse != null && appointmentResponse.Appointments != null)
+                            {
+                                DoctorData.Appointments = appointmentResponse.Appointments;
+                            }
+                            else
+                            {
+                                _logger.LogError("Failed to deserialize appointments JSON into AppointmentResponse.");
+                            }
+                        }
+                        catch (JsonException ex)
+                        {
+                            _logger.LogError($"Error during JSON deserialization: {ex.Message}");
+                        }
+
+                    }
+                    else
+                    {
+                        _logger.LogError("Appointments JSON is null or empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch appointments. Status code: {responseAppointmentsList?.StatusCode}");
+                }
 
 
 
