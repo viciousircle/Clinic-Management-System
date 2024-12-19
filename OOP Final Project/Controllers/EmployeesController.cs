@@ -9,19 +9,19 @@ namespace OOP_Final_Project.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+
+// - GET /api/employees: List all employees.
+// - GET /api/employees/{id}: Get a specific employee by ID.
+// - GET /api/employees/byFirstName/{firstName}: Get an employee by first name.
+// - GET /api/employees/{id}/appointments/count: Get the total number of appointments for an employee.
+// - GET /api/employees/{id}/appointments/future/count: Get the total number of future appointments for an employee in the next 30 days.
+// - GET /api/employees/{id}/appointments/completed/count: Get the total number of completed appointments for an employee.
+// - GET /api/employees/{id}/patients: Get all patients for an employee.
+
+
+// - POST /api/employees: Add a new employee.
 public class EmployeesController : ControllerBase
 {
-
-
-    // - GET /api/employees: List all employees.
-    // - GET /api/employees/{id}: Get a specific employee by ID.
-    // - GET /api/employees/byFirstName/{firstName}: Get an employee by first name.
-    // - GET /api/employees/{id}/appointments/count: Get the total number of appointments for an employee.
-    // - GET /api/employees/{id}/appointments/future/count: Get the total number of future appointments for an employee in the next 30 days.
-    // - GET /api/employees/{id}/appointments/completed/count: Get the total number of completed appointments for an employee.
-
-    // - POST /api/employees: Add a new employee.
-
     private readonly ApplicationDbContext _context;
 
     public EmployeesController(ApplicationDbContext context)
@@ -88,7 +88,6 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, TotalFutureAppointments = totalFutureAppointments });
     }
 
-
     [HttpGet("{id}/appointments/completed/count")]
     public IActionResult GetTotalCompletedAppointmentsByEmployeeId(int id)
     {
@@ -103,9 +102,6 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, TotalCompletedAppointments = totalCompletedAppointments });
     }
 
-
-
-    // TODO: Fix this Total Cancelled Appointments method
     [HttpGet("{id}/appointments/cancelled/count")]
     public IActionResult GetTotalCancelledAppointmentsByEmployeeId(int id)
     {
@@ -119,6 +115,45 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, TotalCancelledAppointments = totalCancelledAppointments });
     }
 
+    [HttpGet("{id}/patients")]
+    public IActionResult GetAllPatientsByEmployeeId(int id)
+    {
+        var patients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(_context.Patients, appt => appt.PatientId, patient => patient.Id, (appt, patient) => patient)
+            .Distinct()
+            .Select(patient => new
+            {
+                patient.Id,
+                patient.FirstName,
+                patient.LastName,
+                patient.Email,
+                patient.Phone
+            })
+            .ToList();
+
+        return Ok(new { EmployeeId = id, Patients = patients });
+    }
+
+    [HttpGet("{id}/appointments")]
+    public IActionResult GetAllAppointmentsByEmployeeId(int id)
+    {
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .ToList();
+
+        return Ok(appointments);
+    }
+
+    // [HttpGet("{DoctorId}/appointments/{appointmentId}/documentsAppointment")]
+    // public IActionResult GetDocumentsByAppointmentId(int appointmentId)
+    // {
+    //     var documents = _context.DocumentAppointments
+    //         .Where(doc => doc.AppointmentId == appointmentId)
+    //         .ToList();
+
+    //     return Ok(documents);
+    // }
 
 
 
