@@ -186,7 +186,12 @@ public class EmployeesController : ControllerBase
                 },
                 DocumentAppointment = new
                 {
-                    appt.doc.Date
+                    appt.doc.Date,
+                    appt.doc.TimeStart
+                },
+                DocumentDiagnose = new
+                {
+                    appt.diag.PatientStatus
                 }
             })
             .ToList();
@@ -209,3 +214,4 @@ public class EmployeesController : ControllerBase
 
 
 }
+

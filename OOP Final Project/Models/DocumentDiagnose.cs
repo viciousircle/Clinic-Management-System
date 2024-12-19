@@ -21,10 +21,10 @@ namespace OOP_Final_Project.Models
         public bool IsSick { get; set; }
 
         [Required]
-        public required string DiagnoseDetails { get; set; }
+        public string DiagnoseDetails { get; set; }
 
         // Navigation properties
-        public virtual required DocumentType DocumentType { get; set; }
-        public virtual required Appointment Appointment { get; set; }
+        public virtual DocumentType DocumentType { get; set; }
+        public virtual Appointment Appointment { get; set; }
     }
 }

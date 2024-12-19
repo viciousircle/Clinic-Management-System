@@ -153,6 +153,27 @@
                     <tr>
                         <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
                         <td>@appointment.DocumentAppointment.Date.ToShortDateString()</td>
+                        @if (appointment.DocumentAppointment.TimeStart != null)
+                        {
+                            <td>@appointment.DocumentAppointment.TimeStart.ToString(@"hh\:mm")</td>
+                        }
+                        else
+                        {
+                            <span>No time available</span>
+                        }
+
+                        @if (appointment.DocumentDiagnose.PatientStatus != null)
+                        {
+                            <td>@appointment.DocumentDiagnose.PatientStatus</td>
+                        }
+                        else
+                        {
+                            <td>No reason available</td>
+                        }
+
+
+
+
                     </tr>
 
 
