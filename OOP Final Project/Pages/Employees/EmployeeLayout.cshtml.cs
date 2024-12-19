@@ -56,7 +56,6 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
 
-            return Page();
         }
 
         private async Task FetchEmployeeData()
@@ -65,10 +64,10 @@ namespace OOP_Final_Project.Pages.Employees
             {
                 _logger.LogInformation("Fetching employee details from API...");
 
-                //! Fetch employee details
-                //! [GET] /api/employees/6
+                //? Fetch employee details
+                //? [GET] /api/employees/6
 
-                var responseEmployee = await _client.GetAsync("api/employees/6");
+                var responseEmployee = await _client.GetAsync("api/employees/96");
 
                 if (responseEmployee.IsSuccessStatusCode)
                 {
@@ -83,10 +82,10 @@ namespace OOP_Final_Project.Pages.Employees
                     DoctorData = new DoctorViewModel();
                 }
 
-                //! Fetch total appointments for the employee
-                //! [GET] /api/employees/6/appointments/count
+                //? Fetch total appointments for the employee
+                //? [GET] /api/employees/96/appointments/count
 
-                var responseAppointments = await _client.GetAsync("api/employees/6/appointments/count");
+                var responseAppointments = await _client.GetAsync("api/employees/96/appointments/count");
 
                 if (responseAppointments != null && responseAppointments.IsSuccessStatusCode)
                 {
@@ -113,6 +112,62 @@ namespace OOP_Final_Project.Pages.Employees
                     _logger.LogError($"Failed to fetch appointments count. Status code: {responseAppointments?.StatusCode}");
                 }
 
+
+                //? Fetch total future appointments for the employee in the next 30 days
+                //? [GET] /api/employees/96/appointments/future/count
+
+                var responseFutureAppointments = await _client.GetAsync("api/employees/96/appointments/future/count");
+
+                if (responseFutureAppointments != null && responseFutureAppointments.IsSuccessStatusCode)
+                {
+                    var futureAppointmentsJson = await responseFutureAppointments.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(futureAppointmentsJson))
+                    {
+                        var futureAppointmentsData = JsonSerializer.Deserialize<JsonElement>(futureAppointmentsJson);
+
+                        if (futureAppointmentsData.TryGetProperty("totalFutureAppointments", out JsonElement totalFutureAppointmentsElementy))
+                        {
+                            DoctorData.FutureAppointmentCount = totalFutureAppointmentsElementy.GetInt32();
+
+                        }
+                        else
+                        {
+                            _logger.LogError($"totalFutureAppointments property not found in the response. Response: {futureAppointmentsJson}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("Future Appointments JSON is null or empty.");
+                    }
+                }
+
+
+                //? Fetch total completed appointments for the employee
+                //? [GET] /api/employees/96/appointments/completed/count
+
+                var responseCompletedAppointments = await _client.GetAsync("api/employees/96/appointments/completed/count");
+
+                if (responseCompletedAppointments != null && responseCompletedAppointments.IsSuccessStatusCode)
+                {
+                    var completedAppointmentsJson = await responseCompletedAppointments.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(completedAppointmentsJson))
+                    {
+                        var completedAppointmentsData = JsonSerializer.Deserialize<JsonElement>(completedAppointmentsJson);
+
+                        if (completedAppointmentsData.TryGetProperty("totalCompletedAppointments", out JsonElement totalCompletedAppointmentsElement))
+                        {
+                            DoctorData.CompletedAppointmentCount = totalCompletedAppointmentsElement.GetInt32();
+                        }
+                        else
+                        {
+                            _logger.LogError($"totalCompletedAppointments property not found in the response. Response: {completedAppointmentsJson}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("Completed Appointments JSON is null or empty.");
+                    }
+                }
             }
             catch (Exception ex)
             {

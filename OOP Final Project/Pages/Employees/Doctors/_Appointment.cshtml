@@ -43,7 +43,7 @@
                     <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
                         <div class="text-muted">Future Appointments</div>
                         <div class="d-flex gap-md-2 align-items-center">
-                            <h3 class="mb-0">200</h3>
+                            <h3 class="mb-0">@Model.FutureAppointmentCount</h3>
                             <small>in the next 30 days</small>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                     <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
                         <div class="text-muted">Completed Appointments</div>
                         <div class="d-flex gap-md-4 align-items-center">
-                            <h3 class="mb-0 text-success">280</h3>
+                            <h3 class="mb-0 text-success">@Model.CompletedAppointmentCount</h3>
                             <small class="text-success">
                                 <i class="fas fa-check-circle"></i> 95%
                             </small>
