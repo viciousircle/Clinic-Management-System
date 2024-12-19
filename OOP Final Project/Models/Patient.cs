@@ -36,7 +36,7 @@ public class Patient
     public required string Phone { get; set; }
 
     [Required]
-    public required string Address { get; set; }
+    public string Address { get; set; }
 
 
     // Foreign key to Account
@@ -46,7 +46,7 @@ public class Patient
     // Navigation property: A patient can have many appointments
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-    public virtual required Account Account { get; set; }
+    public virtual Account Account { get; set; }
 
 
 }

@@ -7,8 +7,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json.Serialization;
-
 using OOP_Final_Project.ViewModels;
+using System.Collections.Generic;
+using OOP_Final_Project.Controllers.ApiResponses;
+
 
 namespace OOP_Final_Project.Pages.Employees
 {
@@ -49,13 +51,10 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
-                    // Handle logout
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
-                // break;
                 default:
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
-
         }
 
         private async Task FetchEmployeeData()
@@ -64,8 +63,8 @@ namespace OOP_Final_Project.Pages.Employees
             {
                 _logger.LogInformation("Fetching employee details from API...");
 
-                //? Fetch employee details
-                //? [GET] /api/employees/6
+                // - Fetch employee details
+                // - GET /api/employees/96
 
                 var responseEmployee = await _client.GetAsync("api/employees/96");
 
@@ -82,8 +81,8 @@ namespace OOP_Final_Project.Pages.Employees
                     DoctorData = new DoctorViewModel();
                 }
 
-                //? Fetch total appointments for the employee
-                //? [GET] /api/employees/96/appointments/count
+                // - Fetch appointment details
+                // - GET /api/employees/96/appointments/count
 
                 var responseAppointments = await _client.GetAsync("api/employees/96/appointments/count");
 
@@ -112,9 +111,10 @@ namespace OOP_Final_Project.Pages.Employees
                     _logger.LogError($"Failed to fetch appointments count. Status code: {responseAppointments?.StatusCode}");
                 }
 
-
-                //? Fetch total future appointments for the employee in the next 30 days
-                //? [GET] /api/employees/96/appointments/future/count
+                // - Fetch future, completed, and cancelled appointments count
+                // - GET /api/employees/96/appointments/future/count
+                // - GET /api/employees/96/appointments/completed/count
+                // - GET /api/employees/96/appointments/cancelled/count
 
                 var responseFutureAppointments = await _client.GetAsync("api/employees/96/appointments/future/count");
 
@@ -128,7 +128,6 @@ namespace OOP_Final_Project.Pages.Employees
                         if (futureAppointmentsData.TryGetProperty("totalFutureAppointments", out JsonElement totalFutureAppointmentsElementy))
                         {
                             DoctorData.FutureAppointmentCount = totalFutureAppointmentsElementy.GetInt32();
-
                         }
                         else
                         {
@@ -140,10 +139,6 @@ namespace OOP_Final_Project.Pages.Employees
                         _logger.LogError("Future Appointments JSON is null or empty.");
                     }
                 }
-
-
-                //? Fetch total completed appointments for the employee
-                //? [GET] /api/employees/96/appointments/completed/count
 
                 var responseCompletedAppointments = await _client.GetAsync("api/employees/96/appointments/completed/count");
 
@@ -168,10 +163,6 @@ namespace OOP_Final_Project.Pages.Employees
                         _logger.LogError("Completed Appointments JSON is null or empty.");
                     }
                 }
-
-
-                //? Fetch total cancelled appointments for the employee
-                //? [GET] /api/employees/96/appointments/cancelled/count
 
                 var responseCancelledAppointments = await _client.GetAsync("api/employees/96/appointments/cancelled/count");
 
@@ -198,48 +189,40 @@ namespace OOP_Final_Project.Pages.Employees
                 }
 
 
-                //? Fetch all appointments for the employee
-                //? [GET] /api/employees/96/appointments
+                // - Fetch patients
+                // - GET /api/employees/96/patients
 
-                // var responseAllAppointments = await _client.GetAsync("api/employees/96/appointments");
+                var responsePatients = await _client.GetAsync("api/employees/96/patients");
 
-                // if (responseAllAppointments != null && responseAllAppointments.IsSuccessStatusCode)
-                // {
-                //     var allAppointmentsJson = await responseAllAppointments.Content.ReadAsStringAsync();
-                //     if (!string.IsNullOrEmpty(allAppointmentsJson))
-                //     {
-                //         try
-                //         {
-                //             var allAppointmentsData = JsonSerializer.Deserialize<JsonElement>(allAppointmentsJson);
+                if (responsePatients != null && responsePatients.IsSuccessStatusCode)
+                {
+                    var patientsJson = await responsePatients.Content.ReadAsStringAsync();
+                    _logger.LogInformation($"Patients JSON: {patientsJson}"); // Log the JSON response
+                    if (!string.IsNullOrEmpty(patientsJson))
+                    {
+                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                        var patientResponse = JsonSerializer.Deserialize<PatientResponse>(patientsJson, options);
 
-                //             if (allAppointmentsData.TryGetProperty("appointments", out JsonElement appointmentsElement))
-                //             {
-                //                 var appointmentsList = JsonSerializer.Deserialize<List<Appointment>>(
-                //                     appointmentsElement.GetRawText(),
-                //                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                //                 );
+                        if (patientResponse != null && patientResponse.Patients != null)
+                        {
+                            DoctorData.Patients = patientResponse.Patients;
+                        }
+                        else
+                        {
+                            _logger.LogError("Failed to deserialize patients JSON into PatientResponse.");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError("Patients JSON is null or empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch patients. Status code: {responsePatients?.StatusCode}");
+                }
 
-                //                 DoctorData.Appointments = appointmentsList ?? new List<Appointment>();
-                //             }
-                //             else
-                //             {
-                //                 _logger.LogError($"'appointments' property not found in response: {allAppointmentsJson}");
-                //             }
-                //         }
-                //         catch (JsonException ex)
-                //         {
-                //             _logger.LogError(ex, "Error deserializing appointments JSON.");
-                //         }
-                //     }
-                //     else
-                //     {
-                //         _logger.LogError("All Appointments JSON is null or empty.");
-                //     }
-                // }
-                // else
-                // {
-                //     _logger.LogError($"Failed to fetch appointments. Status code: {responseAllAppointments?.StatusCode}");
-                // }
+
 
 
 

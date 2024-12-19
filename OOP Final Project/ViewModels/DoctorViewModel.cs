@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using OOP_Final_Project.Models;
 
 namespace OOP_Final_Project.ViewModels;
 
 public class DoctorViewModel
 {
-    public Employee Employee { get; set; }
+    public Employee Employee { get; set; } = new Employee();
 
     public int AppointmentCount { get; set; }
 
@@ -15,5 +16,6 @@ public class DoctorViewModel
 
     public int CancelledAppointmentCount { get; set; }
 
+    public List<Patient> Patients { get; set; } = new List<Patient>();
 
 }
