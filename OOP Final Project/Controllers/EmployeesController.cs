@@ -13,13 +13,24 @@ namespace OOP_Final_Project.Controllers;
 // - GET /api/employees: List all employees.
 // - GET /api/employees/{id}: Get a specific employee by ID.
 // - GET /api/employees/byFirstName/{firstName}: Get an employee by first name.
+
+// - GET /api/employees/{id}/appointments: Get all appointments for an employee.
 // - GET /api/employees/{id}/appointments/count: Get the total number of appointments for an employee.
+
+// - GET /api/employees/{id}/appointments/future: Get all future appointments for an employee in the next 30 days.
 // - GET /api/employees/{id}/appointments/future/count: Get the total number of future appointments for an employee in the next 30 days.
+
+// - GET /api/employees/{id}/appointments/completed: Get all completed appointments for an employee.
 // - GET /api/employees/{id}/appointments/completed/count: Get the total number of completed appointments for an employee.
+
+// - GET /api/employees/{id}/appointments/cancelled: Get all cancelled appointments for an employee.
+// - GET /api/employees/{id}/appointments/cancelled/count: Get the total number of cancelled appointments for an employee.
+
 // - GET /api/employees/{id}/patients: Get all patients for an employee.
 
 
 // - POST /api/employees: Add a new employee.
+
 public class EmployeesController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
