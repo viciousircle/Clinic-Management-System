@@ -15,6 +15,5 @@ public class DoctorViewModel
 
     public int CancelledAppointmentCount { get; set; }
 
-    public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 
 }
