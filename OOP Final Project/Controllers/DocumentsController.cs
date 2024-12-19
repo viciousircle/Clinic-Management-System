@@ -15,10 +15,9 @@ namespace OOP_Final_Project.Controllers;
 // - GET /api/documentsDiagnose: List all documents of type Diagnose.
 // - GET /api/documentsAppointment: List all documents of type Appointment.
 // - GET /api/documentsCancel: List all documents of type Cancel.
+// - GET /api/documentBill/{id}: Get a document of type Bill by id.
 
-
-
-public class DocumentsController
+public class DocumentsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
 
@@ -91,26 +90,88 @@ public class DocumentsController
         return new JsonResult(documents, options);
     }
 
-    // [HttpGet("{id}")]
-    // public IActionResult GetById(int id)
-    // {
-    //     var document = _context.Documents
-    //         .Include(d => d.Appointment)
-    //         .Include(d => d.Bill)
-    //         .Include(d => d.Diagnose)
-    //         .FirstOrDefault(d => d.Id == id);
+    [HttpGet("documentBill/{id}")]
+    public IActionResult GetBill(int id)
+    {
+        var document = _context.DocumentBills
+            .Include(d => d.Appointment)
+            .FirstOrDefault(d => d.Id == id);
 
-    //     if (document == null)
-    //         return NotFound();
+        if (document == null)
+        {
+            return NotFound();
+        }
 
-    //     var options = new JsonSerializerOptions
-    //     {
-    //         ReferenceHandler = ReferenceHandler.Preserve,
-    //         WriteIndented = true
-    //     };
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve,
+            WriteIndented = true
+        };
 
-    //     return new JsonResult(document, options);
-    // }
+        return new JsonResult(document, options);
+    }
 
+    [HttpGet("documentDiagnose/{id}")]
+    public IActionResult GetDiagnose(int id)
+    {
+        var document = _context.DocumentDiagnoses
+            .Include(d => d.Appointment)
+            .FirstOrDefault(d => d.Id == id);
+
+        if (document == null)
+        {
+            return NotFound();
+        }
+
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve,
+            WriteIndented = true
+        };
+
+        return new JsonResult(document, options);
+    }
+
+    [HttpGet("documentAppointment/{id}")]
+    public IActionResult GetAppointment(int id)
+    {
+        var document = _context.DocumentAppointments
+            .Include(d => d.Appointment)
+            .FirstOrDefault(d => d.Id == id);
+
+        if (document == null)
+        {
+            return NotFound();
+        }
+
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve,
+            WriteIndented = true
+        };
+
+        return new JsonResult(document, options);
+    }
+
+    [HttpGet("documentCancel/{id}")]
+    public IActionResult GetCancel(int id)
+    {
+        var document = _context.DocumentCancels
+            .Include(d => d.Appointment)
+            .FirstOrDefault(d => d.Id == id);
+
+        if (document == null)
+        {
+            return NotFound();
+        }
+
+        var options = new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve,
+            WriteIndented = true
+        };
+
+        return new JsonResult(document, options);
+    }
 
 }

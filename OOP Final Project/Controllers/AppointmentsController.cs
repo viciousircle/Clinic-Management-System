@@ -16,8 +16,6 @@ namespace OOP_Final_Project.Controllers;
 // - GET /api/appointments/byPatientId/{patientId}: Get all appointments for a patient.
 // - GET /api/appointments/byDoctorId/{doctorId}: Get all appointments for a doctor.
 
-// ...existing code...
-
 public class AppointmentsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
