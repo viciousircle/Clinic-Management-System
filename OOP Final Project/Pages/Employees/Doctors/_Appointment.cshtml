@@ -88,28 +88,6 @@
                 </div>
             </div>
         </div>
-
-
-
-        @* <!-- Summary Section -->
-                    <div class=" my-4">
-                        <div class="card shadow-sm" style="border-radius: 16px; background-color: #f9f9f9;">
-                            <div class="card-body p-4">
-                                <h5 class="mb-3">Summary</h5>
-                                <p class="text-muted mb-1">Track your appointments' performance and insights:</p>
-                                <ul class="mb-0">
-                                    <li>Total appointments have increased by <strong>10%</strong> compared to last
-                                        month.
-                                    </li>
-                                    <li><strong>95%</strong> of appointments were successfully completed.</li>
-                                    <li>Only <strong>4%</strong> of appointments were cancelled.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> *@
-
-
-
     </div>
 
     <!-- Upcoming Appointments Section -->
@@ -165,21 +143,6 @@
                     <th style="font-weight: 600;">Status</th>
                 </tr>
             </thead>
-            @* <tbody>
-                @foreach (var appointment in Model.Appointments)
-                {
-                    <tr class="align-middle">
-                        <td>@appointment.PatientName</td>
-                        <td>@appointment.AppointmentDate.ToString("yyyy-MM-dd")</td>
-                        <td>@appointment.AppointmentTime</td>
-                        <td>@appointment.Reason</td>
-                        <td>
-                            <button class="btn btn-outline-danger btn-sm" onclick="openHealthCheckModal(this)">Health Check
-                                Now</button>
-                        </td>
-                    </tr>
-                }
-            </tbody> *@
 
 
         </table>

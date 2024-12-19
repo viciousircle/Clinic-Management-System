@@ -15,7 +15,11 @@ namespace OOP_Final_Project.Controllers;
 // - GET /api/documentsDiagnose: List all documents of type Diagnose.
 // - GET /api/documentsAppointment: List all documents of type Appointment.
 // - GET /api/documentsCancel: List all documents of type Cancel.
+
 // - GET /api/documentBill/{id}: Get a document of type Bill by id.
+// - GET /api/documentDiagnose/{id}: Get a document of type Diagnose by id.
+// - GET /api/documentAppointment/{id}: Get a document of type Appointment by id.
+// - GET /api/documentCancel/{id}: Get a document of type Cancel by id.
 
 public class DocumentsController : ControllerBase
 {
