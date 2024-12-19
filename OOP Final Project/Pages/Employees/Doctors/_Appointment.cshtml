@@ -144,6 +144,17 @@
                 </tr>
             </thead>
 
+            <tbody>
+                @foreach (var appointment in Model.Appointments)
+                {
+                    <tr>
+                        <td>@appointment.PatientId</td>
+                        <td>@appointment.DoctorId
+                        <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
+                        <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
+                    </tr>
+                }
+
 
         </table>
     </div>

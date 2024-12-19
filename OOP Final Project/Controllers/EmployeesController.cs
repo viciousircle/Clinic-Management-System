@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
@@ -150,23 +152,20 @@ public class EmployeesController : ControllerBase
     public IActionResult GetAllAppointmentsByEmployeeId(int id)
     {
         var appointments = _context.Appointments
+            .Include(appt => appt.Patient)
+            .Include(appt => appt.Doctor)
+            .Include(appt => appt.DocumentAppointment)
+            .Include(appt => appt.DocumentCancel)
+            .Include(appt => appt.DocumentBill)
             .Where(appt => appt.DoctorId == id)
             .ToList();
 
-        return Ok(appointments);
+        return new JsonResult(appointments, new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            WriteIndented = true
+        });
     }
-
-    // [HttpGet("{DoctorId}/appointments/{appointmentId}/documentsAppointment")]
-    // public IActionResult GetDocumentsByAppointmentId(int appointmentId)
-    // {
-    //     var documents = _context.DocumentAppointments
-    //         .Where(doc => doc.AppointmentId == appointmentId)
-    //         .ToList();
-
-    //     return Ok(documents);
-    // }
-
-
 
 
 
