@@ -54,7 +54,7 @@
         { id: 3, name: "Michael Johnson", age: 40, gender: "Male" }
     ];
 
-    // Function to search for patients based on the input
+    // Function to search for patients based on the input (search by name, age, gender, or id)
     function searchPatients() {
         const input = document.getElementById('patientSearch').value.trim().toLowerCase();
         const patientDropdown = document.getElementById('patientDropdown');
@@ -67,8 +67,13 @@
             return;
         }
 
-        // Filter patients based on the search query
-        const filteredPatients = patients.filter(patient => patient.name.toLowerCase().includes(input));
+        // Filter patients based on the search query (name, age, gender, or id)
+        const filteredPatients = patients.filter(patient => {
+            return patient.name.toLowerCase().includes(input) ||
+                patient.age.toString().includes(input) ||
+                patient.gender.toLowerCase().includes(input) ||
+                patient.id.toString().includes(input); // Search by ID as well
+        });
 
         // If there are matching patients, show the dropdown
         if (filteredPatients.length > 0) {
@@ -76,7 +81,7 @@
             filteredPatients.forEach(patient => {
                 const patientItem = document.createElement('button');
                 patientItem.classList.add('list-group-item', 'list-group-item-action');
-                patientItem.textContent = patient.name;
+                patientItem.textContent = `ID: ${patient.id} - ${patient.name} - ${patient.age} years old, ${patient.gender}`;
                 patientItem.onclick = () => selectPatient(patient);
                 patientDropdown.appendChild(patientItem);
             });
@@ -93,6 +98,7 @@
         // Display patient info in the left column
         patientInfoContainer.innerHTML = `
             <h4>Patient Info</h4>
+            <p><strong>ID:</strong> ${patient.id}</p>
             <p><strong>Name:</strong> ${patient.name}</p>
             <p><strong>Age:</strong> ${patient.age}</p>
             <p><strong>Gender:</strong> ${patient.gender}</p>
