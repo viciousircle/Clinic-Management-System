@@ -1,5 +1,6 @@
 ﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
 
+
 <div class="px-5">
     <!-- Header Section -->
     <div class=" " style="padding-top: 64px;">
@@ -9,8 +10,11 @@
 
             <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal"
                 data-bs-target="#newAppointmentModal">Make new appointment</div>
+
+
         </div>
     </div>
+
 
     <hr>
 
@@ -205,41 +209,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newAppointmentModalLabel">New Appointment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Form elements for creating a new appointment go here -->
-                <form>
-                    <div class="mb-3">
-                        <label for="patientName" class="form-label">Patient Name</label>
-                        <input type="text" class="form-control" id="patientName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="appointmentDate" class="form-label">Appointment Date</label>
-                        <input type="date" class="form-control" id="appointmentDate" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="appointmentTime" class="form-label">Appointment Time</label>
-                        <input type="time" class="form-control" id="appointmentTime" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="reason" class="form-label">Reason for Visit</label>
-                        <textarea class="form-control" id="reason" rows="3"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveAppointmentBtn">Save Appointment</button>
-            </div>
-        </div>
-    </div>
+<div>
+    @await Html.PartialAsync("Modals/_newAppointmentModal")
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -248,9 +219,11 @@
     let selectedRow = null; // To store the selected row for marking as done
 
     document.getElementById("makeNewAppointmentBtn").addEventListener("click", function () {
-        // Show the modal for new appointment
-        var modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
+        var modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'), {
+            backdrop: false
+        });
         modal.show();
+
     });
 
 
