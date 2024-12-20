@@ -23,28 +23,35 @@
                         </div>
 
                         <!-- Patient Info (Initially Hidden) -->
-                        <div id="patientInfo" style="display: none;">
-                            <div class="mb-3">
-                                <label for="patientName" class="form-label text-muted">Full Name:</label>
-                                <input class="form-control text-muted" type="text" id="patientName"
-                                    placeholder="John Doe" disabled>
+                        <div id="patientInfo" style="display: flex; flex-direction: row; ">
+                            <div class="mb-2 d-flex flex-column" style="flex: 1; gap: 1rem;">
+                                <div class="d-flex" style="align-items: center;">
+                                    <label for="patientId" class="form-label text-muted mb-0 pe-2">ID</label>
+                                    <input class="form-control text-muted w-25" type="text" id="patientId"
+                                        placeholder="1" disabled>
+                                </div>
+                                <div class="d-flex" style="align-items: center; gap: 1rem;">
+                                    <label for="patientLastVisit" class="form-label text-muted mb-0">Last Visit</label>
+                                    <input class="form-control text-muted w-50" type="text" id="patientLastVisit"
+                                        placeholder="2023-12-10" disabled>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="patientId" class="form-label text-muted">Id:</label>
-                                <input class="form-control text-muted" type="text" id="patientId" placeholder="1"
-                                    disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="patientLastVisit" class="form-label text-muted">Last Visit:</label>
-                                <input class="form-control text-muted" type="text" id="patientLastVisit"
-                                    placeholder="2023-12-10" disabled>
-                            </div>
-                            <div class="mb-3">
-                                <label for="patientPhone" class="form-label text-muted">Phone:</label>
-                                <input class="form-control text-muted" type="text" id="patientPhone"
-                                    placeholder="123-456-7890" disabled>
+
+                            <div class="mb-2 d-flex flex-column" style="flex: 1; gap: 1rem;">
+                                <div class="d-flex">
+                                    <label for="patientName" class="form-label text-muted mb-0 pe-2">Full Name</label>
+                                    <input class="w-100 form-control text-muted" type="text" id="patientName"
+                                        placeholder="John Doe" disabled>
+                                </div>
+                                <div class="d-flex">
+                                    <label for="patientPhone" class="form-label text-muted mb-0">Phone</label>
+                                    <input class="form-control text-muted" type="text" id="patientPhone"
+                                        placeholder="123-456-7890" disabled>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
 
                     <!-- Right Column (Appointment Info) -->
