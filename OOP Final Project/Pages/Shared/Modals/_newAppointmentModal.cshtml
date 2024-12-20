@@ -22,18 +22,31 @@
                             </div>
                         </div>
 
-                        <!-- Patient Info Card (Initially Hidden) -->
+                        <!-- Patient Info (Initially Hidden) -->
                         <div id="patientInfo" style="display: none;">
-                            <div class="card border-secondary mb-3" style="max-width: 18rem;">
-                                <div class="card-header bg-transparent border-success">Patient Info</div>
-                                <div class="card-body text-muted">
-                                    <h5 class="card-title" id="patientName">Name</h5>
-                                    <p class="card-text" id="patientDetails">Info</p>
-                                </div>
+                            <div class="mb-3">
+                                <label for="patientName" class="form-label text-muted">Full Name:</label>
+                                <input class="form-control text-muted" type="text" id="patientName"
+                                    placeholder="John Doe" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="patientId" class="form-label text-muted">Id:</label>
+                                <input class="form-control text-muted" type="text" id="patientId" placeholder="1"
+                                    disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="patientLastVisit" class="form-label text-muted">Last Visit:</label>
+                                <input class="form-control text-muted" type="text" id="patientLastVisit"
+                                    placeholder="2023-12-10" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="patientPhone" class="form-label text-muted">Phone:</label>
+                                <input class="form-control text-muted" type="text" id="patientPhone"
+                                    placeholder="123-456-7890" disabled>
                             </div>
                         </div>
-
                     </div>
+
                     <!-- Right Column (Appointment Info) -->
                     <div class="col-md-6">
                         <div class="mb-3">
@@ -44,11 +57,11 @@
                             <label for="appointmentTime" class="form-label">Appointment Time</label>
                             <input type="time" class="form-control" id="appointmentTime" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason for Visit</label>
+                            <textarea class="form-control" id="reason" rows="4"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="reason" class="form-label">Reason for Visit</label>
-                    <textarea class="form-control" id="reason" rows="4"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -59,12 +72,13 @@
     </div>
 </div>
 
+
 <script>
     // Sample patient data (replace with actual data fetching logic)
     const patients = [
-        { id: 1, name: "John Doe", age: 30, gender: "Male" },
-        { id: 2, name: "Jane Smith", age: 25, gender: "Female" },
-        { id: 3, name: "Michael Johnson", age: 40, gender: "Male" }
+        { id: 1, name: "John Doe", age: 30, gender: "Male", lastVisit: "2023-12-10", phone: "123-456-7890" },
+        { id: 2, name: "Jane Smith", age: 25, gender: "Female", lastVisit: "2023-12-05", phone: "987-654-3210" },
+        { id: 3, name: "Michael Johnson", age: 40, gender: "Male", lastVisit: "2023-11-20", phone: "456-789-1234" }
     ];
 
     // Function to search for patients based on the input (search by name, age, gender, or id)
@@ -74,6 +88,14 @@
 
         // Clear any existing dropdown items
         patientDropdown.innerHTML = "";
+
+        // Clear the previous patient info when the user starts typing a new search
+        document.getElementById('patientName').value = '';
+        document.getElementById('patientId').value = '';
+        document.getElementById('patientLastVisit').value = '';
+        document.getElementById('patientPhone').value = '';
+
+        document.getElementById('patientInfo').style.display = 'none'; // Hide previous patient info
 
         if (input === "") {
             patientDropdown.style.display = "none"; // Hide dropdown if no input
@@ -103,23 +125,17 @@
         }
     }
 
-    // Function to display selected patient information inside the card
+    // Function to display selected patient information in input fields
     function selectPatient(patient) {
+        // Set input fields with patient info
         document.getElementById('patientSearch').value = patient.name; // Set patient name in the input field
-        const patientInfoContainer = document.getElementById('patientInfo');
+        document.getElementById('patientName').value = patient.name;
+        document.getElementById('patientId').value = patient.id;
+        document.getElementById('patientLastVisit').value = patient.lastVisit || "N/A";
+        document.getElementById('patientPhone').value = patient.phone || "N/A";
 
-        // Update the card with patient info
-        document.getElementById('patientName').textContent = patient.name;
-        document.getElementById('patientDetails').innerHTML = `
-            ID: ${patient.id}<br>
-            Age: ${patient.age}<br>
-            Gender: ${patient.gender}
-        `;
-
-        // Show the card once a patient is selected
-        patientInfoContainer.style.display = "block";
-
-        // Hide the dropdown once a patient is selected
+        // Show patient info and hide dropdown once a patient is selected
+        document.getElementById('patientInfo').style.display = "block";
         document.getElementById('patientDropdown').style.display = "none";
     }
 </script>
