@@ -1,31 +1,41 @@
-﻿<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+﻿<div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-labelledby="newAppointmentModalLabel">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 80%;"> <!-- Custom size for modal -->
+        <div class="modal-content" style="border-radius: 16px;">
             <div class="modal-header">
                 <h5 class="modal-title" id="newAppointmentModalLabel">New Appointment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Form elements for creating a new appointment go here -->
-                <form>
-                    <div class="mb-3">
-                        <label for="patientName" class="form-label">Patient Name</label>
-                        <input type="text" class="form-control" id="patientName" required>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Patient</span>
+                    <input type="text" class="form-control" id="patientSearch" placeholder="Search for patient"
+                        oninput="searchPatients()">
+                </div>
+                <div id="patientDropdown" class="list-group"
+                    style="max-height: 200px; overflow-y: auto; display: none;">
+                    <!-- Patient dropdown list will appear here -->
+                </div>
+                <div class="row">
+                    <!-- Left Column (Patient Info) -->
+                    <div class="col-md-6 position-relative" id="patientInfo">
+                        <!-- Patient info will be displayed here -->
                     </div>
-                    <div class="mb-3">
-                        <label for="appointmentDate" class="form-label">Appointment Date</label>
-                        <input type="date" class="form-control" id="appointmentDate" required>
+                    <!-- Right Column (Appointment Info) -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="appointmentDate" class="form-label">Appointment Date</label>
+                            <input type="date" class="form-control" id="appointmentDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="appointmentTime" class="form-label">Appointment Time</label>
+                            <input type="time" class="form-control" id="appointmentTime" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="appointmentTime" class="form-label">Appointment Time</label>
-                        <input type="time" class="form-control" id="appointmentTime" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="reason" class="form-label">Reason for Visit</label>
-                        <textarea class="form-control" id="reason" rows="3"></textarea>
-                    </div>
-                </form>
+                </div>
+                <div class="mb-3">
+                    <label for="reason" class="form-label">Reason for Visit</label>
+                    <textarea class="form-control" id="reason" rows="4"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -34,3 +44,60 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Sample patient data (replace with actual data fetching logic)
+    const patients = [
+        { id: 1, name: "John Doe", age: 30, gender: "Male" },
+        { id: 2, name: "Jane Smith", age: 25, gender: "Female" },
+        { id: 3, name: "Michael Johnson", age: 40, gender: "Male" }
+    ];
+
+    // Function to search for patients based on the input
+    function searchPatients() {
+        const input = document.getElementById('patientSearch').value.trim().toLowerCase();
+        const patientDropdown = document.getElementById('patientDropdown');
+
+        // Clear any existing dropdown items
+        patientDropdown.innerHTML = "";
+
+        if (input === "") {
+            patientDropdown.style.display = "none"; // Hide dropdown if no input
+            return;
+        }
+
+        // Filter patients based on the search query
+        const filteredPatients = patients.filter(patient => patient.name.toLowerCase().includes(input));
+
+        // If there are matching patients, show the dropdown
+        if (filteredPatients.length > 0) {
+            patientDropdown.style.display = "block"; // Show dropdown
+            filteredPatients.forEach(patient => {
+                const patientItem = document.createElement('button');
+                patientItem.classList.add('list-group-item', 'list-group-item-action');
+                patientItem.textContent = patient.name;
+                patientItem.onclick = () => selectPatient(patient);
+                patientDropdown.appendChild(patientItem);
+            });
+        } else {
+            patientDropdown.style.display = "none"; // Hide dropdown if no matches
+        }
+    }
+
+    // Function to display selected patient information
+    function selectPatient(patient) {
+        document.getElementById('patientSearch').value = patient.name; // Set patient name in the input field
+        const patientInfoContainer = document.getElementById('patientInfo');
+
+        // Display patient info in the left column
+        patientInfoContainer.innerHTML = `
+            <h4>Patient Info</h4>
+            <p><strong>Name:</strong> ${patient.name}</p>
+            <p><strong>Age:</strong> ${patient.age}</p>
+            <p><strong>Gender:</strong> ${patient.gender}</p>
+        `;
+
+        // Hide the dropdown once a patient is selected
+        document.getElementById('patientDropdown').style.display = "none";
+    }
+</script>
