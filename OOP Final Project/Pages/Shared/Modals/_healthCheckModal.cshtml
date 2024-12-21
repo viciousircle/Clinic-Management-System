@@ -7,7 +7,6 @@
             </div>
             <div class="modal-body">
                 <div class="row overflow-auto" style="overflow-y: scroll;">
-
                     <div class="accordion" id="accordionExample">
                         <!-- Patient Information Section -->
                         <div class="accordion-item">
@@ -67,8 +66,6 @@
                             <div id="collapseHealthRecords" class="accordion-collapse collapse"
                                 aria-labelledby="headingHealthRecords" data-bs-parent="#accordionExample">
                                 <div class="accordion-body" id="healthRecords">
-
-
                                     <div class="mb-3">
                                         <label for="temperature" class="form-label">Temperature (°C)</label>
                                         <input type="number" class="form-control" id="temperature" placeholder="N/A">
@@ -118,7 +115,7 @@
                                 aria-labelledby="headingPrescription" data-bs-parent="#accordionExample">
                                 <div class="accordion-body" id="prescription">
                                     <textarea class="form-control" id="prescriptionInput" rows="4"
-                                        placeholder="Add prescription details"></textarea>
+                                        placeholder="Add prescription details" disabled></textarea>
                                 </div>
                             </div>
                         </div>
@@ -184,7 +181,7 @@
             patientName: document.getElementById('patientName').value,
             patientAge: document.getElementById('patientAge').value,
             symptoms: document.getElementById('symptomsInput').value,
-            healthRecords: document.getElementById('healthRecordsInput').value,
+            healthRecords: document.getElementById('healthRecordsInput') ? document.getElementById('healthRecordsInput').value : 'N/A', // Added fallback in case healthRecordsInput is not defined
             temperature: document.getElementById('temperature').value,
             bloodPressure: document.getElementById('bloodPressure').value,
             pulseRate: document.getElementById('pulseRate').value,
@@ -202,4 +199,19 @@
         resetForm();
         document.querySelector('#healthCheckModal .btn-close').click();
     }
+
+    // Enable prescription input if diagnosis is filled in
+    function enablePrescription() {
+        const diagnosisInput = document.getElementById('diagnosisInput').value;
+        const prescriptionInput = document.getElementById('prescriptionInput');
+
+        if (diagnosisInput.trim() !== "") {
+            prescriptionInput.disabled = false;
+        } else {
+            prescriptionInput.disabled = true;
+        }
+    }
+
+    // Add event listener for diagnosis input
+    document.getElementById('diagnosisInput').addEventListener('input', enablePrescription);
 </script>
