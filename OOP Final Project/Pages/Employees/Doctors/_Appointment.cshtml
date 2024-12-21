@@ -145,6 +145,7 @@
                     <th style="font-weight: 600;">Appointment Date</th>
                     <th style="font-weight: 600;">Appointment Time</th>
                     <th style="font-weight: 600;">Reason for Visit</th>
+                    <th style="font-weight: 600;">Actions</th>
                 </tr>
             </thead>
 
@@ -153,31 +154,36 @@
                 @foreach (var appointment in Model.Appointments)
                 {
 
-                        <tr>
-                            <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
-                            <td>@appointment.DocumentAppointment.Date.ToShortDateString()</td>
+                    <tr>
+                        <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
+                        <td>@appointment.DocumentAppointment.Date.ToShortDateString()</td>
                         @if (appointment.DocumentAppointment.TimeStart != null)
                         {
-                                    <td>@appointment.DocumentAppointment.TimeStart.ToString(@"hh\:mm")</td>
+                            <td>@appointment.DocumentAppointment.TimeStart.ToString(@"hh\:mm")</td>
                         }
                         else
                         {
-                                    <span>No time available</span>
+                            <span>No time available</span>
                         }
 
                         @if (appointment.DocumentDiagnose.PatientStatus != null)
                         {
-                                    <td>@appointment.DocumentDiagnose.PatientStatus</td>
+                            <td>@appointment.DocumentDiagnose.PatientStatus</td>
                         }
                         else
                         {
-                                    <td>No reason available</td>
+                            <td>No reason available</td>
                         }
 
 
+                        <td>
+                            <div>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                    onclick="openHealthCheckModal(this)">Health Check</button>
+                            </div>
+                        </td>
 
-
-                        </tr>
+                    </tr>
 
 
                 }
