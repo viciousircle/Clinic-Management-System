@@ -98,6 +98,13 @@
                                 <div class="accordion-body" id="diagnosis">
                                     <textarea class="form-control" id="diagnosisInput" rows="4"
                                         placeholder="Doctor's diagnosis"></textarea>
+                                    <div class="form-check mt-3">
+                                        <input class="form-check-input" type="checkbox" id="needPrescriptionCheck"
+                                            onclick="togglePrescription()">
+                                        <label class="form-check-label" for="needPrescriptionCheck">
+                                            Patient needs prescription
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -200,18 +207,11 @@
         document.querySelector('#healthCheckModal .btn-close').click();
     }
 
-    // Enable prescription input if diagnosis is filled in
-    function enablePrescription() {
-        const diagnosisInput = document.getElementById('diagnosisInput').value;
+    // Enable prescription input if the checkbox is checked
+    function togglePrescription() {
+        const needPrescriptionCheck = document.getElementById('needPrescriptionCheck');
         const prescriptionInput = document.getElementById('prescriptionInput');
 
-        if (diagnosisInput.trim() !== "") {
-            prescriptionInput.disabled = false;
-        } else {
-            prescriptionInput.disabled = true;
-        }
+        prescriptionInput.disabled = !needPrescriptionCheck.checked;
     }
-
-    // Add event listener for diagnosis input
-    document.getElementById('diagnosisInput').addEventListener('input', enablePrescription);
 </script>
