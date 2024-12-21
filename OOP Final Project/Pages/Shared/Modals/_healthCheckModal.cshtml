@@ -127,6 +127,7 @@
                                     <div id="medicinesContainer">
                                         <!-- Dynamic medicine fields will be added here -->
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -195,11 +196,16 @@
         medicineDiv.classList.add('mb-3');
         medicineDiv.innerHTML = `
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search medicine" id="medicineName${medicineIndex}" value="Paracetamol">
-                <input type="text" class="form-control" placeholder="Dosage" id="medicineDosage${medicineIndex}" value="500 mg">
+                <input type="text" class="form-control" placeholder="Search medicine" id="medicineName${medicineIndex}">
+                <input type="text" class="form-control" placeholder="Dosage Amount" id="dosageAmount${medicineIndex}">
+                <input type="text" class="form-control" placeholder="Frequency" id="frequency${medicineIndex}">
+                <input type="text" class="form-control" placeholder="Frequency Unit" id="frequencyUnit${medicineIndex}">
+                <input type="text" class="form-control" placeholder="Route" id="route${medicineIndex}">
+                <input type="text" class="form-control" placeholder="Instructions" id="instructions${medicineIndex}">
                 <button class="btn btn-danger" type="button" onclick="removeMedicine(this)">Remove</button>
             </div>
         `;
+
         medicinesContainer.appendChild(medicineDiv);
     }
 
@@ -220,8 +226,12 @@
             pulseRate: document.getElementById('pulseRate').value,
             diagnosis: document.getElementById('diagnosisInput').value,
             prescription: Array.from(document.querySelectorAll('#medicinesContainer .input-group')).map(group => ({
-                name: group.querySelector('input[type="text"]').value,
-                dosage: group.querySelector('input[type="text"]:nth-child(2)').value
+                name: group.querySelector('input[id^="medicineName"]').value,
+                dosageAmount: group.querySelector('input[id^="dosageAmount"]').value,
+                frequency: group.querySelector('input[id^="frequency"]').value,
+                frequencyUnit: group.querySelector('input[id^="frequencyUnit"]').value,
+                route: group.querySelector('input[id^="route"]').value,
+                instructions: group.querySelector('input[id^="instructions"]').value
             })),
             rulesChecked: Array.from(document.querySelectorAll('#commitAndRules input:checked')).map(
                 (checkbox) => checkbox.labels[0].innerText
