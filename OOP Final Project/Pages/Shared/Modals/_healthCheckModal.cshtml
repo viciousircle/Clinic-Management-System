@@ -121,8 +121,12 @@
                             <div id="collapsePrescription" class="accordion-collapse collapse"
                                 aria-labelledby="headingPrescription" data-bs-parent="#accordionExample">
                                 <div class="accordion-body" id="prescription">
-                                    <textarea class="form-control" id="prescriptionInput" rows="4"
-                                        placeholder="Add prescription details" disabled></textarea>
+                                    <button type="button" class="btn btn-outline-dark w-100 mb-3"
+                                        onclick="addMedicine()">Add
+                                        Medicine</button>
+                                    <div id="medicinesContainer">
+                                        <!-- Dynamic medicine fields will be added here -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -182,6 +186,28 @@
 </div>
 
 <script>
+    // Function to add a new medicine input field
+    function addMedicine() {
+        const medicinesContainer = document.getElementById('medicinesContainer');
+        const medicineIndex = medicinesContainer.children.length;
+
+        const medicineDiv = document.createElement('div');
+        medicineDiv.classList.add('mb-3');
+        medicineDiv.innerHTML = `
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search medicine" id="medicineName${medicineIndex}" value="Paracetamol">
+                <input type="text" class="form-control" placeholder="Dosage" id="medicineDosage${medicineIndex}" value="500 mg">
+                <button class="btn btn-danger" type="button" onclick="removeMedicine(this)">Remove</button>
+            </div>
+        `;
+        medicinesContainer.appendChild(medicineDiv);
+    }
+
+    // Function to remove a medicine input field
+    function removeMedicine(button) {
+        button.parentElement.parentElement.remove();
+    }
+
     // Mark form as done and log the data including new fields
     function markAsDone() {
         const formData = {
@@ -193,7 +219,10 @@
             bloodPressure: document.getElementById('bloodPressure').value,
             pulseRate: document.getElementById('pulseRate').value,
             diagnosis: document.getElementById('diagnosisInput').value,
-            prescription: document.getElementById('prescriptionInput').value,
+            prescription: Array.from(document.querySelectorAll('#medicinesContainer .input-group')).map(group => ({
+                name: group.querySelector('input[type="text"]').value,
+                dosage: group.querySelector('input[type="text"]:nth-child(2)').value
+            })),
             rulesChecked: Array.from(document.querySelectorAll('#commitAndRules input:checked')).map(
                 (checkbox) => checkbox.labels[0].innerText
             )
@@ -213,5 +242,22 @@
         const prescriptionInput = document.getElementById('prescriptionInput');
 
         prescriptionInput.disabled = !needPrescriptionCheck.checked;
+    }
+
+    // Function to reset the form
+    function resetForm() {
+        document.getElementById('patientName').value = '';
+        document.getElementById('patientAge').value = '';
+        document.getElementById('symptomsInput').value = '';
+        document.getElementById('healthRecordsInput').value = '';
+        document.getElementById('diagnosisInput').value = '';
+        document.getElementById('prescriptionInput').value = '';
+        document.getElementById('medicinesContainer').innerHTML = '';
+
+        document.getElementById('patientInfo').style.display = 'none';
+        document.getElementById('appointmentInfoContainer').style.display = 'none';
+        document.getElementById('patientDropdown').style.display = 'none';
+
+        patientSelected = false;
     }
 </script>
