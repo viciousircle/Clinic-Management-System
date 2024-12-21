@@ -20,16 +20,18 @@
                             <div id="collapsePatientInfo" class="accordion-collapse collapse show"
                                 aria-labelledby="headingPatientInfo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body" id="patientInfo">
-                                    <form>
+                                    <form id="healthCheckForm">
                                         <div class="mb-3">
                                             <label for="patientName" class="form-label">Full Name</label>
                                             <input type="text" class="form-control" id="patientName" placeholder="N/A"
                                                 autocomplete="off" required disabled>
+                                            <div class="invalid-feedback">Name is required.</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="patientAge" class="form-label">Age</label>
                                             <input type="number" class="form-control" id="patientAge" placeholder="N/A"
                                                 required disabled>
+                                            <div class="invalid-feedback">Age is required.</div>
                                         </div>
                                     </form>
                                 </div>
@@ -186,7 +188,35 @@
     </div>
 </div>
 
+
+<style>
+    .dropdown-container {
+        position: relative;
+    }
+
+    .dropdown-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+</style>
+
 <script>
+    const medicines = [
+        "Paracetamol",
+        "Ibuprofen",
+        "Amoxicillin",
+        "Ciprofloxacin",
+        "Metformin",
+        "Amlodipine",
+        "Simvastatin",
+        "Omeprazole",
+        "Lisinopril",
+        "Levothyroxine"
+    ];
+
     // Function to add a new medicine input field
     function addMedicine() {
         const medicinesContainer = document.getElementById('medicinesContainer');
@@ -195,8 +225,9 @@
         const medicineDiv = document.createElement('div');
         medicineDiv.classList.add('mb-3');
         medicineDiv.innerHTML = `
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search medicine" id="medicineName${medicineIndex}">
+            <div class="input-group mb-3 dropdown-container">
+                <input type="text" class="form-control" placeholder="Search medicine" id="medicineName${medicineIndex}" oninput="searchMedicine(${medicineIndex})">
+                <div class="list-group dropdown-list" id="medicineList${medicineIndex}"></div>
                 <input type="text" class="form-control" placeholder="Dosage Amount" id="dosageAmount${medicineIndex}">
                 <input type="text" class="form-control" placeholder="Frequency" id="frequency${medicineIndex}">
                 <input type="text" class="form-control" placeholder="Frequency Unit" id="frequencyUnit${medicineIndex}">
@@ -205,8 +236,30 @@
                 <button class="btn btn-danger" type="button" onclick="removeMedicine(this)">Remove</button>
             </div>
         `;
-
         medicinesContainer.appendChild(medicineDiv);
+    }
+
+    // Function to search for medicines
+    function searchMedicine(index) {
+        const input = document.getElementById(`medicineName${index}`);
+        const filter = input.value.toLowerCase();
+        const list = document.getElementById(`medicineList${index}`);
+        list.innerHTML = '';
+
+        if (filter) {
+            const filteredMedicines = medicines.filter(medicine => medicine.toLowerCase().includes(filter));
+            filteredMedicines.forEach(medicine => {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.classList.add('list-group-item', 'list-group-item-action');
+                item.textContent = medicine;
+                item.onclick = () => {
+                    input.value = medicine;
+                    list.innerHTML = '';
+                };
+                list.appendChild(item);
+            });
+        }
     }
 
     // Function to remove a medicine input field
@@ -220,7 +273,6 @@
             patientName: document.getElementById('patientName').value,
             patientAge: document.getElementById('patientAge').value,
             symptoms: document.getElementById('symptomsInput').value,
-            healthRecords: document.getElementById('healthRecordsInput') ? document.getElementById('healthRecordsInput').value : 'N/A', // Added fallback in case healthRecordsInput is not defined
             temperature: document.getElementById('temperature').value,
             bloodPressure: document.getElementById('bloodPressure').value,
             pulseRate: document.getElementById('pulseRate').value,
@@ -259,15 +311,7 @@
         document.getElementById('patientName').value = '';
         document.getElementById('patientAge').value = '';
         document.getElementById('symptomsInput').value = '';
-        document.getElementById('healthRecordsInput').value = '';
         document.getElementById('diagnosisInput').value = '';
-        document.getElementById('prescriptionInput').value = '';
         document.getElementById('medicinesContainer').innerHTML = '';
-
-        document.getElementById('patientInfo').style.display = 'none';
-        document.getElementById('appointmentInfoContainer').style.display = 'none';
-        document.getElementById('patientDropdown').style.display = 'none';
-
-        patientSelected = false;
     }
 </script>
