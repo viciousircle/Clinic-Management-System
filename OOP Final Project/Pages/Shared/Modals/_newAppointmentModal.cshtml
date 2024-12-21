@@ -13,7 +13,7 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text ">Patient</span>
                             <input type="text" class="form-control" id="patientSearch" placeholder="Enter patient info"
-                                oninput="searchPatients()" autocomplete="off">
+                                oninput="handlePatientSearchInput()" autocomplete="off">
                         </div>
                         <div style="display: flex; justify-content: center;">
                             <!-- The dropdown will be placed here -->
@@ -23,80 +23,80 @@
                         </div>
 
                         <!-- Patient Info (Initially Hidden) -->
-                        <div id="patientInfo" class="d-flex flex-column gap-md-2">
+                        <div id="patientInfo" class="d-flex flex-column gap-md-2" style="display: none;">
                             <div class="d-flex" style="align-items: center;">
                                 <label for="patientId" class="form-label text-muted mb-0 pe-2 w-25">ID</label>
-                                <input class="form-control text-muted " type="text" id="patientId" placeholder="1"
+                                <input class="form-control text-muted" type="text" id="patientId" placeholder="N/A"
                                     disabled>
                             </div>
                             <div class="d-flex" style="justify-content:flex-start; align-items: center;">
-                                <label for="patientName" class="form-label text-muted mb-0 pe-2 w-25    ">Full
-                                    Name</label>
+                                <label for="patientName" class="form-label text-muted mb-0 pe-2 w-25">Full Name</label>
                                 <input class="w-100 form-control text-muted" type="text" id="patientName"
-                                    placeholder="John Doe" disabled>
+                                    placeholder="N/A" disabled>
                             </div>
                             <div class="d-flex" style="align-items: center;">
                                 <label for="patientLastVisit" class="form-label text-muted mb-0 w-25">Last Visit</label>
-                                <input class="form-control text-muted " type="text" id="patientLastVisit"
-                                    placeholder="2023-12-10" disabled>
+                                <input class="form-control text-muted" type="text" id="patientLastVisit"
+                                    placeholder="N/A" disabled>
                             </div>
-
                             <div class="d-flex" style="align-items: center;">
                                 <label for="patientPhone" class="form-label text-muted mb-0 w-25">Phone</label>
-                                <input class="form-control text-muted" type="text" id="patientPhone"
-                                    placeholder="123-456-7890" disabled>
+                                <input class="form-control text-muted" type="text" id="patientPhone" placeholder="N/A"
+                                    disabled>
                             </div>
-
-
                             <div class="d-flex flex-column w-100" style="align-items: center;">
-                                <label class="form-label text-muted mb-2 ">Lastest diagnose</label>
-                                <input class="form-control text-muted" type="text" id="patientPhone"
-                                    placeholder="lip sum" disabled>
+                                <label class="form-label text-muted mb-2">Latest Diagnose</label>
+                                <input class="form-control text-muted" type="text" id="patientDiagnose"
+                                    placeholder="N/A" disabled>
                             </div>
-
-
-
-
                         </div>
-
-
                     </div>
 
                     <!-- Right Column (Appointment Info) -->
-                    <div class="col-md-6">
-                        <div class="mb-3 d-flex">
-                            <label for="appointmentDate" class="form-label">Appointment Date</label>
-                            <input type="date" class="form-control" id="appointmentDate" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="appointmentTime" class="form-label">Appointment Time</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="appointmentTime1"
-                                    name="appointmentTime">
-                                <label class="form-check-label" for="appointmentTime1">
-                                    7:00 - 8:00 AM
-                                </label>
+                    <div id="appointmentInfoContainer" style="display: none;" class="col-md-6">
+                        <div>
+                            <!-- Doctor/Provider Selection -->
+                            <div class="mb-3">
+                                @* <label for="doctor" class="form-label">Doctor</label> *@
+                                <select class="form-select" id="doctor" aria-label="Disabled select example" disabled>
+                                    <option value="Dr. John Smith" selected>Dr. John Smith</option>
+                                    <option value="Dr. Jane Doe">Dr. Jane Doe</option>
+                                    <option value="Dr. Emily White">Dr. Emily White</option>
+                                </select>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" disabled id="appointmentTime2"
-                                    name="appointmentTime">
-                                <label class="form-check-label" for="appointmentTime2">
-                                    8:00 - 9:00 AM
-                                </label>
+
+                            <!-- Appointment Date -->
+                            <div class="mb-3 d-flex gap-md-2" style="align-items: center;">
+                                <label for="appointmentDate" class="form-label w-75">Appointment Date</label>
+                                <input type="date" class="form-control" id="appointmentDate" required>
+                                <small class="text-danger d-none" id="dateError">Please select a valid date.</small>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="appointmentTime3"
-                                    name="appointmentTime">
-                                <label class="form-check-label" for="appointmentTime3">
-                                    9:00 - 10:00 AM
-                                </label>
+
+                            <!-- Appointment Time -->
+                            <div class="mb-3 d-flex gap-md-2" style="align-items: center;">
+                                <label for="appointmentTime" class="form-label w-75">Appointment Time</label>
+                                <select class="form-select" id="appointmentTime" required>
+                                    <option value="" disabled selected>Select a time slot</option>
+                                    <option value="7:00-8:00 AM">7:00 - 8:00 AM</option>
+                                    <option value="8:00-9:00 AM" disabled>8:00 - 9:00 AM (Unavailable)</option>
+                                    <option value="9:00-10:00 AM">9:00 - 10:00 AM</option>
+                                </select>
+                                <small class="text-danger d-none" id="timeError">Please select a valid time
+                                    slot.</small>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="reason" class="form-label">Reason for Visit</label>
-                            <textarea class="form-control" id="reason" rows="4"></textarea>
+
+                            <!-- Reason for Visit -->
+                            <div class="mb-3">
+                                <label for="reason" class="form-label">Reason</label>
+                                <textarea class="form-control" id="reason" rows="4"
+                                    placeholder="Describe the reason for the visit"></textarea>
+                            </div>
+
+
+
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -107,7 +107,6 @@
     </div>
 </div>
 
-
 <script>
     // Sample patient data (replace with actual data fetching logic)
     const patients = [
@@ -116,36 +115,45 @@
         { id: 3, name: "Michael Johnson", age: 40, gender: "Male", lastVisit: "2023-11-20", phone: "456-789-1234" }
     ];
 
-    // Function to search for patients based on the input (search by name, age, gender, or id)
+    let patientSelected = false;
+
+    // Function to handle patient search input
+    function handlePatientSearchInput() {
+        if (patientSelected) {
+            const confirmChange = confirm("Changing the patient will delete the current patient information. Do you want to proceed?");
+            if (!confirmChange) {
+                document.getElementById('patientSearch').value = document.getElementById('patientName').value;
+                return;
+            } else {
+                resetForm();
+            }
+        }
+        searchPatients();
+    }
+
+    // Function to search for patients based on input
     function searchPatients() {
         const input = document.getElementById('patientSearch').value.trim().toLowerCase();
         const patientDropdown = document.getElementById('patientDropdown');
 
-        // Clear any existing dropdown items
-        patientDropdown.innerHTML = "";
-
-        // Clear the previous patient info when the user starts typing a new search
-        document.getElementById('patientName').value = '';
-        document.getElementById('patientId').value = '';
-        document.getElementById('patientLastVisit').value = '';
-        document.getElementById('patientPhone').value = '';
-
-        document.getElementById('patientInfo').style.display = 'none'; // Hide previous patient info
-
+        // Clear dropdown and hide appointment info if no input
         if (input === "") {
-            patientDropdown.style.display = "none"; // Hide dropdown if no input
+            patientDropdown.style.display = "none";
+            document.getElementById('appointmentInfoContainer').style.display = "none";
             return;
         }
 
-        // Filter patients based on the search query (name, age, gender, or id)
-        const filteredPatients = patients.filter(patient => {
-            return patient.name.toLowerCase().includes(input) ||
-                patient.age.toString().includes(input) ||
-                patient.gender.toLowerCase().includes(input) ||
-                patient.id.toString().includes(input); // Search by ID as well
-        });
+        patientDropdown.innerHTML = ""; // Clear existing dropdown items
+        document.getElementById('patientInfo').style.display = 'none'; // Hide patient info
 
-        // If there are matching patients, show the dropdown
+        // Filter patients based on input
+        const filteredPatients = patients.filter(patient =>
+            patient.name.toLowerCase().includes(input) ||
+            patient.age.toString().includes(input) ||
+            patient.gender.toLowerCase().includes(input) ||
+            patient.id.toString().includes(input)
+        );
+
         if (filteredPatients.length > 0) {
             patientDropdown.style.display = "block"; // Show dropdown
             filteredPatients.forEach(patient => {
@@ -156,21 +164,72 @@
                 patientDropdown.appendChild(patientItem);
             });
         } else {
-            patientDropdown.style.display = "none"; // Hide dropdown if no matches
+            patientDropdown.style.display = "none";
         }
     }
 
-    // Function to display selected patient information in input fields
+    // Function to select a patient
     function selectPatient(patient) {
-        // Set input fields with patient info
-        document.getElementById('patientSearch').value = patient.name; // Set patient name in the input field
+        document.getElementById('patientSearch').value = patient.name;
         document.getElementById('patientName').value = patient.name;
         document.getElementById('patientId').value = patient.id;
         document.getElementById('patientLastVisit').value = patient.lastVisit || "N/A";
         document.getElementById('patientPhone').value = patient.phone || "N/A";
+        document.getElementById('patientDiagnose').value = patient.diagnose || "N/A";
 
-        // Show patient info and hide dropdown once a patient is selected
         document.getElementById('patientInfo').style.display = "block";
         document.getElementById('patientDropdown').style.display = "none";
+        document.getElementById('appointmentInfoContainer').style.display = "block";
+
+        patientSelected = true;
     }
+
+    // Function to reset the form
+    function resetForm() {
+        document.getElementById('patientSearch').value = '';
+        document.getElementById('patientName').value = 'N/A';
+        document.getElementById('patientId').value = 'N/A';
+        document.getElementById('patientLastVisit').value = 'N/A';
+        document.getElementById('patientPhone').value = 'N/A';
+        document.getElementById('patientDiagnose').value = 'N/A';
+
+        document.getElementById('patientInfo').style.display = 'none';
+        document.getElementById('appointmentInfoContainer').style.display = 'none';
+        document.getElementById('patientDropdown').style.display = 'none';
+
+        document.getElementById('appointmentDate').value = '';
+        document.getElementById('appointmentTime').value = '';
+        document.getElementById('reason').value = '';
+
+        patientSelected = false;
+    }
+
+    // Appointment form validation
+    document.getElementById('saveAppointmentBtn').addEventListener('click', () => {
+        const date = document.getElementById('appointmentDate').value;
+        const time = document.getElementById('appointmentTime').value;
+        const dateError = document.getElementById('dateError');
+        const timeError = document.getElementById('timeError');
+
+        let isValid = true;
+
+        if (!date) {
+            dateError.classList.remove('d-none');
+            isValid = false;
+        } else {
+            dateError.classList.add('d-none');
+        }
+
+        if (!time) {
+            timeError.classList.remove('d-none');
+            isValid = false;
+        } else {
+            timeError.classList.add('d-none');
+        }
+
+        if (isValid) {
+            alert('Appointment saved successfully!');
+            resetForm();
+        }
+    });
 </script>
