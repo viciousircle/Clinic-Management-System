@@ -174,6 +174,13 @@
                                             or recommending them.
                                         </label>
                                     </div>
+                                    <div class="form-check mt-3">
+                                        <input class="form-check-input" type="checkbox" id="confirmCheck"
+                                            onclick="toggleMarkAsDone()">
+                                        <label class="form-check-label" for="confirmCheck">
+                                            I have read and made sure all the above rules are followed.
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -182,12 +189,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="markAsDone()">Mark as Done</button>
+                <button type="button" class="btn btn-primary" id="markAsDoneBtn" onclick="markAsDone()" disabled>Mark as
+                    Done</button>
             </div>
         </div>
     </div>
 </div>
-
 
 <style>
     .dropdown-container {
@@ -301,9 +308,21 @@
     // Enable prescription input if the checkbox is checked
     function togglePrescription() {
         const needPrescriptionCheck = document.getElementById('needPrescriptionCheck');
-        const prescriptionInput = document.getElementById('prescriptionInput');
+        const prescriptionSection = document.getElementById('collapsePrescription');
 
-        prescriptionInput.disabled = !needPrescriptionCheck.checked;
+        if (needPrescriptionCheck.checked) {
+            prescriptionSection.classList.add('show');
+        } else {
+            prescriptionSection.classList.remove('show');
+        }
+    }
+
+    // Enable "Mark as Done" button if all checkboxes are checked
+    function toggleMarkAsDone() {
+        const confirmCheck = document.getElementById('confirmCheck');
+        const markAsDoneBtn = document.getElementById('markAsDoneBtn');
+
+        markAsDoneBtn.disabled = !confirmCheck.checked;
     }
 
     // Function to reset the form
@@ -313,5 +332,7 @@
         document.getElementById('symptomsInput').value = '';
         document.getElementById('diagnosisInput').value = '';
         document.getElementById('medicinesContainer').innerHTML = '';
+        document.getElementById('confirmCheck').checked = false;
+        toggleMarkAsDone();
     }
 </script>
