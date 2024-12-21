@@ -1,5 +1,5 @@
-﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
-
+﻿/OOP Final Project/Pages/Employees/Doctors/_Appointment.cshtml
+@model OOP_Final_Project.ViewModels.DoctorViewModel
 
 <div class="px-5">
     <!-- Header Section -->
@@ -7,14 +7,10 @@
         <div class="  d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-0">Appointments</h3>
 
-
             <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal"
                 data-bs-target="#newAppointmentModal">Make new appointment</div>
-
-
         </div>
     </div>
-
 
     <hr>
 
@@ -54,8 +50,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <!-- Completed Appointments -->
         <div class="col-md-3 d-flex flex-column">
@@ -106,7 +100,6 @@
                     <button type="button" class="btn btn-outline-dark  ">Previous</button>
                 </div>
 
-
                 @* TODO: Cái này chỉ hiện khi ấn vào view all hoặc previous thôi *@
                 <!-- Date Filter -->
                 <div>
@@ -134,9 +127,6 @@
             </div>
         </div>
 
-
-
-
         <!-- Appointments Table -->
         <table class="table table-hover table-bordered shadow-sm text-center " id="appointmentsTable">
             <thead class="table-light">
@@ -150,10 +140,8 @@
             </thead>
 
             <tbody>
-
                 @foreach (var appointment in Model.Appointments)
                 {
-
                     <tr>
                         <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
                         <td>@appointment.DocumentAppointment.Date.ToShortDateString()</td>
@@ -175,47 +163,22 @@
                             <td>No reason available</td>
                         }
 
-
                         <td>
                             <div>
                                 <button type="button" class="btn btn-sm btn-outline-danger"
                                     onclick="openHealthCheckModal(this)">Health Check</button>
                             </div>
                         </td>
-
                     </tr>
-
-
                 }
-
             </tbody>
-
-
         </table>
-    </div>
-
-</div>
-
-<div class="modal fade" id="healthCheckModal" tabindex="-1" aria-labelledby="healthCheckModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="healthCheckModalLabel">Health Check</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Perform the health check for the selected patient.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="markAsDone()">Mark as Done</button>
-            </div>
-        </div>
     </div>
 </div>
 
 <div>
     @await Html.PartialAsync("Modals/_newAppointmentModal")
+    @await Html.PartialAsync("Modals/_HealthCheckModal")
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -228,10 +191,7 @@
             backdrop: false
         });
         modal.show();
-
     });
-
-
 
     function searchAppointments() {
         const searchInput = document.getElementById("searchInput").value.toLowerCase();
