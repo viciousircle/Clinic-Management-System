@@ -6,90 +6,166 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <!-- Sidebar for Scrollspy -->
-                    <div class="col-md-3">
-                        <div id="scrollspyMenu" class="list-group">
-                            <a class="list-group-item list-group-item-action" href="#patientInfo">Patient
-                                Information</a>
-                            <a class="list-group-item list-group-item-action" href="#symptoms">Symptoms</a>
-                            <a class="list-group-item list-group-item-action" href="#healthRecords">Health Records</a>
-                            <a class="list-group-item list-group-item-action" href="#diagnosis">Diagnosis</a>
-                            <a class="list-group-item list-group-item-action" href="#prescription">Prescription</a>
-                            <a class="list-group-item list-group-item-action" href="#commitAndRules">Commit & Rules</a>
-                        </div>
-                    </div>
+                <div class="row overflow-auto" style="overflow-y: scroll;">
 
-                    <!-- Main Content Area -->
-                    <div class="col-md-9 overflow-auto" data-bs-spy="scroll" data-bs-target="#scrollspyMenu"
-                        data-bs-offset="0" tabindex="0" style="max-height: 70vh; overflow-y: scroll;">
+                    <div class="accordion" id="accordionExample">
                         <!-- Patient Information Section -->
-                        <section id="patientInfo" class="mb-5">
-                            <h5>Patient Information</h5>
-                            <form>
-                                <div class="mb-3">
-                                    <label for="patientName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="patientName" placeholder="Enter name"
-                                        autocomplete="off" required>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPatientInfo">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePatientInfo" aria-expanded="true"
+                                    aria-controls="collapsePatientInfo">
+                                    Patient Information
+                                </button>
+                            </h2>
+                            <div id="collapsePatientInfo" class="accordion-collapse collapse show"
+                                aria-labelledby="headingPatientInfo" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" id="patientInfo">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="patientName" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="patientName" placeholder="N/A"
+                                                autocomplete="off" required disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="patientAge" class="form-label">Age</label>
+                                            <input type="number" class="form-control" id="patientAge" placeholder="N/A"
+                                                required disabled>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="patientAge" class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="patientAge" placeholder="Enter age"
-                                        required>
-                                </div>
-                            </form>
-                        </section>
+                            </div>
+                        </div>
 
                         <!-- Symptoms Section -->
-                        <section id="symptoms" class="mb-5">
-                            <h5>Symptoms</h5>
-                            <textarea class="form-control" id="symptomsInput" rows="4"
-                                placeholder="Describe symptoms"></textarea>
-                        </section>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSymptoms">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseSymptoms" aria-expanded="false"
+                                    aria-controls="collapseSymptoms">
+                                    Symptoms
+                                </button>
+                            </h2>
+                            <div id="collapseSymptoms" class="accordion-collapse collapse"
+                                aria-labelledby="headingSymptoms" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" id="symptoms">
+                                    <textarea class="form-control" id="symptomsInput" rows="4"
+                                        placeholder="Describe symptoms"></textarea>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Health Records Section -->
-                        <section id="healthRecords" class="mb-5">
-                            <h5>Health Records</h5>
-                            <textarea class="form-control" id="healthRecordsInput" rows="4"
-                                placeholder="Add past health records"></textarea>
-                        </section>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingHealthRecords">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseHealthRecords" aria-expanded="false"
+                                    aria-controls="collapseHealthRecords">
+                                    Health Records
+                                </button>
+                            </h2>
+                            <div id="collapseHealthRecords" class="accordion-collapse collapse"
+                                aria-labelledby="headingHealthRecords" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" id="healthRecords">
+
+
+                                    <div class="mb-3">
+                                        <label for="temperature" class="form-label">Temperature (°C)</label>
+                                        <input type="number" class="form-control" id="temperature" placeholder="N/A">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="bloodPressure" class="form-label">Blood Pressure</label>
+                                        <input type="text" class="form-control" id="bloodPressure" placeholder="N/A">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="pulseRate" class="form-label">Pulse Rate</label>
+                                        <input type="number" class="form-control" id="pulseRate" placeholder="N/A">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Diagnosis Section -->
-                        <section id="diagnosis" class="mb-5">
-                            <h5>Diagnosis</h5>
-                            <textarea class="form-control" id="diagnosisInput" rows="4"
-                                placeholder="Doctor's diagnosis"></textarea>
-                        </section>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDiagnosis">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseDiagnosis" aria-expanded="false"
+                                    aria-controls="collapseDiagnosis">
+                                    Diagnosis
+                                </button>
+                            </h2>
+                            <div id="collapseDiagnosis" class="accordion-collapse collapse"
+                                aria-labelledby="headingDiagnosis" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" id="diagnosis">
+                                    <textarea class="form-control" id="diagnosisInput" rows="4"
+                                        placeholder="Doctor's diagnosis"></textarea>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Prescription Section -->
-                        <section id="prescription" class="mb-5">
-                            <h5>Prescription</h5>
-                            <textarea class="form-control" id="prescriptionInput" rows="4"
-                                placeholder="Add prescription details"></textarea>
-                        </section>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingPrescription">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsePrescription" aria-expanded="false"
+                                    aria-controls="collapsePrescription">
+                                    Prescription
+                                </button>
+                            </h2>
+                            <div id="collapsePrescription" class="accordion-collapse collapse"
+                                aria-labelledby="headingPrescription" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" id="prescription">
+                                    <textarea class="form-control" id="prescriptionInput" rows="4"
+                                        placeholder="Add prescription details"></textarea>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Commit & Rules Section -->
-                        <section id="commitAndRules" class="mb-5">
-                            <h5>Commit & Rules</h5>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rule1" required>
-                                <label class="form-check-label" for="rule1">
-                                    Rule 1: Ensure patient consent is obtained.
-                                </label>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingCommitAndRules">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseCommitAndRules" aria-expanded="false"
+                                    aria-controls="collapseCommitAndRules">
+                                    Commit & Rules
+                                </button>
+                            </h2>
+                            <div id="collapseCommitAndRules" class="accordion-collapse collapse"
+                                aria-labelledby="headingCommitAndRules" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" id="commitAndRules">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rule1" required>
+                                        <label class="form-check-label" for="rule1">
+                                            Rule 1: Ensure patient consent is obtained. This is crucial to protect both
+                                            the patient's rights and the healthcare provider's responsibility.
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rule2" required>
+                                        <label class="form-check-label" for="rule2">
+                                            Rule 2: Verify all entered data is correct, including medical history,
+                                            symptoms, and diagnostic details.
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rule3" required>
+                                        <label class="form-check-label" for="rule3">
+                                            Rule 3: Follow hospital guidelines strictly. This includes adhering to
+                                            protocols for patient care and medical record keeping.
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rule4" required>
+                                        <label class="form-check-label" for="rule4">
+                                            Rule 4: Ensure thorough understanding of treatment plans before prescribing
+                                            or recommending them.
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rule2" required>
-                                <label class="form-check-label" for="rule2">
-                                    Rule 2: Verify all entered data is correct.
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rule3" required>
-                                <label class="form-check-label" for="rule3">
-                                    Rule 3: Follow hospital guidelines strictly.
-                                </label>
-                            </div>
-                        </section>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,12 +178,16 @@
 </div>
 
 <script>
+    // Mark form as done and log the data including new fields
     function markAsDone() {
         const formData = {
             patientName: document.getElementById('patientName').value,
             patientAge: document.getElementById('patientAge').value,
             symptoms: document.getElementById('symptomsInput').value,
             healthRecords: document.getElementById('healthRecordsInput').value,
+            temperature: document.getElementById('temperature').value,
+            bloodPressure: document.getElementById('bloodPressure').value,
+            pulseRate: document.getElementById('pulseRate').value,
             diagnosis: document.getElementById('diagnosisInput').value,
             prescription: document.getElementById('prescriptionInput').value,
             rulesChecked: Array.from(document.querySelectorAll('#commitAndRules input:checked')).map(
@@ -119,7 +199,7 @@
         alert("Health check marked as done!");
 
         // Reset modal and close
-        document.getElementById('healthCheckForm').reset();
+        resetForm();
         document.querySelector('#healthCheckModal .btn-close').click();
     }
 </script>
