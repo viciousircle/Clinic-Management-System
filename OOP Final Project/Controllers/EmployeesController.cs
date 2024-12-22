@@ -200,6 +200,120 @@ public class EmployeesController : ControllerBase
 
     }
 
+    // ...existing code...
+
+    [HttpGet("{id}/appointments/today")]
+    public IActionResult GetAppointmentsToday(int id)
+    {
+        var today = DateTime.Today;
+
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+            .Where(joined => joined.doc.Date == today)
+            .Select(joined => new
+            {
+                joined.appt.Id,
+                joined.appt.PatientId,
+                joined.appt.DoctorId,
+                joined.doc.Date,
+                joined.doc.TimeStart,
+                joined.doc.TimeEnd,
+                joined.doc.Location,
+                Doctor = new
+                {
+                    joined.appt.Doctor.Id,
+                    joined.appt.Doctor.FirstName,
+                    joined.appt.Doctor.LastName
+                },
+                Patient = new
+                {
+                    joined.appt.Patient.Id,
+                    joined.appt.Patient.FirstName,
+                    joined.appt.Patient.LastName
+                }
+            })
+            .ToList();
+
+        return Ok(new { Date = today, Appointments = appointments });
+    }
+
+    [HttpGet("{id}/appointments/past")]
+    public IActionResult GetPastAppointments(int id)
+    {
+        var today = DateTime.Today;
+
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+            .Where(joined => joined.doc.Date < today)
+            .Select(joined => new
+            {
+                joined.appt.Id,
+                joined.appt.PatientId,
+                joined.appt.DoctorId,
+                joined.doc.Date,
+                joined.doc.TimeStart,
+                joined.doc.TimeEnd,
+                joined.doc.Location,
+                Doctor = new
+                {
+                    joined.appt.Doctor.Id,
+                    joined.appt.Doctor.FirstName,
+                    joined.appt.Doctor.LastName
+                },
+                Patient = new
+                {
+                    joined.appt.Patient.Id,
+                    joined.appt.Patient.FirstName,
+                    joined.appt.Patient.LastName
+                }
+            })
+            .ToList();
+
+        return Ok(new { Date = today, PastAppointments = appointments });
+    }
+
+    // ...existing code...
+
+    // ...existing code...
+
+    [HttpGet("{id}/appointments/on/{date}")]
+    public IActionResult GetAppointmentsOnSpecificDay(int id, DateTime date)
+    {
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+            .Where(joined => joined.doc.Date.Date == date.Date)
+            .Select(joined => new
+            {
+                joined.appt.Id,
+                joined.appt.PatientId,
+                joined.appt.DoctorId,
+                joined.doc.Date,
+                joined.doc.TimeStart,
+                joined.doc.TimeEnd,
+                joined.doc.Location,
+                Doctor = new
+                {
+                    joined.appt.Doctor.Id,
+                    joined.appt.Doctor.FirstName,
+                    joined.appt.Doctor.LastName
+                },
+                Patient = new
+                {
+                    joined.appt.Patient.Id,
+                    joined.appt.Patient.FirstName,
+                    joined.appt.Patient.LastName
+                }
+            })
+            .ToList();
+
+        return Ok(new { Date = date.Date, Appointments = appointments });
+    }
+
+    // ...existing code...
+    // ...existing code...
 
 
     [HttpPost]
@@ -209,6 +323,7 @@ public class EmployeesController : ControllerBase
         _context.SaveChanges();
         return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
     }
+
 
 
 
