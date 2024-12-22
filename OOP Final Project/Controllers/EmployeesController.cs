@@ -45,14 +45,35 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var employees = _context.Employees.ToList();
-        return Ok(employees);
+        var employees = _context.Employees
+        .Select(employee => new
+        {
+            employee.Id,
+            employee.FirstName,
+            employee.LastName,
+            employee.Email,
+            employee.Phone,
+            employee.AccountId,
+            employee.IsActive,
+        })
+        .ToList();
+        return Ok(new { Employees = employees });
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var employee = _context.Employees.Find(id);
+        var employee = _context.Employees.Where(e => e.Id == id).Select(e => new
+        {
+            e.Id,
+            e.FirstName,
+            e.LastName,
+            e.Email,
+            e.Phone,
+            e.AccountId,
+            e.IsActive,
+        }).ToList().FirstOrDefault();
+
         if (employee == null)
             return NotFound();
 
