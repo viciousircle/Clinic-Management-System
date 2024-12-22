@@ -68,31 +68,39 @@
                                         </thead>
                                         <tbody>
                                             <!-- Medicine 1 -->
-                                            <tr>
-                                                <td><strong>Ibuprofen 200mg</strong></td>
-                                                <td>200mg</td>
-                                                <td>Twice a day</td>
-                                                <td>5 days</td>
-                                                <td>Take with food</td>
+                                            <tr id="firstRow">
+                                                <td onclick="changeColor(this.parentElement)">Ibuprofen 200mg</td>
+                                                <td onclick="changeColor(this.parentElement)">200mg</td>
+                                                <td onclick="changeColor(this.parentElement)">Twice a day</td>
+                                                <td onclick="changeColor(this.parentElement)">5 days</td>
+                                                <td onclick="changeColor(this.parentElement)">Take with food</td>
                                             </tr>
                                             <!-- Medicine 2 -->
-                                            <tr>
-                                                <td><strong>Paracetamol 500mg</strong></td>
-                                                <td>500mg</td>
-                                                <td>As needed for pain</td>
-                                                <td>As needed</td>
-                                                <td>Do not exceed 4 doses per day</td>
+                                            <tr id="secondRow">
+                                                <td onclick="changeColor(this.parentElement)">Paracetamol 500mg</td>
+                                                <td onclick="changeColor(this.parentElement)">500mg</td>
+                                                <td onclick="changeColor(this.parentElement)">As needed for pain</td>
+                                                <td onclick="changeColor(this.parentElement)">As needed</td>
+                                                <td onclick="changeColor(this.parentElement)">Do not exceed 4 doses per
+                                                    day</td>
                                             </tr>
                                             <!-- Medicine 3 -->
-                                            <tr>
-                                                <td><strong>Vitamin C 1000mg</strong></td>
-                                                <td>1000mg</td>
-                                                <td>Once a day</td>
-                                                <td>Ongoing</td>
-                                                <td>Take with water</td>
+                                            <tr id="thirdRow">
+                                                <td onclick="changeColor(this.parentElement)">Vitamin C 1000mg</td>
+                                                <td onclick="changeColor(this.parentElement)">1000mg</td>
+                                                <td onclick="changeColor(this.parentElement)">Once a day</td>
+                                                <td onclick="changeColor(this.parentElement)">Ongoing</td>
+                                                <td onclick="changeColor(this.parentElement)">Take with water</td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="form-check d-flex gap-md-2" style="justify-content: flex-end;">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                        onclick="toggleAllRows(this)">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Check all
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -108,3 +116,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    function changeColor(row) {
+        if (row.classList.contains('table-primary')) {
+            row.classList.remove('table-primary');
+        } else {
+            row.classList.add('table-primary');
+        }
+    }
+
+    function toggleAllRows(checkbox) {
+        var rows = document.querySelectorAll('tbody tr');
+        rows.forEach(function (row) {
+            if (checkbox.checked) {
+                row.classList.add('table-primary');
+            } else {
+                row.classList.remove('table-primary');
+            }
+        });
+    }
+</script>
