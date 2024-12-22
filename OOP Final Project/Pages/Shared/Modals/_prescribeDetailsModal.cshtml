@@ -44,7 +44,7 @@
                         </div>
                     </div>
 
-                    <!-- Panel 2: Medicine Details (Non-collapsing list with checkboxes) -->
+                    <!-- Panel 2: Medicine Details (Table format) -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -55,116 +55,56 @@
                         <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo"
                             data-bs-parent="#prescriptionAccordion">
                             <div class="accordion-body">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkAll">
-                                    <label class="form-check-label" for="checkAll">Check all</label>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col" style="width: 25%;">Medicine Name</th>
+                                                <th scope="col" style="width: 20%;">Dosage</th>
+                                                <th scope="col" style="width: 15%;">Frequency</th>
+                                                <th scope="col" style="width: 15%;">Duration</th>
+                                                <th scope="col" style="width: 20%;">Special Instructions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Medicine 1 -->
+                                            <tr>
+                                                <td><strong>Ibuprofen 200mg</strong></td>
+                                                <td>200mg</td>
+                                                <td>Twice a day</td>
+                                                <td>5 days</td>
+                                                <td>Take with food</td>
+                                            </tr>
+                                            <!-- Medicine 2 -->
+                                            <tr>
+                                                <td><strong>Paracetamol 500mg</strong></td>
+                                                <td>500mg</td>
+                                                <td>As needed for pain</td>
+                                                <td>As needed</td>
+                                                <td>Do not exceed 4 doses per day</td>
+                                            </tr>
+                                            <!-- Medicine 3 -->
+                                            <tr>
+                                                <td><strong>Vitamin C 1000mg</strong></td>
+                                                <td>1000mg</td>
+                                                <td>Once a day</td>
+                                                <td>Ongoing</td>
+                                                <td>Take with water</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <ul class="list-group">
-                                    <!-- Medicine 1 -->
-                                    <li class="list-group-item">
-                                        <input type="checkbox" id="medicine1" class="form-check-input me-2">
-                                        <label for="medicine1" class="form-check-label">
-                                            <strong>Ibuprofen 200mg</strong> - Twice a day for 5 days
-                                        </label>
-                                        <div class="mt-2">
-                                            <ul class="list-unstyled">
-                                                <li><strong>Dosage:</strong> 200mg</li>
-                                                <li><strong>Frequency:</strong> Twice a day</li>
-                                                <li><strong>Duration:</strong> 5 days</li>
-                                                <li><strong>Special Instructions:</strong> Take with food</li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <!-- Medicine 2 -->
-                                    <li class="list-group-item">
-                                        <input type="checkbox" id="medicine2" class="form-check-input me-2">
-                                        <label for="medicine2" class="form-check-label">
-                                            <strong>Paracetamol 500mg</strong> - When required for pain
-                                        </label>
-                                        <div class="mt-2">
-                                            <ul class="list-unstyled">
-                                                <li><strong>Dosage:</strong> 500mg</li>
-                                                <li><strong>Frequency:</strong> As needed for pain</li>
-                                                <li><strong>Duration:</strong> As needed</li>
-                                                <li><strong>Special Instructions:</strong> Do not exceed 4 doses per day
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <!-- Medicine 3 -->
-                                    <li class="list-group-item">
-                                        <input type="checkbox" id="medicine3" class="form-check-input me-2">
-                                        <label for="medicine3" class="form-check-label">
-                                            <strong>Vitamin C 1000mg</strong> - Once a day
-                                        </label>
-                                        <div class="mt-2">
-                                            <ul class="list-unstyled">
-                                                <li><strong>Dosage:</strong> 1000mg</li>
-                                                <li><strong>Frequency:</strong> Once a day</li>
-                                                <li><strong>Duration:</strong> Ongoing</li>
-                                                <li><strong>Special Instructions:</strong> Take with water</li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="prepareBtn" data-bs-dismiss="modal" disabled>Prepare
-                    done and print</button>
+                <button type="button" class="btn btn-success" id="prepareBtn" data-bs-dismiss="modal">Prepare done and
+                    print</button>
             </div>
         </div>
     </div>
 </div>
-
-<!-- JavaScript -->
-<script>
-    // Select all checkboxes and enable the "Prepare done and print" button when all are checked
-    const checkAll = document.getElementById('checkAll');
-    const medicineCheckboxes = document.querySelectorAll('.form-check-input[id^="medicine"]');
-    const prepareBtn = document.getElementById('prepareBtn');
-    const listGroupItems = document.querySelectorAll('.list-group-item');
-
-    // Check all toggle logic
-    checkAll.addEventListener('change', function () {
-        const checked = checkAll.checked;
-        medicineCheckboxes.forEach(checkbox => {
-            checkbox.checked = checked;
-        });
-        togglePrepareButton();
-    });
-
-    // Logic to handle checking/unchecking of individual checkboxes and the "check all" checkbox
-    medicineCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-            // Update the "Check all" checkbox state
-            if (!this.checked) {
-                checkAll.checked = false;
-            } else if (Array.from(medicineCheckboxes).every(checkbox => checkbox.checked)) {
-                checkAll.checked = true;
-            }
-            togglePrepareButton();
-        });
-    });
-
-    // Make list item clickable to toggle the checkbox
-    listGroupItems.forEach(item => {
-        item.addEventListener('click', function (event) {
-            if (event.target.tagName !== 'INPUT') {
-                const checkbox = this.querySelector('.form-check-input');
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change'));
-            }
-        });
-    });
-
-    // Enable or disable the Prepare button based on all checkboxes being checked
-    function togglePrepareButton() {
-        const allChecked = Array.from(medicineCheckboxes).every(checkbox => checkbox.checked);
-        prepareBtn.disabled = !allChecked;
-    }
-</script>
