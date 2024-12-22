@@ -1,0 +1,41 @@
+﻿<!-- Modal for Adding New Medicine -->
+<div class="modal fade" id="addNewMedicineModal" tabindex="-1" aria-labelledby="addNewMedicineModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMedicineModalLabel">Add New Medicine</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="medicineName" class="form-label">Medicine Name</label>
+                        <input type="text" class="form-control" id="medicineName" name="MedicineName" required>
+                        <div class="invalid-feedback">Please enter the medicine name.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-control" id="type" name="Type" required>
+                            <option value="Tablet">Tablet</option>
+                            <option value="Syrup">Syrup</option>
+                            <option value="Injection">Injection</option>
+                        </select>
+                        <div class="invalid-feedback">Please select the medicine type.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="Quantity" required>
+                        <div class="invalid-feedback">Please enter the quantity.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expiryDate" class="form-label">Expiry Date</label>
+                        <input type="date" class="form-control" id="expiryDate" name="ExpiryDate" required>
+                        <div class="invalid-feedback">Please select the expiry date.</div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Medicine</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
