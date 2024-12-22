@@ -203,10 +203,6 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, Patients = patients });
     }
 
-
-
-
-
     [HttpGet("{id}/appointments/today")]
     public IActionResult GetAppointmentsToday(int id)
     {
@@ -219,12 +215,7 @@ public class EmployeesController : ControllerBase
             .Select(joined => new
             {
                 joined.appt.Id,
-                joined.appt.PatientId,
-                joined.appt.DoctorId,
-                joined.doc.Date,
-                joined.doc.TimeStart,
-                joined.doc.TimeEnd,
-                joined.doc.Location,
+
                 Doctor = new
                 {
                     joined.appt.Doctor.Id,
@@ -236,7 +227,13 @@ public class EmployeesController : ControllerBase
                     joined.appt.Patient.Id,
                     joined.appt.Patient.FirstName,
                     joined.appt.Patient.LastName
-                }
+                },
+                joined.doc.Date,
+                joined.doc.TimeStart,
+                joined.doc.TimeEnd,
+                joined.doc.Location,
+
+
             })
             .ToList();
 
@@ -255,12 +252,7 @@ public class EmployeesController : ControllerBase
             .Select(joined => new
             {
                 joined.appt.Id,
-                joined.appt.PatientId,
-                joined.appt.DoctorId,
-                joined.doc.Date,
-                joined.doc.TimeStart,
-                joined.doc.TimeEnd,
-                joined.doc.Location,
+
                 Doctor = new
                 {
                     joined.appt.Doctor.Id,
@@ -272,7 +264,12 @@ public class EmployeesController : ControllerBase
                     joined.appt.Patient.Id,
                     joined.appt.Patient.FirstName,
                     joined.appt.Patient.LastName
-                }
+                },
+                joined.doc.Date,
+                joined.doc.TimeStart,
+                joined.doc.TimeEnd,
+                joined.doc.Location,
+
             })
             .ToList();
 
@@ -293,12 +290,7 @@ public class EmployeesController : ControllerBase
             .Select(joined => new
             {
                 joined.appt.Id,
-                joined.appt.PatientId,
-                joined.appt.DoctorId,
-                joined.doc.Date,
-                joined.doc.TimeStart,
-                joined.doc.TimeEnd,
-                joined.doc.Location,
+
                 Doctor = new
                 {
                     joined.appt.Doctor.Id,
@@ -310,7 +302,12 @@ public class EmployeesController : ControllerBase
                     joined.appt.Patient.Id,
                     joined.appt.Patient.FirstName,
                     joined.appt.Patient.LastName
-                }
+                },
+                joined.doc.Date,
+                joined.doc.TimeStart,
+                joined.doc.TimeEnd,
+                joined.doc.Location,
+
             })
             .ToList();
 
