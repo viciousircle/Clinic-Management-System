@@ -210,6 +210,8 @@
     }
 </style>
 
+
+
 <script>
     const medicines = [
         "Paracetamol",
@@ -309,11 +311,16 @@
     function togglePrescription() {
         const needPrescriptionCheck = document.getElementById('needPrescriptionCheck');
         const prescriptionSection = document.getElementById('collapsePrescription');
+        const addMedicineBtn = document.querySelector('#collapsePrescription .btn');
 
         if (needPrescriptionCheck.checked) {
             prescriptionSection.classList.add('show');
+            addMedicineBtn.classList.remove('btn-secondary');
+            addMedicineBtn.classList.add('btn-outline-dark');
         } else {
             prescriptionSection.classList.remove('show');
+            addMedicineBtn.classList.remove('btn-outline-dark');
+            addMedicineBtn.classList.add('btn-secondary');
         }
     }
 
