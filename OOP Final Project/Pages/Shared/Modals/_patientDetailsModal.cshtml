@@ -21,27 +21,35 @@
                         <div id="flush-collapseOne" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <div class="mb-3">
-                                    <label for="patientName" class="form-label"><strong>Name:</strong></label>
-                                    <input type="text" class="form-control" id="patientName" value="John Doe" disabled>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="patientName" class="form-label">Name:</label>
+                                        <input type="text" class="form-control" id="patientName" value="John Doe"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="patientAge" class="form-label">Age:</label>
+                                        <input type="number" class="form-control" id="patientAge" value="35" disabled>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="patientAge" class="form-label"><strong>Age:</strong></label>
-                                    <input type="number" class="form-control" id="patientAge" value="35" disabled>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="patientGender" class="form-label">Gender:</label>
+                                        <input type="text" class="form-control" id="patientGender" value="Male"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="patientContact" class="form-label">Contact:</label>
+                                        <input type="text" class="form-control" id="patientContact"
+                                            value="(123) 456-7890" disabled>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="patientGender" class="form-label"><strong>Gender:</strong></label>
-                                    <input type="text" class="form-control" id="patientGender" value="Male" disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="patientContact" class="form-label"><strong>Contact:</strong></label>
-                                    <input type="text" class="form-control" id="patientContact" value="(123) 456-7890"
-                                        disabled>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="patientAddress" class="form-label"><strong>Address:</strong></label>
-                                    <input type="text" class="form-control" id="patientAddress"
-                                        value="123 Main St, Anytown, USA" disabled>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="patientAddress" class="form-label">Address:</label>
+                                        <input type="text" class="form-control" id="patientAddress"
+                                            value="123 Main St, Anytown, USA" disabled>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -60,9 +68,9 @@
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                                 <ul class="list-group">
-                                    <li class="list-group-item"><strong>Known Allergies:</strong> None</li>
-                                    <li class="list-group-item"><strong>Chronic Conditions:</strong> Hypertension</li>
-                                    <li class="list-group-item"><strong>Last Visit:</strong> 2024-12-10</li>
+                                    <li class="list-group-item">Known Allergies: None</li>
+                                    <li class="list-group-item">Chronic Conditions: Hypertension</li>
+                                    <li class="list-group-item">Last Visit: 2024-12-10</li>
                                 </ul>
                             </div>
                         </div>
@@ -80,24 +88,55 @@
                         <div id="flush-collapseThree" class="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <ul class="list-group">
-                                    <li class="list-group-item"><strong>Appointment Date:</strong> 2024-11-15</li>
-                                    <li class="list-group-item"><strong>Doctor:</strong> Dr. Smith</li>
-                                    <li class="list-group-item"><strong>Reason:</strong> Routine Checkup</li>
-                                    <li class="list-group-item"><strong>Diagnosis:</strong> All vitals are normal.</li>
-                                </ul>
-                                <div class="mb-3">
-                                    <label for="healthCheck" class="form-label"><strong>Health Check:</strong></label>
-                                    <input type="text" class="form-control" id="healthCheck"
-                                        value="Blood Pressure: 120/80, Pulse: 72" disabled>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#appointmentInfo" aria-expanded="false"
+                                            aria-controls="appointmentInfo">
+                                            Appointment Information
+                                        </button>
+                                        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#healthCheckInfo" aria-expanded="false"
+                                            aria-controls="healthCheckInfo">
+                                            Health Check
+                                        </button>
+                                        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#diagnoseInfo" aria-expanded="false"
+                                            aria-controls="diagnoseInfo">
+                                            Diagnose
+                                        </button>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="collapse" id="appointmentInfo"
+                                            data-bs-parent="#flush-collapseThree">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">Appointment Date: 2024-11-15</li>
+                                                <li class="list-group-item">Doctor: Dr. Smith</li>
+                                                <li class="list-group-item">Reason: Routine Checkup</li>
+                                            </ul>
+                                        </div>
+                                        <div class="collapse" id="healthCheckInfo"
+                                            data-bs-parent="#flush-collapseThree">
+                                            <div class="mb-3">
+                                                <label for="healthCheck" class="form-label">Health Check:</label>
+                                                <input type="text" class="form-control" id="healthCheck"
+                                                    value="Blood Pressure: 120/80, Pulse: 72" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="collapse" id="diagnoseInfo" data-bs-parent="#flush-collapseThree">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">Diagnosis: All vitals are normal.</li>
+                                            </ul>
+                                            <!-- Popover button to show prescribed medicines -->
+                                            <button type="button" class="btn btn-secondary mt-3"
+                                                data-bs-toggle="popover" data-bs-placement="right"
+                                                title="Prescribed Medicines"
+                                                data-bs-content="<ul><li>Aspirin 100mg</li><li>Ibuprofen 200mg</li><li>Paracetamol 500mg</li></ul>">
+                                                View Prescriptions
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <!-- Popover button to show prescribed medicines -->
-                                <button type="button" class="btn btn-secondary" data-bs-toggle="popover"
-                                    data-bs-placement="right" title="Prescribed Medicines"
-                                    data-bs-content="<ul><li>Aspirin 100mg</li><li>Ibuprofen 200mg</li><li>Paracetamol 500mg</li></ul>">
-                                    View Prescriptions
-                                </button>
                             </div>
                         </div>
                     </div>
