@@ -1,32 +1,48 @@
 ﻿<div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-labelledby="patientDetailsModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+        <div class="modal-content" style="border-radius: 24px;">
             <div class="modal-header">
                 <h5 class="modal-title" id="patientDetailsModalLabel">Patient Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <!-- Accordion starts here -->
-                <div class="accordion" id="accordionExample">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
                     <!-- Panel 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                data-bs-target="#flush-collapseOne" aria-expanded="true"
+                                aria-controls="flush-collapseOne">
                                 Basic Information
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show"
-                            data-bs-parent="#accordionExample">
+                        <div id="flush-collapseOne" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <ul class="list-group">
-                                    <li class="list-group-item"><strong>Name:</strong> John Doe</li>
-                                    <li class="list-group-item"><strong>Age:</strong> 35</li>
-                                    <li class="list-group-item"><strong>Gender:</strong> Male</li>
-                                    <li class="list-group-item"><strong>Contact:</strong> (123) 456-7890</li>
-                                    <li class="list-group-item"><strong>Address:</strong> 123 Main St, Anytown, USA</li>
-                                </ul>
+                                <div class="mb-3">
+                                    <label for="patientName" class="form-label"><strong>Name:</strong></label>
+                                    <input type="text" class="form-control" id="patientName" value="John Doe" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="patientAge" class="form-label"><strong>Age:</strong></label>
+                                    <input type="number" class="form-control" id="patientAge" value="35" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="patientGender" class="form-label"><strong>Gender:</strong></label>
+                                    <input type="text" class="form-control" id="patientGender" value="Male" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="patientContact" class="form-label"><strong>Contact:</strong></label>
+                                    <input type="text" class="form-control" id="patientContact" value="(123) 456-7890"
+                                        disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="patientAddress" class="form-label"><strong>Address:</strong></label>
+                                    <input type="text" class="form-control" id="patientAddress"
+                                        value="123 Main St, Anytown, USA" disabled>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -35,11 +51,13 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                aria-controls="flush-collapseTwo">
                                 Medical History
                             </button>
                         </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                                 <ul class="list-group">
                                     <li class="list-group-item"><strong>Known Allergies:</strong> None</li>
@@ -54,27 +72,32 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                Health Status
+                                data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                aria-controls="flush-collapseThree">
+                                Previous Appointment Record
                             </button>
                         </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div id="flush-collapseThree" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item"><strong>Appointment Date:</strong> 2024-11-15</li>
+                                    <li class="list-group-item"><strong>Doctor:</strong> Dr. Smith</li>
+                                    <li class="list-group-item"><strong>Reason:</strong> Routine Checkup</li>
+                                    <li class="list-group-item"><strong>Diagnosis:</strong> All vitals are normal.</li>
+                                </ul>
                                 <div class="mb-3">
-                                    <label for="temperature" class="form-label">Temperature (°C)</label>
-                                    <input type="number" class="form-control" id="temperature"
-                                        placeholder="Enter temperature">
+                                    <label for="healthCheck" class="form-label"><strong>Health Check:</strong></label>
+                                    <input type="text" class="form-control" id="healthCheck"
+                                        value="Blood Pressure: 120/80, Pulse: 72" disabled>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="bloodPressure" class="form-label">Blood Pressure</label>
-                                    <input type="text" class="form-control" id="bloodPressure"
-                                        placeholder="e.g., 120/80">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="pulseRate" class="form-label">Pulse Rate</label>
-                                    <input type="number" class="form-control" id="pulseRate"
-                                        placeholder="Enter pulse rate">
-                                </div>
+
+                                <!-- Popover button to show prescribed medicines -->
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="popover"
+                                    data-bs-placement="right" title="Prescribed Medicines"
+                                    data-bs-content="<ul><li>Aspirin 100mg</li><li>Ibuprofen 200mg</li><li>Paracetamol 500mg</li></ul>">
+                                    View Prescriptions
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -89,3 +112,18 @@
         </div>
     </div>
 </div>
+
+<!-- Include this script to initialize the popover on modal show -->
+<script>
+    // Initialize the popover after modal is shown
+    var myModal = new bootstrap.Modal(document.getElementById('patientDetailsModal'));
+    document.getElementById('patientDetailsModal').addEventListener('shown.bs.modal', function () {
+        // Initialize the popover here
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl, {
+                html: true // Enable HTML content in popover
+            });
+        });
+    });
+</script>
