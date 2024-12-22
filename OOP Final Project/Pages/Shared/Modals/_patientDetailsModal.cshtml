@@ -154,14 +154,37 @@
 
 <!-- Include this script to initialize the popover on modal show -->
 <script>
-    // Initialize the popover after modal is shown
+    // Initialize the modal and popover
     var myModal = new bootstrap.Modal(document.getElementById('patientDetailsModal'));
+
     document.getElementById('patientDetailsModal').addEventListener('shown.bs.modal', function () {
-        // Initialize the popover here
+        // Initialize the popover
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl, {
                 html: true // Enable HTML content in popover
+            });
+        });
+
+        // Add click event listeners to toggle accordion buttons in panel 3
+        var buttons = document.querySelectorAll('#flush-collapseThree .accordion-button');
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var targetCollapse = document.querySelector(button.getAttribute('data-bs-target'));
+
+                // If content is not already collapsed, toggle it
+                if (targetCollapse.classList.contains('show')) {
+                    // Collapse the content if it's already expanded
+                    var collapseInstance = bootstrap.Collapse.getInstance(targetCollapse);
+                    if (collapseInstance) {
+                        collapseInstance.hide();
+                    }
+                } else {
+                    // If the content is collapsed, expand it
+                    var collapseInstance = new bootstrap.Collapse(targetCollapse, {
+                        toggle: true // Automatically toggle the collapse
+                    });
+                }
             });
         });
     });
