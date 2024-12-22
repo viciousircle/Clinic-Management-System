@@ -1,41 +1,91 @@
 ﻿<!-- Modal for Adding New Medicine -->
 <div class="modal fade" id="addNewMedicineModal" tabindex="-1" aria-labelledby="addNewMedicineModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addMedicineModalLabel">Add New Medicine</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" class="needs-validation" novalidate>
-                    <div class="mb-3">
-                        <label for="medicineName" class="form-label">Medicine Name</label>
-                        <input type="text" class="form-control" id="medicineName" name="MedicineName" required>
-                        <div class="invalid-feedback">Please enter the medicine name.</div>
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-outline-dark px-4" id="addMoreMedicine">
+                        <i class="fas fa-plus-circle"></i> New
+                    </button>
+                </div>
+
+
+                <form method="post" class="needs-validation" novalidate id="medicineForm">
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Medicine Name</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Expiry Date</th>
+                                <th>Import Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicineFields">
+                            <tr class="medicine-entry">
+                                <td>
+                                    <input type="text" class="form-control" name="MedicineName" required>
+                                    <div class="invalid-feedback">Please enter the medicine name.</div>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="Type" required>
+                                        <option value="Tablet">Tablet</option>
+                                        <option value="Syrup">Syrup</option>
+                                        <option value="Injection">Injection</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select the medicine type.</div>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="Quantity" required>
+                                    <div class="invalid-feedback">Please enter the quantity.</div>
+                                </td>
+                                <td>
+                                    <input type="date" class="form-control" name="ExpiryDate" required>
+                                    <div class="invalid-feedback">Please select the expiry date.</div>
+                                </td>
+                                <td>
+                                    <input type="date" class="form-control" name="ImportDate" required>
+                                    <div class="invalid-feedback">Please select the import date.</div>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger remove-medicine">Remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end gap-md-4" style="align-items: center;">
+                        <div class="small text-danger">
+                            Check it carefully before submitting the form.
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Medicine</button>
+
                     </div>
-                    <div class="mb-3">
-                        <label for="type" class="form-label">Type</label>
-                        <select class="form-control" id="type" name="Type" required>
-                            <option value="Tablet">Tablet</option>
-                            <option value="Syrup">Syrup</option>
-                            <option value="Injection">Injection</option>
-                        </select>
-                        <div class="invalid-feedback">Please select the medicine type.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="quantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" name="Quantity" required>
-                        <div class="invalid-feedback">Please enter the quantity.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="expiryDate" class="form-label">Expiry Date</label>
-                        <input type="date" class="form-control" id="expiryDate" name="ExpiryDate" required>
-                        <div class="invalid-feedback">Please select the expiry date.</div>
-                    </div>
-                    <button type="submit" class="btn btn-success">Add Medicine</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('addMoreMedicine').addEventListener('click', function () {
+        var medicineFields = document.getElementById('medicineFields');
+        var newMedicineEntry = medicineFields.firstElementChild.cloneNode(true);
+        newMedicineEntry.querySelectorAll('input, select').forEach(function (input) {
+            input.value = '';
+        });
+        medicineFields.appendChild(newMedicineEntry);
+    });
+
+    document.getElementById('medicineFields').addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('remove-medicine')) {
+            e.target.closest('tr').remove();
+        }
+    });
+</script>
