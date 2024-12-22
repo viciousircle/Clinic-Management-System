@@ -1,18 +1,170 @@
-﻿<div class="modal fade" id="prescribeDetailModal" tabindex="-1" aria-labelledby="prescribeDetailModalLabel"
+﻿<!-- Modal -->
+<div class="modal fade" id="prescribeDetailModal" tabindex="-1" aria-labelledby="prescribeDetailModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content" style="border-radius: 24px;">
             <div class="modal-header">
                 <h5 class="modal-title" id="prescribeDetailModalLabel">Prescription Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Add your prescription details here -->
-                <p>Prescription details will be shown here.</p>
+                <!-- Accordion -->
+                <div class="accordion" id="prescriptionAccordion">
+                    <!-- Panel 1: Appointment Information -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Appointment Information
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#prescriptionAccordion">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="patientName" class="form-label">Patient Name:</label>
+                                        <input type="text" class="form-control" id="patientName" value="John Doe"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="doctorName" class="form-label">Doctor Name:</label>
+                                        <input type="text" class="form-control" id="doctorName" value="Dr. Smith"
+                                            disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="appointmentTime" class="form-label">Appointment Time:</label>
+                                        <input type="text" class="form-control" id="appointmentTime"
+                                            value="12:00 PM, 25th December 2024" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 2: Medicine Details (Non-collapsing list with checkboxes) -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Medicine Details
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo"
+                            data-bs-parent="#prescriptionAccordion">
+                            <div class="accordion-body">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkAll">
+                                    <label class="form-check-label" for="checkAll">Check all</label>
+                                </div>
+                                <ul class="list-group">
+                                    <!-- Medicine 1 -->
+                                    <li class="list-group-item">
+                                        <input type="checkbox" id="medicine1" class="form-check-input me-2">
+                                        <label for="medicine1" class="form-check-label">
+                                            <strong>Ibuprofen 200mg</strong> - Twice a day for 5 days
+                                        </label>
+                                        <div class="mt-2">
+                                            <ul class="list-unstyled">
+                                                <li><strong>Dosage:</strong> 200mg</li>
+                                                <li><strong>Frequency:</strong> Twice a day</li>
+                                                <li><strong>Duration:</strong> 5 days</li>
+                                                <li><strong>Special Instructions:</strong> Take with food</li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <!-- Medicine 2 -->
+                                    <li class="list-group-item">
+                                        <input type="checkbox" id="medicine2" class="form-check-input me-2">
+                                        <label for="medicine2" class="form-check-label">
+                                            <strong>Paracetamol 500mg</strong> - When required for pain
+                                        </label>
+                                        <div class="mt-2">
+                                            <ul class="list-unstyled">
+                                                <li><strong>Dosage:</strong> 500mg</li>
+                                                <li><strong>Frequency:</strong> As needed for pain</li>
+                                                <li><strong>Duration:</strong> As needed</li>
+                                                <li><strong>Special Instructions:</strong> Do not exceed 4 doses per day
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <!-- Medicine 3 -->
+                                    <li class="list-group-item">
+                                        <input type="checkbox" id="medicine3" class="form-check-input me-2">
+                                        <label for="medicine3" class="form-check-label">
+                                            <strong>Vitamin C 1000mg</strong> - Once a day
+                                        </label>
+                                        <div class="mt-2">
+                                            <ul class="list-unstyled">
+                                                <li><strong>Dosage:</strong> 1000mg</li>
+                                                <li><strong>Frequency:</strong> Once a day</li>
+                                                <li><strong>Duration:</strong> Ongoing</li>
+                                                <li><strong>Special Instructions:</strong> Take with water</li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="prepareBtn" data-bs-dismiss="modal" disabled>Prepare
+                    done and print</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- JavaScript -->
+<script>
+    // Select all checkboxes and enable the "Prepare done and print" button when all are checked
+    const checkAll = document.getElementById('checkAll');
+    const medicineCheckboxes = document.querySelectorAll('.form-check-input[id^="medicine"]');
+    const prepareBtn = document.getElementById('prepareBtn');
+    const listGroupItems = document.querySelectorAll('.list-group-item');
+
+    // Check all toggle logic
+    checkAll.addEventListener('change', function () {
+        const checked = checkAll.checked;
+        medicineCheckboxes.forEach(checkbox => {
+            checkbox.checked = checked;
+        });
+        togglePrepareButton();
+    });
+
+    // Logic to handle checking/unchecking of individual checkboxes and the "check all" checkbox
+    medicineCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            // Update the "Check all" checkbox state
+            if (!this.checked) {
+                checkAll.checked = false;
+            } else if (Array.from(medicineCheckboxes).every(checkbox => checkbox.checked)) {
+                checkAll.checked = true;
+            }
+            togglePrepareButton();
+        });
+    });
+
+    // Make list item clickable to toggle the checkbox
+    listGroupItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            if (event.target.tagName !== 'INPUT') {
+                const checkbox = this.querySelector('.form-check-input');
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    // Enable or disable the Prepare button based on all checkboxes being checked
+    function togglePrepareButton() {
+        const allChecked = Array.from(medicineCheckboxes).every(checkbox => checkbox.checked);
+        prepareBtn.disabled = !allChecked;
+    }
+</script>
