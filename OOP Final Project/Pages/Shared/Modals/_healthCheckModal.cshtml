@@ -123,9 +123,10 @@
                             <div id="collapsePrescription" class="accordion-collapse collapse"
                                 aria-labelledby="headingPrescription" data-bs-parent="#accordionExample">
                                 <div class="accordion-body" id="prescription">
-                                    <button type="button" class="btn btn-outline-dark w-100 mb-3"
-                                        onclick="addMedicine()">Add
-                                        Medicine</button>
+                                    <button type="button" class="btn btn-secondary w-100 mb-3" onclick="addMedicine()"
+                                        disabled>
+                                        Add Medicine
+                                    </button>
                                     <div id="medicinesContainer">
                                         <!-- Dynamic medicine fields will be added here -->
                                     </div>
@@ -310,19 +311,19 @@
     // Enable prescription input if the checkbox is checked
     function togglePrescription() {
         const needPrescriptionCheck = document.getElementById('needPrescriptionCheck');
-        const prescriptionSection = document.getElementById('collapsePrescription');
         const addMedicineBtn = document.querySelector('#collapsePrescription .btn');
 
         if (needPrescriptionCheck.checked) {
-            prescriptionSection.classList.add('show');
             addMedicineBtn.classList.remove('btn-secondary');
             addMedicineBtn.classList.add('btn-outline-dark');
+            addMedicineBtn.disabled = false;
         } else {
-            prescriptionSection.classList.remove('show');
             addMedicineBtn.classList.remove('btn-outline-dark');
             addMedicineBtn.classList.add('btn-secondary');
+            addMedicineBtn.disabled = true;
         }
     }
+
 
     // Enable "Mark as Done" button if all checkboxes are checked
     function toggleMarkAsDone() {
