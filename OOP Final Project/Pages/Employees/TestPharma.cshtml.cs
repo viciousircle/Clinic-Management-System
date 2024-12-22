@@ -18,7 +18,7 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml"); // Ensure the correct path
                 case "Prescribe":
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml"); // Ensure the correct path
-                case "Patient":
+                case "Warehouse":
                     return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml"); // Ensure the correct path
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
