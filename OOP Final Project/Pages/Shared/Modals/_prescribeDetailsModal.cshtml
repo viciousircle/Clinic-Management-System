@@ -119,11 +119,13 @@
 
 <script>
     function changeColor(row) {
+        var checkAll = document.getElementById('flexCheckDefault');
         if (row.classList.contains('table-primary')) {
             row.classList.remove('table-primary');
         } else {
             row.classList.add('table-primary');
         }
+        updateCheckAll();
     }
 
     function toggleAllRows(checkbox) {
@@ -135,5 +137,17 @@
                 row.classList.remove('table-primary');
             }
         });
+    }
+
+    function updateCheckAll() {
+        var rows = document.querySelectorAll('tbody tr');
+        var checkAll = document.getElementById('flexCheckDefault');
+        var allChecked = true;
+        rows.forEach(function (row) {
+            if (!row.classList.contains('table-primary')) {
+                allChecked = false;
+            }
+        });
+        checkAll.checked = allChecked;
     }
 </script>
