@@ -124,7 +124,6 @@ public class EmployeesController : ControllerBase
 
     }
 
-
     [HttpGet("{id}/appointments/count")]
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
     {
@@ -197,8 +196,7 @@ public class EmployeesController : ControllerBase
                 patient.FirstName,
                 patient.LastName,
                 patient.Email,
-                patient.Phone,
-
+                Phone = System.Text.RegularExpressions.Regex.Replace(patient.Phone, @"\s*x\d+$", "") // Remove extension
             })
             .ToList();
 
