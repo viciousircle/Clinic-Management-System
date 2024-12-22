@@ -113,7 +113,7 @@
 
         <!-- Patients List Section -->
         @* TODO: Nếu mà bệnh nhân đã được chữa khỏi sẽ có tag màu xanh, tương tự với các TH khác  *@
-        <div class="d-flex flex-wrap  mb-3 text-dark " style="gap: 36px;">
+        <div class="d-flex flex-wrap mb-3 text-dark " style="gap: 36px;">
             @foreach (var patient in Model.Patients)
             {
                 <div class="card rounded-12px shadow-sm" style="padding: 6px;">
@@ -123,7 +123,9 @@
                                 <i class="fas fa-user-tag"></i>
                                 <h5 class="card-title mb-0">@patient.FirstName</h5>
                             </div>
-                            <div class="btn-sm btn btn-outline-dark">Details</div>
+                            <button class="btn-sm btn btn-outline-dark" onclick="showPatientDetails()">
+                                Details
+                            </button>
                         </div>
                         <hr>
                         <div class="d-flex gap-md-2 flex-column">
@@ -139,15 +141,44 @@
                     </div>
                 </div>
             }
-
-
-
-
-
-
         </div>
 
 
     </div>
 
 </div>
+
+@* <!-- Modal for Patient Details -->
+<div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-labelledby="patientDetailsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="patientDetailsModalLabel">Patient Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <!-- Dynamic content goes here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+<div>
+
+    @await Html.PartialAsync("Modals/_patientDetailsModal")
+</div>
+
+<script>
+    function showPatientDetails() {
+
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('patientDetailsModal'));
+        modal.show();
+    }
+</script>
