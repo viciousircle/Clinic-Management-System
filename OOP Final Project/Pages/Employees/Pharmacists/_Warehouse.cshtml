@@ -12,12 +12,17 @@
                         <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
                             <i class="fas fa-plus-circle me-2"></i> Add New
                         </button>
-                        <button class="btn btn btn-success ">
+                        <button class="btn btn-success" onclick="document.getElementById('importFileInput').click()">
                             <i class="fas fa-file-import me-2"></i> Import Excel
                         </button>
-                        <button class="btn btn-outline-danger ">
-                            <i class="fas fa-file-export me-2"></i> Export PDF
+                        <input type="file" id="importFileInput" accept=".xlsx, .csv" style="display:none"
+                            onchange="handleFileImport(event)">
+
+                        <!-- Single Export Button -->
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exportModal">
+                            <i class="fas fa-file-export me-2"></i> Export
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -224,3 +229,50 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal for Export -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Export Options</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please choose the format to export the medicines:</p>
+                <div class="d-flex justify-content-end gap-md-2">
+                    <button class="btn btn-outline-danger" onclick="exportMedicines('pdf')">
+                        <i class="fas fa-file-pdf me-2"></i> Export PDF
+                    </button>
+                    <button class="btn btn-outline-success" onclick="exportMedicines('excel')">
+                        <i class="fas fa-file-excel me-2"></i> Export Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function exportMedicines(format) {
+        fetch(`/export-medicine?format=${format}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    alert("Export failed.");
+                    throw new Error("Failed to export");
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `medicines.${format}`;
+                link.click();
+            })
+            .catch(err => console.error("Export error:", err));
+    }
+</script>
