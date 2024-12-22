@@ -14,7 +14,6 @@ namespace OOP_Final_Project.Controllers;
 
 // - GET /api/employees: List all employees.
 // - GET /api/employees/{id}: Get a specific employee by ID.
-// - GET /api/employees/byFirstName/{firstName}: Get an employee by first name.
 
 // - GET /api/employees/{id}/appointments: Get all appointments for an employee.
 // - GET /api/employees/{id}/appointments/count: Get the total number of appointments for an employee.
@@ -80,15 +79,51 @@ public class EmployeesController : ControllerBase
         return Ok(employee);
     }
 
-    [HttpGet("byFirstName/{firstName}")]
-    public IActionResult GetByFirstName(string firstName)
+    [HttpGet("{id}/appointments")]
+    public IActionResult GetAllAppointmentsByEmployeeId(int id)
     {
-        var employee = _context.Employees.FirstOrDefault(e => e.FirstName == firstName);
-        if (employee == null)
-            return NotFound();
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+             .Include(appt => appt.Doctor)
+            .Include(appt => appt.Patient)
+            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+            .Select(appt => new
+            {
+                appt.appt.Id,
+                appt.appt.DoctorId,
 
-        return Ok(employee);
+                Patient = new
+                {
+                    appt.appt.Patient.Id,
+                    appt.appt.Patient.FirstName,
+                    appt.appt.Patient.LastName,
+                    appt.diag.IsSick,
+                    appt.diag.PatientStatus,
+
+                },
+                AppointmentRecord = new
+                {
+                    appt.doc.TimeBook,
+
+                    appt.doc.Date,
+                    appt.doc.TimeStart,
+                    appt.doc.TimeEnd,
+                    appt.doc.Location,
+
+
+                },
+                Diagnose = new
+                {
+                    appt.diag.DiagnoseDetails,
+                }
+            })
+            .ToList();
+
+        return Ok(new { Appointments = appointments });
+
     }
+
 
     [HttpGet("{id}/appointments/count")]
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
@@ -171,57 +206,8 @@ public class EmployeesController : ControllerBase
     }
 
 
-    [HttpGet("{id}/appointments")]
-    public IActionResult GetAllAppointmentsByEmployeeId(int id)
-    {
-        var appointments = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-             .Include(appt => appt.Doctor)  // Include Doctor data
-            .Include(appt => appt.Patient) // Include Patient data
-            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-            .Select(appt => new
-            {
-                appt.appt.Id,
-                appt.appt.PatientId,
-                appt.appt.DoctorId,
-                appt.doc.TimeBook,
-                appt.doc.Date,
-                appt.doc.TimeStart,
-                appt.doc.TimeEnd,
-                appt.doc.Location,
-                appt.diag.IsSick,
-                appt.diag.PatientStatus,
-                appt.diag.DiagnoseDetails,
-                Doctor = new
-                {
-                    appt.appt.Doctor.Id, // Add Doctor's ID
-                    appt.appt.Doctor.FirstName, // Add other Doctor properties you need
 
-                },
-                Patient = new
-                {
-                    appt.appt.Patient.Id, // Add Patient's ID
-                    appt.appt.Patient.FirstName, // Add other Patient properties you need
-                    appt.appt.Patient.LastName,
-                },
-                DocumentAppointment = new
-                {
-                    appt.doc.Date,
-                    appt.doc.TimeStart
-                },
-                DocumentDiagnose = new
-                {
-                    appt.diag.PatientStatus
-                }
-            })
-            .ToList();
 
-        return Ok(new { Appointments = appointments });
-
-    }
-
-    // ...existing code...
 
     [HttpGet("{id}/appointments/today")]
     public IActionResult GetAppointmentsToday(int id)
