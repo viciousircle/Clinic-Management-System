@@ -8,17 +8,17 @@
             </div>
             <div class="modal-body">
                 <!-- Accordion starts here -->
-                <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion" id="accordionExample">
                     <!-- Panel 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button " type="button" data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                aria-controls="panelsStayOpen-collapseOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Basic Information
                             </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                        <div id="collapseOne" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <ul class="list-group">
                                     <li class="list-group-item"><strong>Name:</strong> John Doe</li>
@@ -35,12 +35,11 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                                aria-controls="panelsStayOpen-collapseTwo">
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 Medical History
                             </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse ">
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <ul class="list-group">
                                     <li class="list-group-item"><strong>Known Allergies:</strong> None</li>
@@ -55,30 +54,27 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
-                                aria-controls="panelsStayOpen-collapseThree">
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 Health Status
                             </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse ">
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="temperature" class="form-label">Temperature (°C)</label>
-                                        <input type="number" class="form-control" id="temperature"
-                                            placeholder="Enter temperature">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="bloodPressure" class="form-label">Blood Pressure</label>
-                                        <input type="text" class="form-control" id="bloodPressure"
-                                            placeholder="e.g., 120/80">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="pulseRate" class="form-label">Pulse Rate</label>
-                                        <input type="number" class="form-control" id="pulseRate"
-                                            placeholder="Enter pulse rate">
-                                    </div>
-                                </form>
+                                <div class="mb-3">
+                                    <label for="temperature" class="form-label">Temperature (°C)</label>
+                                    <input type="number" class="form-control" id="temperature"
+                                        placeholder="Enter temperature">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="bloodPressure" class="form-label">Blood Pressure</label>
+                                    <input type="text" class="form-control" id="bloodPressure"
+                                        placeholder="e.g., 120/80">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pulseRate" class="form-label">Pulse Rate</label>
+                                    <input type="number" class="form-control" id="pulseRate"
+                                        placeholder="Enter pulse rate">
+                                </div>
                             </div>
                         </div>
                     </div>
