@@ -146,7 +146,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-outline-dark" id="makeAppointmentBtn">Make Appointment</button>
             </div>
         </div>
     </div>
@@ -187,5 +187,16 @@
                 }
             });
         });
+    });
+
+    // Add event listener to "Make Appointment" button
+    document.getElementById('makeAppointmentBtn').addEventListener('click', function () {
+        // Hide the patient details modal
+        var patientDetailsModal = bootstrap.Modal.getInstance(document.getElementById('patientDetailsModal'));
+        patientDetailsModal.hide();
+
+        // Show the new appointment modal
+        var newAppointmentModal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
+        newAppointmentModal.show();
     });
 </script>
