@@ -147,7 +147,7 @@ public class EmployeesController : ControllerBase
                 AppointmentRecord = new
                 {
                     joined.doc.TimeBook,
-                    joined.doc.Date,
+                    Date = joined.doc.Date.Date, // Ensure only the date part is returned
                     joined.doc.TimeStart,
                     joined.doc.TimeEnd,
                     joined.doc.Location,
@@ -160,6 +160,46 @@ public class EmployeesController : ControllerBase
             .ToList();
 
         return Ok(new { Date = today, Appointments = appointments });
+    }
+
+    [HttpGet("{id}/appointments/on/{date}")]
+    public IActionResult GetAppointmentsOnSpecificDay(int id, DateTime date)
+    {
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Include(appt => appt.Doctor)
+            .Include(appt => appt.Patient)
+            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+            .Where(joined => joined.doc.Date.Date == date.Date)
+            .Select(joined => new
+            {
+                joined.appt.Id,
+                joined.appt.DoctorId,
+                Patient = new
+                {
+                    joined.appt.Patient.Id,
+                    joined.appt.Patient.FirstName,
+                    joined.appt.Patient.LastName,
+                    joined.diag.IsSick,
+                    joined.diag.PatientStatus,
+                },
+                AppointmentRecord = new
+                {
+                    joined.doc.TimeBook,
+                    Date = joined.doc.Date.Date, // Ensure only the date part is returned
+                    joined.doc.TimeStart,
+                    joined.doc.TimeEnd,
+                    joined.doc.Location,
+                },
+                Diagnose = new
+                {
+                    joined.diag.DiagnoseDetails,
+                }
+            })
+            .ToList();
+
+        return Ok(new { Date = date.Date, Appointments = appointments });
     }
 
     [HttpGet("{id}/appointments/past")]
@@ -204,47 +244,7 @@ public class EmployeesController : ControllerBase
         return Ok(new { Date = today, PastAppointments = appointments });
     }
 
-    [HttpGet("{id}/appointments/on/{date}")]
-    public IActionResult GetAppointmentsOnSpecificDay(int id, DateTime date)
-    {
-        var appointments = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-            .Include(appt => appt.Doctor)
-            .Include(appt => appt.Patient)
-            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-            .Where(joined => joined.doc.Date.Date == date.Date)
-            .Select(joined => new
-            {
-                joined.appt.Id,
-                joined.appt.DoctorId,
-                Patient = new
-                {
-                    joined.appt.Patient.Id,
-                    joined.appt.Patient.FirstName,
-                    joined.appt.Patient.LastName,
-                    joined.diag.IsSick,
-                    joined.diag.PatientStatus,
-                },
-                AppointmentRecord = new
-                {
-                    joined.doc.TimeBook,
-                    joined.doc.Date,
-                    joined.doc.TimeStart,
-                    joined.doc.TimeEnd,
-                    joined.doc.Location,
-                },
-                Diagnose = new
-                {
-                    joined.diag.DiagnoseDetails,
-                }
-            })
-            .ToList();
 
-        return Ok(new { Date = date.Date, Appointments = appointments });
-    }
-
-    // ...existing code...
 
     [HttpGet("{id}/appointments/count")]
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
