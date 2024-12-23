@@ -51,8 +51,8 @@ public class PatientViewModel
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public bool IsSick { get; set; }
-    public string PatientStatus { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
 }
 
 public class AppointmentRecordViewModel
@@ -67,4 +67,6 @@ public class AppointmentRecordViewModel
 public class DiagnoseViewModel
 {
     public string DiagnoseDetails { get; set; }
+    public bool IsSick { get; set; }
+    public string PatientStatus { get; set; }
 }

@@ -53,6 +53,7 @@ namespace OOP_Final_Project.Pages.Employees
             await FetchEmployeeDetailsAsync();
             await FetchAllEmployeesAsync();
             await FetchAppointmentCountsAsync();
+            await FetchPatientsAsync();
         }
 
 
@@ -79,6 +80,10 @@ namespace OOP_Final_Project.Pages.Employees
             }
         }
 
+
+        // ! ------------------------------------------------------------------------------------------------
+
+
         // --- Fetch All Employees -----------------------
         // -- [GET] api/employees -------------------------
 
@@ -86,7 +91,7 @@ namespace OOP_Final_Project.Pages.Employees
         {
             try
             {
-                _logger.LogInformation("Fetching all employee details from API...");
+                // _logger.LogInformation("Fetching all employee details from API..."); //For logging purposes
                 var response = await _client.GetAsync("api/employees");
 
                 if (response.IsSuccessStatusCode)
@@ -161,6 +166,7 @@ namespace OOP_Final_Project.Pages.Employees
 
         }
 
+        // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointment Counts -------------------
         // -- [GET] api/employees/96/appointments/count ---
@@ -211,9 +217,50 @@ namespace OOP_Final_Project.Pages.Employees
                 _logger.LogError(ex, $"An error occurred while fetching appointment count from {url}");
             }
 
-            return 0; // Default to 0 if fetching fails
+            return 0;
         }
 
+        // ! ------------------------------------------------------------------------------------------------
 
+        // --- Fetch Patients -----------------------------
+        // -- [GET] api/employees/96/patients -------------
+        private async Task FetchPatientsAsync()
+        {
+            try
+            {
+                var response = await _client.GetAsync("api/employees/96/patients");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var patientResponse = JsonSerializer.Deserialize<PatientResponse>(json, options);
+
+                    if (patientResponse?.Patients != null)
+                    {
+                        DoctorData.Patients = patientResponse.Patients;
+                        _logger.LogInformation($"Successfully fetched {DoctorData.Patients} patients.");
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to deserialize patient data.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch patients. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching patients.");
+            }
+
+
+
+
+
+
+        }
     }
 }

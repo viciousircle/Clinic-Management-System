@@ -138,14 +138,14 @@
                 </tr>
             </thead>
 
-            @* <tbody>
-                @foreach (var appointment in Model.Appointments)
+            <tbody>
+                @foreach (var doctor in Model.DoctorList)
                 {
                     <tr>
-                        <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
-                        <td>@appointment.AppointmentRecord.Date.ToShortDateString()</td>
+                        <td>@doctor.FirstName</td>
+                        @* <td>@appointment.AppointmentRecord.Date.ToShortDateString()</td>
                         <td>@appointment.AppointmentRecord.TimeStart.ToString(@"hh\:mm")</td>
-                        <td>@appointment.Diagnose.DiagnoseDetails</td>
+                        <td>@appointment.Diagnose.DiagnoseDetails</td> *@
                         <td>
                             <div>
                                 <button type="button" class="btn btn-sm btn-outline-danger"
@@ -154,7 +154,7 @@
                         </td>
                     </tr>
                 }
-            </tbody> *@
+            </tbody>
         </table>
     </div>
 </div>

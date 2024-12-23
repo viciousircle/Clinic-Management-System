@@ -6,6 +6,6 @@ namespace OOP_Final_Project.Controllers.ApiResponses;
 public class PatientResponse
 {
     public int EmployeeId { get; set; }
-    public List<PatientViewModel> Patients { get; set; } = new List<PatientViewModel>();
+    public List<PatientViewModel> Patients { get; set; } = new();
 
 }

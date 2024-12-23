@@ -103,25 +103,28 @@ public class EmployeesController : ControllerBase
             {
                 appt.appt.Id,
                 appt.appt.DoctorId,
-                Patient = new
+                Patient = new PatientViewModel
                 {
-                    appt.appt.Patient.Id,
-                    appt.appt.Patient.FirstName,
-                    appt.appt.Patient.LastName,
-                    appt.diag.IsSick,
-                    appt.diag.PatientStatus,
+                    Id = appt.appt.Patient.Id,
+                    FirstName = appt.appt.Patient.FirstName,
+                    LastName = appt.appt.Patient.LastName,
+                    Email = appt.appt.Patient.Email,
+                    Phone = appt.appt.Patient.Phone,
+
                 },
-                AppointmentRecord = new
+                AppointmentRecord = new AppointmentRecordViewModel
                 {
-                    appt.doc.TimeBook,
-                    appt.doc.Date,
-                    appt.doc.TimeStart,
-                    appt.doc.TimeEnd,
-                    appt.doc.Location,
+                    TimeBook = appt.doc.TimeBook,
+                    Date = appt.doc.Date,
+                    TimeStart = appt.doc.TimeStart,
+                    TimeEnd = appt.doc.TimeEnd,
+                    Location = appt.doc.Location,
                 },
-                Diagnose = new
+                Diagnose = new DiagnoseViewModel
                 {
-                    appt.diag.DiagnoseDetails,
+                    DiagnoseDetails = appt.diag.DiagnoseDetails,
+                    IsSick = appt.diag.IsSick,
+                    PatientStatus = appt.diag.PatientStatus,
                 }
             })
             .ToList();
@@ -156,7 +159,7 @@ public class EmployeesController : ControllerBase
                 AppointmentRecord = new
                 {
                     joined.doc.TimeBook,
-                    Date = joined.doc.Date.Date, // Ensure only the date part is returned
+                    Date = joined.doc.Date.Date,
                     joined.doc.TimeStart,
                     joined.doc.TimeEnd,
                     joined.doc.Location,
@@ -196,7 +199,7 @@ public class EmployeesController : ControllerBase
                 AppointmentRecord = new
                 {
                     joined.doc.TimeBook,
-                    Date = joined.doc.Date.Date, // Ensure only the date part is returned
+                    Date = joined.doc.Date.Date,
                     joined.doc.TimeStart,
                     joined.doc.TimeEnd,
                     joined.doc.Location,
@@ -259,13 +262,15 @@ public class EmployeesController : ControllerBase
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
     {
         var employee = _context.Employees
-            .Include(e => e.Appointments) // Ensure Appointments are included
+            .Include(e => e.Appointments)
             .FirstOrDefault(e => e.Id == id);
 
         if (employee == null)
             return NotFound();
 
         var totalAppointments = employee.Appointments.Count;
+
+
         return Ok(new { EmployeeId = id, TotalAppointments = totalAppointments });
     }
 
