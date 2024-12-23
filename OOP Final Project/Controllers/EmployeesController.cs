@@ -15,26 +15,6 @@ namespace OOP_Final_Project.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-// - GET /api/employees: List all employees.
-// - GET /api/employees/{id}: Get a specific employee by ID.
-
-// - GET /api/employees/{id}/appointments: Get all appointments for an employee.
-// - GET /api/employees/{id}/appointments/count: Get the total number of appointments for an employee.
-
-// - GET /api/employees/{id}/appointments/future: Get all future appointments for an employee in the next 30 days.
-// - GET /api/employees/{id}/appointments/future/count: Get the total number of future appointments for an employee in the next 30 days.
-
-// - GET /api/employees/{id}/appointments/completed: Get all completed appointments for an employee.
-// - GET /api/employees/{id}/appointments/completed/count: Get the total number of completed appointments for an employee.
-
-// - GET /api/employees/{id}/appointments/cancelled: Get all cancelled appointments for an employee.
-// - GET /api/employees/{id}/appointments/cancelled/count: Get the total number of cancelled appointments for an employee.
-
-// - GET /api/employees/{id}/patients: Get all patients for an employee.
-
-
-// - POST /api/employees: Add a new employee.
-
 public class EmployeesController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -43,6 +23,10 @@ public class EmployeesController : ControllerBase
     {
         _context = context;
     }
+
+    // ! ------------------- Employees -------------------
+    // ? [GET] /api/employees : Get all employees
+    // ? [GET] /api/employees/{id} : Get employee by id
 
     [HttpGet]
     public IActionResult GetAll()
@@ -89,8 +73,14 @@ public class EmployeesController : ControllerBase
         return Ok(response);
     }
 
+    // ! ----------------------------------------------------
 
-    // ------------------- Appointments -------------------
+    // ! ------------------- Appointments -------------------
+    // ? [GET] /api/employees/{id}/appointments : Get all appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/today : Get today's appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/on/{date} : Get appointments by employee id and date
+    // ? [GET] /api/employees/{id}/appointments/past : Get past appointments by employee id
+
     [HttpGet("{id}/appointments")]
     public IActionResult GetAllAppointmentsByEmployeeId(int id)
     {
@@ -305,9 +295,13 @@ public class EmployeesController : ControllerBase
         return Ok(new { PastAppointments = appointments });
     }
 
+    // ! -----------------------------------------------------------
 
-
-    // ------------------- Appointments Counts -------------------
+    // ! ------------------- Appointments Counts -------------------
+    // ? [GET] /api/employees/{id}/appointments/count : Get total appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/future/count : Get total future appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/completed/count : Get total completed appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/cancelled/count : Get total cancelled appointments by employee id
 
     [HttpGet("{id}/appointments/count")]
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
@@ -370,7 +364,11 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, TotalCancelledAppointments = totalCancelledAppointments });
     }
 
-    // ------------------- Patients -------------------
+    // ! -----------------------------------------------------------
+
+    // ! ------------------- Patients ------------------------------
+    // ? [GET] /api/employees/{id}/patients : Get all patients by employee id
+    // ? [GET] /api/employees/{id}/patients/observed : Get all observed patients by employee id
 
     [HttpGet("{id}/patients")]
     public IActionResult GetAllPatientsByEmployeeId(int id)
@@ -395,7 +393,7 @@ public class EmployeesController : ControllerBase
                         .FirstOrDefault()
                 }
             )
-            .AsEnumerable() // Move processing to in-memory
+            .AsEnumerable()
             .Select(result => new PatientViewModel
             {
                 Id = result.Patient.Id,
@@ -464,6 +462,11 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, ObservedPatients = observedPatients });
     }
 
+    // ! -----------------------------------------------------------
+
+    // ! ------------------- Patients Counts ------------------------
+    // ? [GET] /api/employees/{id}/patients/count : Get total patients by employee id
+    // ? [GET] /api/employees/{id}/patients/observed/count : Get total observed patients by employee id
 
     [HttpGet("{id}/patients/count")]
     public IActionResult GetTotalPatientsByEmployeeId(int id)
@@ -513,7 +516,7 @@ public class EmployeesController : ControllerBase
         return Ok(response);
     }
 
-
+    // ! -----------------------------------------------------------
 
 }
 
