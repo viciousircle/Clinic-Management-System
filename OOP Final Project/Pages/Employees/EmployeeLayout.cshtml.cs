@@ -226,9 +226,8 @@ namespace OOP_Final_Project.Pages.Employees
                 // - Fetch appointments
                 // - GET /api/employees/96/appointments
 
-                var responseAppointmentsList = await _client.GetAsync("api/employees/96/appointments");
-
-                if (responseAppointmentsList != null && responseAppointmentsList.IsSuccessStatusCode)
+                var responseAppointmentsList = await _client.GetAsync("api/employees/96/appointments"); // Replace with actual employee ID
+                if (responseAppointmentsList.IsSuccessStatusCode)
                 {
                     var appointmentsJson = await responseAppointmentsList.Content.ReadAsStringAsync();
                     _logger.LogInformation($"Appointments JSON: {appointmentsJson}"); // Log the JSON response
@@ -240,7 +239,32 @@ namespace OOP_Final_Project.Pages.Employees
                             var appointmentResponse = JsonSerializer.Deserialize<AppointmentResponse>(appointmentsJson, options);
                             if (appointmentResponse != null && appointmentResponse.Appointments != null)
                             {
-                                DoctorData.Appointments = appointmentResponse.Appointments;
+                                DoctorData.Appointments = appointmentResponse.Appointments.Select(a => new AppointmentViewModel
+                                {
+                                    Id = a.Id,
+                                    DoctorId = a.DoctorId,
+                                    Patient = new PatientViewModel
+                                    {
+                                        Id = a.Patient.Id,
+                                        FirstName = a.Patient.FirstName,
+                                        LastName = a.Patient.LastName,
+                                        IsSick = a.DocumentDiagnose.IsSick,
+                                        PatientStatus = a.DocumentDiagnose.PatientStatus
+                                    },
+                                    AppointmentRecord = new AppointmentRecordViewModel
+                                    {
+                                        TimeBook = a.DocumentAppointment.TimeBook,
+                                        Date = a.DocumentAppointment.Date,
+                                        TimeStart = a.DocumentAppointment.TimeStart,
+                                        TimeEnd = a.DocumentAppointment.TimeEnd,
+                                        Location = a.DocumentAppointment.Location
+                                    },
+                                    Diagnose = new DiagnoseViewModel
+                                    {
+                                        DiagnoseDetails = a.DocumentDiagnose.DiagnoseDetails
+                                    }
+                                    // Map other properties as needed
+                                }).ToList();
                             }
                             else
                             {
@@ -249,18 +273,13 @@ namespace OOP_Final_Project.Pages.Employees
                         }
                         catch (JsonException ex)
                         {
-                            _logger.LogError($"Error during JSON deserialization: {ex.Message}");
+                            _logger.LogError($"JSON deserialization error: {ex.Message}");
                         }
-
-                    }
-                    else
-                    {
-                        _logger.LogError("Appointments JSON is null or empty.");
                     }
                 }
                 else
                 {
-                    _logger.LogError($"Failed to fetch appointments. Status code: {responseAppointmentsList?.StatusCode}");
+                    _logger.LogError($"Failed to fetch appointments. Status code: {responseAppointmentsList.StatusCode}");
                 }
 
 

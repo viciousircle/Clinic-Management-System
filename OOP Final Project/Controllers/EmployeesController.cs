@@ -79,7 +79,7 @@ public class EmployeesController : ControllerBase
         return Ok(employee);
     }
 
-    // ...existing code...
+    // ------------------- Appointments -------------------
 
     [HttpGet("{id}/appointments")]
     public IActionResult GetAllAppointmentsByEmployeeId(int id)
@@ -244,7 +244,7 @@ public class EmployeesController : ControllerBase
         return Ok(new { Date = today, PastAppointments = appointments });
     }
 
-
+    // ------------------- Appointments Counts -------------------
 
     [HttpGet("{id}/appointments/count")]
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
@@ -305,6 +305,8 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, TotalCancelledAppointments = totalCancelledAppointments });
     }
 
+    // ------------------- Patients -------------------
+
     [HttpGet("{id}/patients")]
     public IActionResult GetAllPatientsByEmployeeId(int id)
     {
@@ -324,7 +326,6 @@ public class EmployeesController : ControllerBase
 
         return Ok(new { EmployeeId = id, Patients = patients });
     }
-
 
 
 
