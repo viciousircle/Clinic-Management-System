@@ -9,4 +9,6 @@ public class PatientsResponse
     public int EmployeeId { get; set; }
     public List<PatientViewModel> Patients { get; set; } = new();
 
+    public List<PatientViewModel> ObservedPatients { get; set; } = new();
+
 }

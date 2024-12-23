@@ -396,7 +396,7 @@ public class EmployeesController : ControllerBase
                 }
             )
             .AsEnumerable() // Move processing to in-memory
-            .Select(result => new
+            .Select(result => new PatientViewModel
             {
                 Id = result.Patient.Id,
                 FirstName = result.Patient.FirstName,
@@ -411,6 +411,59 @@ public class EmployeesController : ControllerBase
 
         return Ok(new { EmployeeId = id, Patients = patients });
     }
+
+    [HttpGet("{id}/patients/observed")]
+    public IActionResult GetAllObservedPatientsByEmployeeId(int id)
+    {
+        var observedPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(
+                _context.Patients,
+                appt => appt.PatientId,
+                patient => patient.Id,
+                (appt, patient) => new { Appointment = appt, Patient = patient }
+            )
+            .GroupJoin(
+                _context.DocumentAppointments,
+                apptPatient => apptPatient.Appointment.Id,
+                docAppt => docAppt.AppointmentId,
+                (apptPatient, docAppointments) => new
+                {
+                    apptPatient.Patient,
+                    LatestVisit = docAppointments
+                        .OrderByDescending(doc => doc.Date)
+                        .FirstOrDefault()
+                }
+            )
+            .Join(
+                _context.DocumentDiagnoses,
+                result => result.LatestVisit.AppointmentId,
+                diag => diag.AppointmentId,
+                (result, diag) => new
+                {
+                    result.Patient,
+                    result.LatestVisit,
+                    diag
+                }
+            )
+            .AsEnumerable()
+            .Where(result => result.LatestVisit != null && result.diag != null && result.diag.IsSick)
+            .Select(result => new PatientViewModel
+            {
+                Id = result.Patient.Id,
+                FirstName = result.Patient.FirstName,
+                LastName = result.Patient.LastName,
+                Email = result.Patient.Email,
+                Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                Address = result.Patient.Address,
+                LatestVisit = result.LatestVisit.Date.ToString("dd-MM-yyyy")
+            })
+            .Distinct()
+            .ToList();
+
+        return Ok(new { EmployeeId = id, ObservedPatients = observedPatients });
+    }
+
 
     [HttpGet("{id}/patients/count")]
     public IActionResult GetTotalPatientsByEmployeeId(int id)
@@ -459,6 +512,8 @@ public class EmployeesController : ControllerBase
 
         return Ok(response);
     }
+
+
 
 }
 

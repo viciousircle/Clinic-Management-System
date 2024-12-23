@@ -46,6 +46,7 @@ namespace OOP_Final_Project.Pages.Employees
         public async Task OnGetAsync()
         {
             await FetchAllDataAsync();
+            await FetchObservedPatientsAsync();
         }
 
         // -- Helper Methods -----------------------------
@@ -87,7 +88,7 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
                 case "Patient":
                     await FetchPatientCountAsync();
-                    await FetchPatientsAsync();
+                    await FetchAllPatientsAsync();
 
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
@@ -347,11 +348,14 @@ namespace OOP_Final_Project.Pages.Employees
 
         // --- Fetch Patients -----------------------------
         // -- [GET] api/employees/96/patients -------------
-        private async Task FetchPatientsAsync()
+        // -- [GET] api/employees/96/patients/observed ----
+        // -- [GET] api/employees/96/patients/{status} ----
+
+        private async Task FetchPatientsAsync(string url, string description = null)
         {
             try
             {
-                var response = await _client.GetAsync("api/employees/96/patients");
+                var response = await _client.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -359,23 +363,22 @@ namespace OOP_Final_Project.Pages.Employees
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     var patientsResponse = JsonSerializer.Deserialize<PatientsResponse>(json, options);
 
-                    if (patientsResponse?.Patients != null)
+                    if (patientsResponse != null)
                     {
-                        // Manually parse the LatestVisit field to DateTime if needed
-                        foreach (var patient in patientsResponse.Patients)
+                        if (patientsResponse.Patients != null && patientsResponse.Patients.Count > 0)
                         {
-                            if (DateTime.TryParseExact(patient.LatestVisit, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
-                            {
-                                // _logger.LogInformation($"Parsed LatestVisit: {parsedDate:yyyy-MM-dd}"); //For logging purposes
-                            }
-                            else
-                            {
-                                _logger.LogWarning($"Failed to parse LatestVisit for patient ID {patient.Id}: {patient.LatestVisit}");
-                            }
+                            DoctorData.Patients = patientsResponse.Patients;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} patients.");
                         }
-
-                        DoctorData.Patients = patientsResponse.Patients;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} patients.");
+                        else if (patientsResponse.ObservedPatients != null && patientsResponse.ObservedPatients.Count > 0)
+                        {
+                            DoctorData.Patients = patientsResponse.ObservedPatients;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} observed patients.");
+                        }
+                        else
+                        {
+                            _logger.LogError("Failed to deserialize patient data.");
+                        }
                     }
                     else
                     {
@@ -389,9 +392,22 @@ namespace OOP_Final_Project.Pages.Employees
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching patients.");
+                _logger.LogError(ex, $"An error occurred while fetching patients {description ?? ""}.");
             }
         }
+
+        // Fetch all patients
+        private Task FetchAllPatientsAsync()
+        {
+            return FetchPatientsAsync("api/employees/96/patients", "all patients");
+        }
+
+        // Fetch observed patients
+        private Task FetchObservedPatientsAsync()
+        {
+            return FetchPatientsAsync("api/employees/96/patients/observed", "observed patients");
+        }
+
 
 
         // ! ------------------------------------------------------------------------------------------------
