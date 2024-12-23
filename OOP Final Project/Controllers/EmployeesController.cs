@@ -90,7 +90,6 @@ public class EmployeesController : ControllerBase
 
 
     // ------------------- Appointments -------------------
-
     [HttpGet("{id}/appointments")]
     public IActionResult GetAllAppointmentsByEmployeeId(int id)
     {
@@ -98,8 +97,9 @@ public class EmployeesController : ControllerBase
             .Where(appt => appt.DoctorId == id)
             .Include(appt => appt.Doctor)
             .Include(appt => appt.Patient)
-            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+            .GroupJoin(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, docAppointments) => new { appt, docAppointments })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.docAppointments, diag })
+            .AsEnumerable() // Move processing to in-memory for further LINQ transformations
             .Select(appt => new
             {
                 appt.appt.Id,
@@ -110,28 +110,38 @@ public class EmployeesController : ControllerBase
                     FirstName = appt.appt.Patient.FirstName,
                     LastName = appt.appt.Patient.LastName,
                     Email = appt.appt.Patient.Email,
-                    Phone = appt.appt.Patient.Phone,
-
+                    Phone = System.Text.RegularExpressions.Regex.Replace(appt.appt.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                    Address = appt.appt.Patient.Address,
+                    // Get the most recent visit from DocumentAppointments
+                    LatestVisit = appt.docAppointments
+                        .OrderByDescending(doc => doc.Date)
+                        .FirstOrDefault()?.Date != default(DateTime)
+                            ? appt.docAppointments
+                                .OrderByDescending(doc => doc.Date)
+                                .FirstOrDefault()?.Date.ToString("dd-MM-yyyy") // No need for .Value here
+                            : "N/A" // Return "N/A" if no valid date is found
                 },
                 AppointmentRecord = new AppointmentRecordViewModel
                 {
-                    TimeBook = appt.doc.TimeBook,
-                    Date = appt.doc.Date,
-                    TimeStart = appt.doc.TimeStart,
-                    TimeEnd = appt.doc.TimeEnd,
-                    Location = appt.doc.Location,
+                    // Safely get the first appointment record if available
+                    TimeBook = appt.docAppointments.FirstOrDefault()?.TimeBook ?? default(DateTime),
+                    Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
+                    TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
+                    TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
+                    Location = appt.docAppointments.FirstOrDefault()?.Location,
                 },
                 Diagnose = new DiagnoseViewModel
                 {
                     DiagnoseDetails = appt.diag.DiagnoseDetails,
                     IsSick = appt.diag.IsSick,
-                    PatientStatus = appt.diag.PatientStatus,
+                    PatientStatus = appt.diag.PatientStatus
                 }
             })
             .ToList();
 
         return Ok(new { Appointments = appointments });
     }
+
 
     // [HttpGet("{id}/appointments/today")]
     // public IActionResult GetAppointmentsToday(int id)

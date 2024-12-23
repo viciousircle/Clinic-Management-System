@@ -123,6 +123,8 @@ namespace OOP_Final_Project.Pages.Employees
         }
 
 
+        // ! ------------------------------------------------------------------------------------------------
+
         // --- Fetch Employee Details By ID ---------------------
         // -- [GET] api/employees/96 -----------------------
         private async Task FetchEmployeeDetailsAsync()
@@ -165,6 +167,7 @@ namespace OOP_Final_Project.Pages.Employees
             }
 
         }
+
 
         // ! ------------------------------------------------------------------------------------------------
 
@@ -219,6 +222,17 @@ namespace OOP_Final_Project.Pages.Employees
 
             return 0;
         }
+
+        // ! ------------------------------------------------------------------------------------------------
+
+        // --- Fetch Appointments -------------------------
+        // -- [GET] api/employees/96/appointments ---------
+        // -- [GET] api/employees/96/appointments/today ---
+        // -- [GET] api/employees/96/appointments/{date} --
+        // -- [GET] api/employees/96/appointments/past ----
+
+
+
 
         // ! ------------------------------------------------------------------------------------------------
 
