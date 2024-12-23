@@ -70,12 +70,26 @@ namespace OOP_Final_Project.Pages.Employees
                 case "previous":
                     await FetchPastAppointmentsAsync();
                     break;
+
+                case "allPatients":
+                    await FetchAllPatientsAsync();
+                    break;
+
+                case "observedPatients":
+                    await FetchObservedPatientsAsync();
+                    break;
             }
 
             if (section == "AppointmentTableRows")
             {
                 return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
             }
+
+            if (section == "PatientCards")
+            {
+                return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
+            }
+
 
             switch (section)
             {
