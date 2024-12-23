@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
 using OOP_Final_Project.Models;
+using OOP_Final_Project.ViewModels;
 
 
 namespace OOP_Final_Project.Controllers;
@@ -62,15 +63,17 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var employee = _context.Employees.Where(e => e.Id == id).Select(e => new
+        var employee = _context.Employees
+        .Where(e => e.Id == id)
+        .Select(e => new EmployeeViewModel
         {
-            e.Id,
-            e.FirstName,
-            e.LastName,
-            e.Email,
-            e.Phone,
-            e.AccountId,
-            e.IsActive,
+            Id = e.Id,
+            FirstName = e.FirstName,
+            LastName = e.LastName,
+            Email = e.Email,
+            Phone = e.Phone,
+            AccountId = e.AccountId,
+            IsActive = e.IsActive
         }).ToList().FirstOrDefault();
 
         if (employee == null)
@@ -78,6 +81,7 @@ public class EmployeesController : ControllerBase
 
         return Ok(new { Employee = employee });
     }
+
 
     // ------------------- Appointments -------------------
 

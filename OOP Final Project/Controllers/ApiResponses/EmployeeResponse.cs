@@ -5,6 +5,6 @@ namespace OOP_Final_Project.Controllers.ApiResponses;
 
 public class EmployeeResponse
 {
-    public List<EmployeeViewModel> Employees { get; set; } = new List<EmployeeViewModel>();
+    public EmployeeViewModel Employee { get; set; } = new();
 
 }
