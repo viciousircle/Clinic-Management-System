@@ -46,7 +46,6 @@ namespace OOP_Final_Project.Pages.Employees
         public async Task OnGetAsync()
         {
             await FetchAllDataAsync();
-            await FetchObservedPatientsAsync();
         }
 
         // -- Helper Methods -----------------------------
