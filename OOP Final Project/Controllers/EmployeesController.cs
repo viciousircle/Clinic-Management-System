@@ -197,12 +197,10 @@ public class EmployeesController : ControllerBase
     public IActionResult GetAppointmentsByEmployeeIdAndDate(int id, string date)
     {
         string[] formats = { "yyyy-MM-dd", "dd-MM-yyyy" };
-        // Parse the date string to DateTime using custom format
         if (!DateTime.TryParseExact(date, formats, null, System.Globalization.DateTimeStyles.None, out var parsedDate))
         {
             return BadRequest("Invalid date format. Please use yyyy-MM-dd or dd-MM-yyyy.");
         }
-
 
         var appointments = _context.Appointments
             .Where(appt => appt.DoctorId == id)
@@ -226,14 +224,10 @@ public class EmployeesController : ControllerBase
                     Phone = System.Text.RegularExpressions.Regex.Replace(appt.appt.Patient.Phone ?? "", @"\s*x\d+$", ""),
                     Address = appt.appt.Patient.Address,
                     LatestVisit = appt.docAppointments
-                    .Where(doc => doc.Date.Date == parsedDate.Date) // Only today's visits for the specified date
                     .OrderByDescending(doc => doc.Date)
-                    .FirstOrDefault()?.Date != default(DateTime)
-                    ? appt.docAppointments
-                        .Where(doc => doc.Date.Date == parsedDate.Date)
-                        .OrderByDescending(doc => doc.Date)
-                        .FirstOrDefault()?.Date.ToString("dd-MM-yyyy")
-                    : "N/A"
+                    .FirstOrDefault()?.Date != default(DateTime) ? appt.docAppointments
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date.ToString("dd-MM-yyyy") : "N/A"
                 },
                 AppointmentRecord = new AppointmentRecordViewModel
                 {
