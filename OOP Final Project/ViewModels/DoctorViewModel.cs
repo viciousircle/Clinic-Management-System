@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Bogus.DataSets;
 using OOP_Final_Project.Models;
 using OOP_Final_Project.ViewModels;
 
@@ -54,6 +55,7 @@ public class PatientViewModel
     public string Email { get; set; }
     public string Phone { get; set; }
     public string Address { get; set; }
+    public DateTime LatestVisit { get; set; }
 }
 
 public class AppointmentRecordViewModel

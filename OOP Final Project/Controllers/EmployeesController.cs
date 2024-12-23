@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Bogus.DataSets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
@@ -328,42 +329,41 @@ public class EmployeesController : ControllerBase
     public IActionResult GetAllPatientsByEmployeeId(int id)
     {
         var patients = _context.Appointments
-        .Where(appt => appt.DoctorId == id)
-        .Join(_context.Patients, appt => appt.PatientId, patient => patient.Id, (appt, patient) => new
-        {
-            patient.Id,
-            patient.FirstName,
-            patient.LastName,
-            patient.Email,
-            patient.Phone,
-            patient.Address
-        })
-        .Distinct()
-        .Select(patient => new PatientViewModel
-        {
-            Id = patient.Id,
-            FirstName = patient.FirstName,
-            LastName = patient.LastName,
-            Email = patient.Email,
-            Phone = System.Text.RegularExpressions.Regex.Replace(patient.Phone, @"\s*x\d+$", ""),
-            Address = patient.Address
-        })
-        .ToList();
+            .Where(appt => appt.DoctorId == id)
+            .Join(
+                _context.Patients,
+                appt => appt.PatientId,
+                patient => patient.Id,
+                (appt, patient) => new { Appointment = appt, Patient = patient }
+            )
+            .GroupJoin(
+                _context.DocumentAppointments,
+                apptPatient => apptPatient.Appointment.Id,
+                docAppt => docAppt.AppointmentId,
+                (apptPatient, docAppointments) => new
+                {
+                    apptPatient.Patient,
+                    LatestVisit = docAppointments
+                        .OrderByDescending(doc => doc.Date)
+                        .FirstOrDefault()
+                }
+            )
+            .AsEnumerable() // Move processing to in-memory
+            .Select(result => new
+            {
+                Id = result.Patient.Id,
+                FirstName = result.Patient.FirstName,
+                LastName = result.Patient.LastName,
+                Email = result.Patient.Email,
+                Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone, @"\s*x\d+$", ""),
+                Address = result.Patient.Address,
+                LatestVisit = result.LatestVisit?.Date.ToString("dd-MM-yyyy") ?? "N/A" // Format date as dd-MM-yyyy or use "N/A"
+            })
+            .Distinct()
+            .ToList();
 
         return Ok(new { EmployeeId = id, Patients = patients });
     }
-
-
-
-    [HttpPost]
-    public IActionResult Create(Employee employee)
-    {
-        _context.Employees.Add(employee);
-        _context.SaveChanges();
-        return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
-    }
-
-
 
 
 
