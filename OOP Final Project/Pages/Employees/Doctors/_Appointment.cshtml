@@ -105,6 +105,7 @@
                 <!-- Sort Options -->
                 <div>
                     <select id="sortTime" class="form-select w-auto " onchange="sortAppointments()">
+                        <option value="none">None</option>
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>
@@ -123,7 +124,8 @@
                     <i class="fas fa-search"></i>
                 </span>
 
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search"
+                    oninput="searchAppointments()" autocomplete="off">
             </div>
         </div>
 
@@ -131,11 +133,11 @@
         <table class="table table-hover table-bordered shadow-sm text-center " id="appointmentsTable">
             <thead class="table-light">
                 <tr>
-                    <th style="font-weight: 600;">Patient Name</th>
-                    <th style="font-weight: 600;">Appointment Date</th>
-                    <th style="font-weight: 600;">Appointment Time</th>
-                    <th style="font-weight: 600;">Reason for Visit</th>
-                    <th style="font-weight: 600;">Actions</th>
+                    <th style="font-weight: 400; width: 20%;">Patient Name</th>
+                    <th style="font-weight: 400; width: 20%;">Appointment Date</th>
+                    <th style="font-weight: 400; width: 20%;">Appointment Time</th>
+                    <th style="font-weight: 400; width: 20%;">Reason for Visit</th>
+                    <th style="font-weight: 400; width: 20%;">Actions</th>
                 </tr>
             </thead>
 
@@ -245,15 +247,20 @@
         const table = document.getElementById("appointmentsTable");
         const rows = Array.from(table.querySelectorAll("tbody tr"));
 
-        rows.sort((rowA, rowB) => {
-            const timeA = rowA.cells[2].textContent; // Get appointment time from third column
-            const timeB = rowB.cells[2].textContent;
+        if (sortOption === "none") {
+            // Reload the appointments to reset the order
+            loadAppointments('all');
+        } else {
+            rows.sort((rowA, rowB) => {
+                const timeA = rowA.cells[2].textContent; // Get appointment time from third column
+                const timeB = rowB.cells[2].textContent;
 
-            return sortOption === "asc" ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
-        });
+                return sortOption === "asc" ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
+            });
 
-        const tbody = table.querySelector("tbody");
-        rows.forEach(row => tbody.appendChild(row));
+            const tbody = table.querySelector("tbody");
+            rows.forEach(row => tbody.appendChild(row));
+        }
     }
 
     function openHealthCheckModal(button) {
