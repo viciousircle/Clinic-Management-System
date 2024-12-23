@@ -426,5 +426,39 @@ public class EmployeesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("{id}/patients/observed/count")]
+    public IActionResult GetTotalObservedPatientsByEmployeeId(int id)
+    {
+        var totalObservedPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(
+                _context.DocumentAppointments,
+                appt => appt.Id,
+                docAppt => docAppt.AppointmentId,
+                (appt, docAppt) => new { appt, docAppt }
+            )
+            .Join(
+                _context.DocumentDiagnoses,
+                joined => joined.appt.Id,
+                diag => diag.AppointmentId,
+                (joined, diag) => new { joined.appt, joined.docAppt, diag }
+            )
+            .AsEnumerable() // Switch to client-side evaluation
+            .GroupBy(joined => joined.appt.PatientId)
+            .Select(group => new
+            {
+                PatientId = group.Key,
+                LatestAppointment = group.OrderByDescending(g => g.docAppt.Date).FirstOrDefault()
+            })
+            .Where(result => result.LatestAppointment != null && result.LatestAppointment.diag.IsSick)
+            .Select(result => result.PatientId)
+            .Distinct()
+            .Count();
+
+        var response = new { EmployeeId = id, TotalObservedPatients = totalObservedPatients };
+
+        return Ok(response);
+    }
+
 }
 

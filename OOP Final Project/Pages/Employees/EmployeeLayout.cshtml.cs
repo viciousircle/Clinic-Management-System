@@ -402,7 +402,7 @@ namespace OOP_Final_Project.Pages.Employees
         private async Task FetchPatientCountAsync()
         {
             DoctorData.PatientCount = await FetchPatientCountAsync("api/employees/96/patients/count", "totalPatients");
-            // DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/96/patients/observed/count", "totalObservedPatients");
+            DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/96/patients/observed/count", "totalObservedPatients");
         }
 
         private async Task<int> FetchPatientCountAsync(string url, string jsonProperty)
