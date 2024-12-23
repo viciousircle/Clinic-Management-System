@@ -251,48 +251,58 @@ public class EmployeesController : ControllerBase
     }
 
 
-    // [HttpGet("{id}/appointments/past")]
-    // public IActionResult GetPastAppointments(int id)
-    // {
-    //     var today = DateTime.Today;
+    [HttpGet("{id}/appointments/past")]
+    public IActionResult GetPastAppointmentsByEmployeeId(int id)
+    {
+        var currentDate = DateTime.Now;
 
-    //     var appointments = _context.Appointments
-    //         .Where(appt => appt.DoctorId == id)
-    //         .Include(appt => appt.Doctor)
-    //         .Include(appt => appt.Patient)
-    //         .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-    //         .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-    //         .Where(joined => joined.doc.Date.Date < today)
-    //         .Select(joined => new
-    //         {
-    //             joined.appt.Id,
-    //             joined.appt.DoctorId,
-    //             Patient = new
-    //             {
-    //                 joined.appt.Patient.Id,
-    //                 joined.appt.Patient.FirstName,
-    //                 joined.appt.Patient.LastName,
-    //                 joined.diag.IsSick,
-    //                 joined.diag.PatientStatus,
-    //             },
-    //             AppointmentRecord = new
-    //             {
-    //                 joined.doc.TimeBook,
-    //                 joined.doc.Date,
-    //                 joined.doc.TimeStart,
-    //                 joined.doc.TimeEnd,
-    //                 joined.doc.Location,
-    //             },
-    //             Diagnose = new
-    //             {
-    //                 joined.diag.DiagnoseDetails,
-    //             }
-    //         })
-    //         .ToList();
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Include(appt => appt.Doctor)
+            .Include(appt => appt.Patient)
+            .GroupJoin(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, docAppointments) => new { appt, docAppointments })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.docAppointments, diag })
+            .AsEnumerable()
+            .Where(appt => appt.docAppointments
+                .Any(doc => doc.Date.Date < currentDate.Date))
+            .Select(appt => new
+            {
+                appt.appt.Id,
+                appt.appt.DoctorId,
+                Patient = new PatientViewModel
+                {
+                    Id = appt.appt.Patient.Id,
+                    FirstName = appt.appt.Patient.FirstName,
+                    LastName = appt.appt.Patient.LastName,
+                    Email = appt.appt.Patient.Email,
+                    Phone = System.Text.RegularExpressions.Regex.Replace(appt.appt.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                    Address = appt.appt.Patient.Address,
+                    LatestVisit = appt.docAppointments
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date != default(DateTime) ? appt.docAppointments
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date.ToString("dd-MM-yyyy") : "N/A"
+                },
+                AppointmentRecord = new AppointmentRecordViewModel
+                {
+                    // Safely get the first appointment record if available
+                    TimeBook = appt.docAppointments.FirstOrDefault()?.TimeBook ?? default(DateTime),
+                    Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
+                    TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
+                    TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
+                    Location = appt.docAppointments.FirstOrDefault()?.Location,
+                },
+                Diagnose = new DiagnoseViewModel
+                {
+                    DiagnoseDetails = appt.diag.DiagnoseDetails,
+                    IsSick = appt.diag.IsSick,
+                    PatientStatus = appt.diag.PatientStatus
+                }
+            })
+            .ToList();
 
-    //     return Ok(new { Date = today, PastAppointments = appointments });
-    // }
-
+        return Ok(new { PastAppointments = appointments });
+    }
 
 
 
