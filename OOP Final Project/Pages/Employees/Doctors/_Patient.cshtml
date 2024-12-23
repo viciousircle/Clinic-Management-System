@@ -88,7 +88,10 @@
         </div>
 
         <!-- Patients List Section -->
-        <div class="d-flex flex-wrap mb-3  text-dark" id="patientsList" style="gap: 30px; justify-content: center;">
+        <div class="d-flex flex-wrap mb-3 text-dark" id="patientsList" style="gap: 30px; justify-content: center;">
+            <!-- Observed Patients will be loaded here -->
+
+
         </div>
     </div>
 </div>
@@ -106,6 +109,12 @@
 </style>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Call observedPatients by default
+        loadPatients('observedPatients');
+    });
+
+
     function showPatientDetails() {
         // Show modal
         const modal = new bootstrap.Modal(document.getElementById('patientDetailsModal'));
@@ -120,25 +129,22 @@
     });
 
     function loadPatients(view) {
-        let url = '';
-
-        switch (view) {
-            case 'observedPatients':
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=PatientCards&view=observedPatients';
-                break;
-            case 'allPatients':
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=PatientCards&view=allPatients';
-                break;
-            default:
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=PatientCards&view=allPatients';
-                break;
-        }
+        let url = `/Employees/EmployeeLayout?handler=LoadPartial&section=PatientCards&view=${view}`;
 
         fetch(url)
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
             .then(html => {
                 document.querySelector('#patientsList').innerHTML = html;
             })
-            .catch(error => console.error('Error loading patients:', error));
+            .catch(error => {
+                console.error('Error loading patients:', error);
+                document.querySelector('#patientsList').innerHTML = `<p class="text-danger">Failed to load patients.</p>`;
+            });
     }
+
 </script>

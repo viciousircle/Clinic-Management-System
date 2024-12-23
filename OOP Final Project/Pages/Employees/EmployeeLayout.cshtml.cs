@@ -80,6 +80,7 @@ namespace OOP_Final_Project.Pages.Employees
                     break;
             }
 
+
             if (section == "AppointmentTableRows")
             {
                 return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
@@ -87,6 +88,7 @@ namespace OOP_Final_Project.Pages.Employees
 
             if (section == "PatientCards")
             {
+
                 return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
             }
 
@@ -101,8 +103,7 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
                 case "Patient":
                     await FetchPatientCountAsync();
-                    await FetchAllPatientsAsync();
-
+                    // await FetchAllPatientsAsync();
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);

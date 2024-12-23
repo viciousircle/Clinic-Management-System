@@ -29,4 +29,6 @@ public class DoctorViewModel
     // --- Patient Lists --------------------
     public List<PatientViewModel> Patients { get; set; } = new List<PatientViewModel>();
 
+    public List<PatientViewModel> ObservedPatients { get; set; } = new List<PatientViewModel>();
+
 }
