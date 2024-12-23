@@ -238,6 +238,19 @@ namespace OOP_Final_Project.Pages.Employees
 
                     if (patientsResponse?.Patients != null)
                     {
+                        // Manually parse the LatestVisit field to DateTime if needed
+                        foreach (var patient in patientsResponse.Patients)
+                        {
+                            if (DateTime.TryParseExact(patient.LatestVisit, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
+                            {
+                                _logger.LogInformation($"Parsed LatestVisit: {parsedDate:yyyy-MM-dd}");
+                            }
+                            else
+                            {
+                                _logger.LogWarning($"Failed to parse LatestVisit for patient ID {patient.Id}: {patient.LatestVisit}");
+                            }
+                        }
+
                         DoctorData.Patients = patientsResponse.Patients;
                         _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} patients.");
                     }
@@ -255,12 +268,11 @@ namespace OOP_Final_Project.Pages.Employees
             {
                 _logger.LogError(ex, "An error occurred while fetching patients.");
             }
-
-
-
-
-
-
         }
+
+
+
+
+
     }
 }

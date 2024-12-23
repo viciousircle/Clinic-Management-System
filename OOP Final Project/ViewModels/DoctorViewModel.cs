@@ -55,7 +55,7 @@ public class PatientViewModel
     public string Email { get; set; }
     public string Phone { get; set; }
     public string Address { get; set; }
-    public DateTime LatestVisit { get; set; }
+    public string LatestVisit { get; set; }
 }
 
 public class AppointmentRecordViewModel
