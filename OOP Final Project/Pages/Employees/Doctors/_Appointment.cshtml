@@ -26,7 +26,7 @@
                             <h3 class="mb-0 pb-0 ">@Model.AppointmentCount</h3>
                             <small class="text-success">
                                 @* TODO: Change this *@
-                                <i class="fas fa-arrow-circle-up"></i> 10%
+                                <i class="fas fa-arrow-circle-up"></i> 10% from last month
                             </small>
                         </div>
                     </div>
@@ -276,7 +276,7 @@
         if (selectedRow) {
             // Update the status cell to "Completed Health Check"
             const statusCell = selectedRow.cells[4];
-            statusCell.innerHTML = '<span class="btn btn-sm btn-success">Completed</span>';
+            statusCell.innerHTML = '<span class="btn btn-sm btn-outline-dark px-4">Details</span>';
 
             // Move the row to the end of the table body
             const tableBody = selectedRow.parentElement;
