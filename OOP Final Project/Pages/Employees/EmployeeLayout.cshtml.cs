@@ -193,94 +193,10 @@ namespace OOP_Final_Project.Pages.Employees
                 // - Fetch patients
                 // - GET /api/employees/96/patients
 
-                var responsePatients = await _client.GetAsync("api/employees/96/patients");
-
-                if (responsePatients != null && responsePatients.IsSuccessStatusCode)
-                {
-                    var patientsJson = await responsePatients.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"Patients JSON: {patientsJson}"); // Log the JSON response
-                    if (!string.IsNullOrEmpty(patientsJson))
-                    {
-                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                        var patientResponse = JsonSerializer.Deserialize<PatientResponse>(patientsJson, options);
-
-                        if (patientResponse != null && patientResponse.Patients != null)
-                        {
-                            DoctorData.Patients = patientResponse.Patients;
-                        }
-                        else
-                        {
-                            _logger.LogError("Failed to deserialize patients JSON into PatientResponse.");
-                        }
-                    }
-                    else
-                    {
-                        _logger.LogError("Patients JSON is null or empty.");
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch patients. Status code: {responsePatients?.StatusCode}");
-                }
 
                 // - Fetch appointments
                 // - GET /api/employees/96/appointments
 
-                var responseAppointmentsList = await _client.GetAsync("api/employees/96/appointments"); // Replace with actual employee ID
-                if (responseAppointmentsList.IsSuccessStatusCode)
-                {
-                    var appointmentsJson = await responseAppointmentsList.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"Appointments JSON: {appointmentsJson}"); // Log the JSON response
-                    if (!string.IsNullOrEmpty(appointmentsJson))
-                    {
-                        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                        try
-                        {
-                            var appointmentResponse = JsonSerializer.Deserialize<AppointmentResponse>(appointmentsJson, options);
-                            if (appointmentResponse != null && appointmentResponse.Appointments != null)
-                            {
-                                DoctorData.Appointments = appointmentResponse.Appointments.Select(a => new AppointmentViewModel
-                                {
-                                    Id = a.Id,
-                                    DoctorId = a.DoctorId,
-                                    Patient = new PatientViewModel
-                                    {
-                                        Id = a.Patient.Id,
-                                        FirstName = a.Patient.FirstName,
-                                        LastName = a.Patient.LastName,
-                                        IsSick = a.DocumentDiagnose.IsSick,
-                                        PatientStatus = a.DocumentDiagnose.PatientStatus
-                                    },
-                                    AppointmentRecord = new AppointmentRecordViewModel
-                                    {
-                                        TimeBook = a.DocumentAppointment.TimeBook,
-                                        Date = a.DocumentAppointment.Date,
-                                        TimeStart = a.DocumentAppointment.TimeStart,
-                                        TimeEnd = a.DocumentAppointment.TimeEnd,
-                                        Location = a.DocumentAppointment.Location
-                                    },
-                                    Diagnose = new DiagnoseViewModel
-                                    {
-                                        DiagnoseDetails = a.DocumentDiagnose.DiagnoseDetails
-                                    }
-                                    // Map other properties as needed
-                                }).ToList();
-                            }
-                            else
-                            {
-                                _logger.LogError("Failed to deserialize appointments JSON into AppointmentResponse.");
-                            }
-                        }
-                        catch (JsonException ex)
-                        {
-                            _logger.LogError($"JSON deserialization error: {ex.Message}");
-                        }
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch appointments. Status code: {responseAppointmentsList.StatusCode}");
-                }
 
 
 
