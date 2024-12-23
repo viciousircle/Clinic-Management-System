@@ -94,20 +94,13 @@
             <div class="d-flex gap-md-2">
                 <!-- View Options -->
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-dark" onclick="loadAppointments('today')">Today</button>
-                    <button type="button" class="btn btn-outline-dark" onclick="loadAppointments('all')">View
-                        All</button>
-                    <button type="button" class="btn btn-outline-dark"
+                    <button type="button" class="btn btn-dark" id="btnToday"
+                        onclick="loadAppointments('today')">Today</button>
+                    <button type="button" class="btn btn-outline-dark" id="btnAll"
+                        onclick="loadAppointments('all')">View All</button>
+                    <button type="button" class="btn btn-outline-dark" id="btnPrevious"
                         onclick="loadAppointments('previous')">Previous</button>
                 </div>
-
-                @* TODO: Cái này chỉ hiện khi ấn vào view all hoặc previous thôi *@
-                <!-- Date Filter -->
-                <div>
-                    <input type="date" class="form-control d-inline-block w-auto "
-                        onchange="filterAppointmentsByDate()">
-                </div>
-                @* TODO *@
 
                 <!-- Sort Options -->
                 <div>
@@ -115,6 +108,12 @@
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>
+                </div>
+
+                <!-- Date Filter -->
+                <div id="dateFilterContainer" style="display: none;">
+                    <input type="date" id="dateFilter" class="form-control d-inline-block w-auto"
+                        onchange="filterAppointmentsByDate()">
                 </div>
             </div>
 
@@ -175,12 +174,18 @@
         switch (view) {
             case 'today':
                 url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=today';
+                document.getElementById('dateFilterContainer').style.display = 'none';
+                updateButtonStyles('btnToday');
                 break;
             case 'all':
                 url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=all';
+                document.getElementById('dateFilterContainer').style.display = 'block';
+                updateButtonStyles('btnAll');
                 break;
             case 'previous':
                 url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=previous';
+                document.getElementById('dateFilterContainer').style.display = 'block';
+                updateButtonStyles('btnPrevious');
                 break;
         }
 
@@ -190,6 +195,20 @@
                 document.querySelector('#appointmentsTable tbody').innerHTML = html;
             })
             .catch(error => console.error('Error loading appointments:', error));
+    }
+
+    function updateButtonStyles(activeButtonId) {
+        const buttons = ['btnToday', 'btnAll', 'btnPrevious'];
+        buttons.forEach(buttonId => {
+            const button = document.getElementById(buttonId);
+            if (buttonId === activeButtonId) {
+                button.classList.remove('btn-outline-dark');
+                button.classList.add('btn-dark');
+            } else {
+                button.classList.remove('btn-dark');
+                button.classList.add('btn-outline-dark');
+            }
+        });
     }
 
     let selectedRow = null; // To store the selected row for marking as done
