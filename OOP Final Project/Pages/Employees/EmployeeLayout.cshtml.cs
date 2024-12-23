@@ -51,20 +51,12 @@ namespace OOP_Final_Project.Pages.Employees
         private async Task FetchAllDataAsync()
         {
             await FetchEmployeeDetailsAsync();
-            await FetchAllEmployeesAsync();
-            await FetchAppointmentCountsAsync();
-            await FetchPatientsAsync();
-            // await FetchAppointmentsAsync();
-            // await FetchAppointmentsTodayAsync();
-            // await FetchAppointmentsByDateAsync(DateTime.Parse("2025-05-04"));
-            // await FetchPastAppointmentsAsync();
         }
 
 
         // -- Get Partial View ---------------------------
         public async Task<IActionResult> OnGetLoadPartialAsync(string section, string view)
         {
-            await FetchAllDataAsync();
 
             switch (view)
             {
@@ -88,14 +80,22 @@ namespace OOP_Final_Project.Pages.Employees
             {
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
+                case "Appointment":
+
+                    await FetchAppointmentCountsAsync();
+
+                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
+
                 case "Patient":
+                    await FetchPatientsAsync();
+
+
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
-                case "Appointment":
-                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
+
 
                 default:
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
