@@ -99,7 +99,7 @@ public class EmployeesController : ControllerBase
             .Include(appt => appt.Patient)
             .GroupJoin(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, docAppointments) => new { appt, docAppointments })
             .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.docAppointments, diag })
-            .AsEnumerable() // Move processing to in-memory for further LINQ transformations
+            .AsEnumerable()
             .Select(appt => new
             {
                 appt.appt.Id,
@@ -142,7 +142,7 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}/appointments/today")]
     public IActionResult GetTodayAppointmentsByEmployeeId(int id)
     {
-        var today = DateTime.Today; // Get today's date (midnight)
+        var today = DateTime.Today;
 
         var appointments = _context.Appointments
             .Where(appt => appt.DoctorId == id)
@@ -150,7 +150,9 @@ public class EmployeesController : ControllerBase
             .Include(appt => appt.Patient)
             .GroupJoin(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, docAppointments) => new { appt, docAppointments })
             .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.docAppointments, diag })
-            .AsEnumerable() // Move processing to in-memory for further LINQ transformations
+            .AsEnumerable()
+            .Where(appt => appt.docAppointments
+            .Any(doc => doc.Date.Date == today))
             .Select(appt => new
             {
                 appt.appt.Id,
@@ -164,12 +166,10 @@ public class EmployeesController : ControllerBase
                     Phone = System.Text.RegularExpressions.Regex.Replace(appt.appt.Patient.Phone ?? "", @"\s*x\d+$", ""),
                     Address = appt.appt.Patient.Address,
                     LatestVisit = appt.docAppointments
-                        .OrderByDescending(doc => doc.Date)
-                        .FirstOrDefault()?.Date != default(DateTime)
-                            ? appt.docAppointments
-                                .OrderByDescending(doc => doc.Date)
-                                .FirstOrDefault()?.Date.ToString("dd-MM-yyyy")
-                            : "N/A" // Return "N/A" if no valid date is found
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date != default(DateTime) ? appt.docAppointments
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date.ToString("dd-MM-yyyy") : "N/A"
                 },
                 AppointmentRecord = new AppointmentRecordViewModel
                 {
@@ -193,45 +193,69 @@ public class EmployeesController : ControllerBase
     }
 
 
-    // [HttpGet("{id}/appointments/on/{date}")]
-    // public IActionResult GetAppointmentsOnSpecificDay(int id, DateTime date)
-    // {
-    //     var appointments = _context.Appointments
-    //         .Where(appt => appt.DoctorId == id)
-    //         .Include(appt => appt.Doctor)
-    //         .Include(appt => appt.Patient)
-    //         .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-    //         .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-    //         .Where(joined => joined.doc.Date.Date == date.Date)
-    //         .Select(joined => new
-    //         {
-    //             joined.appt.Id,
-    //             joined.appt.DoctorId,
-    //             Patient = new
-    //             {
-    //                 joined.appt.Patient.Id,
-    //                 joined.appt.Patient.FirstName,
-    //                 joined.appt.Patient.LastName,
-    //                 joined.diag.IsSick,
-    //                 joined.diag.PatientStatus,
-    //             },
-    //             AppointmentRecord = new
-    //             {
-    //                 joined.doc.TimeBook,
-    //                 Date = joined.doc.Date.Date,
-    //                 joined.doc.TimeStart,
-    //                 joined.doc.TimeEnd,
-    //                 joined.doc.Location,
-    //             },
-    //             Diagnose = new
-    //             {
-    //                 joined.diag.DiagnoseDetails,
-    //             }
-    //         })
-    //         .ToList();
+    [HttpGet("{id}/appointments/on/{date}")]
+    public IActionResult GetAppointmentsByEmployeeIdAndDate(int id, string date)
+    {
+        string[] formats = { "yyyy-MM-dd", "dd-MM-yyyy" };
+        // Parse the date string to DateTime using custom format
+        if (!DateTime.TryParseExact(date, formats, null, System.Globalization.DateTimeStyles.None, out var parsedDate))
+        {
+            return BadRequest("Invalid date format. Please use yyyy-MM-dd or dd-MM-yyyy.");
+        }
 
-    //     return Ok(new { Date = date.Date, Appointments = appointments });
-    // }
+
+        var appointments = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Include(appt => appt.Doctor)
+            .Include(appt => appt.Patient)
+            .GroupJoin(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, docAppointments) => new { appt, docAppointments })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.docAppointments, diag })
+            .AsEnumerable() // Move processing to in-memory for further LINQ transformations
+            .Where(appt => appt.docAppointments
+                .Any(doc => doc.Date.Date == parsedDate.Date)) // Filter by the given date in DocumentAppointments
+            .Select(appt => new
+            {
+                appt.appt.Id,
+                appt.appt.DoctorId,
+                Patient = new PatientViewModel
+                {
+                    Id = appt.appt.Patient.Id,
+                    FirstName = appt.appt.Patient.FirstName,
+                    LastName = appt.appt.Patient.LastName,
+                    Email = appt.appt.Patient.Email,
+                    Phone = System.Text.RegularExpressions.Regex.Replace(appt.appt.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                    Address = appt.appt.Patient.Address,
+                    LatestVisit = appt.docAppointments
+                    .Where(doc => doc.Date.Date == parsedDate.Date) // Only today's visits for the specified date
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date != default(DateTime)
+                    ? appt.docAppointments
+                        .Where(doc => doc.Date.Date == parsedDate.Date)
+                        .OrderByDescending(doc => doc.Date)
+                        .FirstOrDefault()?.Date.ToString("dd-MM-yyyy")
+                    : "N/A"
+                },
+                AppointmentRecord = new AppointmentRecordViewModel
+                {
+                    // Safely get the first appointment record if available
+                    TimeBook = appt.docAppointments.FirstOrDefault()?.TimeBook ?? default(DateTime),
+                    Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
+                    TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
+                    TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
+                    Location = appt.docAppointments.FirstOrDefault()?.Location,
+                },
+                Diagnose = new DiagnoseViewModel
+                {
+                    DiagnoseDetails = appt.diag.DiagnoseDetails,
+                    IsSick = appt.diag.IsSick,
+                    PatientStatus = appt.diag.PatientStatus
+                }
+            })
+            .ToList();
+
+        return Ok(new { Appointments = appointments });
+    }
+
 
     // [HttpGet("{id}/appointments/past")]
     // public IActionResult GetPastAppointments(int id)
