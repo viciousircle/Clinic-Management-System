@@ -189,7 +189,7 @@ public class EmployeesController : ControllerBase
             })
             .ToList();
 
-        return Ok(new { Appointments = appointments });
+        return Ok(new { TodayAppointments = appointments });
     }
 
 
@@ -247,7 +247,7 @@ public class EmployeesController : ControllerBase
             })
             .ToList();
 
-        return Ok(new { Appointments = appointments });
+        return Ok(new { AppointmentsOnDate = appointments });
     }
 
 

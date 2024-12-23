@@ -234,12 +234,12 @@ namespace OOP_Final_Project.Pages.Employees
         // -- [GET] api/employees/96/appointments/today ---
         // -- [GET] api/employees/96/appointments/{date} --
         // -- [GET] api/employees/96/appointments/past ----
-
-        private async Task FetchAppointmentsAsync()
+        // This method will handle the common logic for fetching appointments
+        private async Task FetchAppointmentsAsync(string url, string dateDescription = null)
         {
             try
             {
-                var response = await _client.GetAsync("api/employees/96/appointments");
+                var response = await _client.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -247,23 +247,39 @@ namespace OOP_Final_Project.Pages.Employees
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     var appointmentsResponse = JsonSerializer.Deserialize<AppointmentsResponse>(json, options);
 
-                    if (appointmentsResponse?.Appointments != null)
+                    if (appointmentsResponse != null)
                     {
-                        // Manually parse the Date field to DateTime if needed
-                        foreach (var appointment in appointmentsResponse.Appointments)
-                        {
-                            if (DateTime.TryParseExact(appointment.AppointmentRecord.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
-                            {
-                                // _logger.LogInformation($"Parsed Date: {parsedDate:yyyy-MM-dd}"); //For logging purposes
-                            }
-                            else
-                            {
-                                _logger.LogWarning($"Failed to parse Date for appointment ID {appointment.Id}: {appointment.AppointmentRecord.Date}");
-                            }
-                        }
 
-                        DoctorData.Appointments = appointmentsResponse.Appointments;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments.");
+                        // Check each possible appointment list and assign it to DoctorData.Appointments
+                        if (appointmentsResponse.Appointments != null && appointmentsResponse.Appointments.Count > 0)
+                        {
+                            DoctorData.Appointments = appointmentsResponse.Appointments;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments.");
+                        }
+                        else if (appointmentsResponse.TodayAppointments != null && appointmentsResponse.TodayAppointments.Count > 0)
+                        {
+                            DoctorData.Appointments = appointmentsResponse.TodayAppointments;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments today.");
+                        }
+                        else if (appointmentsResponse.PastAppointments != null && appointmentsResponse.PastAppointments.Count > 0)
+                        {
+                            DoctorData.Appointments = appointmentsResponse.PastAppointments;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} past appointments.");
+                        }
+                        else if (appointmentsResponse.AppointmentsOnDate != null && appointmentsResponse.AppointmentsOnDate.Count > 0)
+                        {
+                            DoctorData.Appointments = appointmentsResponse.AppointmentsOnDate;
+                            if (string.IsNullOrEmpty(dateDescription))
+                            {
+                                dateDescription = "for the specified date";
+                            }
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments {dateDescription}.");
+                        }
+                        else
+                        {
+                            _logger.LogWarning("No appointments found for the specified date or criteria.");
+                            DoctorData.Appointments = new List<AppointmentViewModel>();
+                        }
                     }
                     else
                     {
@@ -281,144 +297,32 @@ namespace OOP_Final_Project.Pages.Employees
             }
         }
 
-        private async Task FetchAppointmentsTodayAsync()
+
+        // Method to fetch all appointments
+        private Task FetchAppointmentsAsync()
         {
-            try
-            {
-                var response = await _client.GetAsync("api/employees/96/appointments/today");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var appointmentsResponse = JsonSerializer.Deserialize<AppointmentsResponse>(json, options);
-
-                    if (appointmentsResponse?.Appointments != null)
-                    {
-                        // Manually parse the Date field to DateTime if needed
-                        foreach (var appointment in appointmentsResponse.Appointments)
-                        {
-                            if (DateTime.TryParseExact(appointment.AppointmentRecord.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
-                            {
-                                // _logger.LogInformation($"Parsed Date: {parsedDate:yyyy-MM-dd}"); //For logging purposes
-                            }
-                            else
-                            {
-                                _logger.LogWarning($"Failed to parse Date for appointment ID {appointment.Id}: {appointment.AppointmentRecord.Date}");
-                            }
-                        }
-
-                        DoctorData.Appointments = appointmentsResponse.Appointments;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments today.");
-                    }
-                    else
-                    {
-                        _logger.LogError("Failed to deserialize appointment data.");
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch appointments. Status code: {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching appointments.");
-            }
+            return FetchAppointmentsAsync("api/employees/96/appointments");
         }
 
-        private async Task FetchAppointmentsByDateAsync(DateTime date)
+        // Method to fetch today's appointments
+        private Task FetchAppointmentsTodayAsync()
         {
-            try
-            {
-                // Ensure the date is in the correct format (yyyy-MM-dd)
-                var formattedDate = date.ToString("yyyy-MM-dd");
+            return FetchAppointmentsAsync("api/employees/96/appointments/today", "today");
 
-                var response = await _client.GetAsync($"api/employees/96/appointments/on/{formattedDate}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var appointmentsResponse = JsonSerializer.Deserialize<AppointmentsResponse>(json, options);
-
-                    if (appointmentsResponse?.Appointments != null)
-                    {
-                        foreach (var appointment in appointmentsResponse.Appointments)
-                        {
-                            if (DateTime.TryParseExact(appointment.AppointmentRecord.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
-                            {
-                                // Optional logging
-                            }
-                            else
-                            {
-                                _logger.LogWarning($"Failed to parse Date for appointment ID {appointment.Id}: {appointment.AppointmentRecord.Date}");
-                            }
-                        }
-
-                        DoctorData.Appointments = appointmentsResponse.Appointments;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments in date.");
-                    }
-                    else
-                    {
-                        _logger.LogError("Failed to deserialize appointment data.");
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch appointments. Status code: {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching appointments.");
-            }
         }
 
-        private async Task FetchPastAppointmentsAsync()
+        // Method to fetch appointments for a specific date
+        private Task FetchAppointmentsByDateAsync(DateTime date)
         {
-            try
-            {
-                var response = await _client.GetAsync("api/employees/96/appointments/past");
+            var formattedDate = date.ToString("yyyy-MM-dd");
+            return FetchAppointmentsAsync($"api/employees/96/appointments/on/{formattedDate}", $"Successfully fetched appointments for the specified date: {formattedDate}");
+        }
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var appointmentsResponse = JsonSerializer.Deserialize<AppointmentsResponse>(json, options);
+        // Method to fetch past appointments
+        private Task FetchPastAppointmentsAsync()
+        {
+            return FetchAppointmentsAsync("api/employees/96/appointments/past", "in the past");
 
-                    if (appointmentsResponse?.Appointments != null)
-                    {
-                        // Manually parse the Date field to DateTime if needed
-                        foreach (var appointment in appointmentsResponse.Appointments)
-                        {
-                            if (DateTime.TryParseExact(appointment.AppointmentRecord.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
-                            {
-                                // _logger.LogInformation($"Parsed Date: {parsedDate:yyyy-MM-dd}"); //For logging purposes
-                            }
-                            else
-                            {
-                                _logger.LogWarning($"Failed to parse Date for appointment ID {appointment.Id}: {appointment.AppointmentRecord.Date}");
-                            }
-                        }
-
-                        DoctorData.Appointments = appointmentsResponse.Appointments;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Appointments.Count} appointments in past.");
-                    }
-                    else
-                    {
-                        _logger.LogError("Failed to deserialize appointment data.");
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch appointments. Status code: {response.StatusCode}");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching appointments.");
-            }
         }
 
         // ! ------------------------------------------------------------------------------------------------
