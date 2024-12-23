@@ -97,6 +97,17 @@ namespace OOP_Final_Project.Pages.Employees
                 }
             }
 
+            switch (view)
+            {
+                case "allPatients":
+                    await FetchAllPatientsAsync();
+                    break;
+                case "observedPatients":
+                    await FetchObservedPatientsAsync();
+                    break;
+            }
+
+
 
             switch (section)
             {
@@ -108,6 +119,8 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
                 case "Patient":
                     await FetchPatientCountAsync();
+
+
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
