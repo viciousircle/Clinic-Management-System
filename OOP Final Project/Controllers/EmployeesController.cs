@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
 using OOP_Final_Project.Models;
 using OOP_Final_Project.ViewModels;
+using OOP_Final_Project.ViewModels.Shared;
 
 
 namespace OOP_Final_Project.Controllers;

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json.Serialization;
 using OOP_Final_Project.ViewModels;
+using OOP_Final_Project.ViewModels.Shared;
 using System.Collections.Generic;
 using OOP_Final_Project.Controllers.ApiResponses;
 
