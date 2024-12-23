@@ -7,7 +7,7 @@ namespace OOP_Final_Project.ViewModels;
 
 public class DoctorViewModel
 {
-    public Employee Employee { get; set; } = new Employee();
+    public EmployeeViewModel Doctor { get; set; } = new EmployeeViewModel();
 
     public int AppointmentCount { get; set; }
 
@@ -21,6 +21,19 @@ public class DoctorViewModel
 
     public List<AppointmentViewModel> Appointments { get; set; } = new List<AppointmentViewModel>();
 }
+
+public class EmployeeViewModel
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    public string Address { get; set; }
+    public bool IsActive { get; set; }
+    public int AccountId { get; set; }
+}
+
 
 public class AppointmentViewModel
 {

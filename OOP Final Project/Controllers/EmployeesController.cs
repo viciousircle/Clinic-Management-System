@@ -76,7 +76,7 @@ public class EmployeesController : ControllerBase
         if (employee == null)
             return NotFound();
 
-        return Ok(employee);
+        return Ok(new { Employee = employee });
     }
 
     // ------------------- Appointments -------------------

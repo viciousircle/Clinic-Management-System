@@ -16,29 +16,47 @@ namespace OOP_Final_Project.Pages.Employees
 {
     public class EmployeeLayoutModel : PageModel
     {
+
+        // -- Fields ------------------------------------
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<EmployeeLayoutModel> _logger;
         private readonly HttpClient _client;
 
+        // -- Constructor --------------------------------
         public EmployeeLayoutModel(IHttpClientFactory clientFactory, ILogger<EmployeeLayoutModel> logger)
         {
             _clientFactory = clientFactory;
             _logger = logger;
             _client = _clientFactory.CreateClient();
-            _client.BaseAddress = new Uri("http://localhost:5298/"); // Replace with your actual base URL
+            _client.BaseAddress = new Uri("http://localhost:5298/");
+
+            // -- Initialize ViewModel ---------------------
             DoctorData = new DoctorViewModel();
+            Employee = new EmployeeViewModel();
         }
 
+        // -- Properties --------------------------------
         public DoctorViewModel DoctorData { get; set; }
+        public EmployeeViewModel Employee { get; set; }
+
 
         public async Task OnGetAsync()
         {
             await FetchEmployeeData();
         }
 
+        private async Task FetchAllDataAsync()
+        {
+            await FetchEmployeeDetailsAsync();
+            await FetchAppointmentCountsAsync();
+        }
+
+
         public async Task<IActionResult> OnGetLoadPartialAsync(string section)
         {
-            await FetchEmployeeData();
+            // await FetchEmployeeData();
+
+            await FetchAllDataAsync();
 
             switch (section)
             {
@@ -57,6 +75,90 @@ namespace OOP_Final_Project.Pages.Employees
             }
         }
 
+        private async Task FetchEmployeeDetailsAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Fetching employee details from API...");
+                var response = await _client.GetAsync("api/employees/96");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var employeeData = JsonSerializer.Deserialize<EmployeeViewModel>(json, options);
+
+                    if (employeeData != null)
+                    {
+                        DoctorData.Doctor = employeeData;
+                        _logger.LogInformation("Employee details fetched successfully.");
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to deserialize employee data.");
+                        DoctorData.Doctor = new EmployeeViewModel();
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch employee details. Status code: {response.StatusCode}");
+                    DoctorData.Doctor = new EmployeeViewModel();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching employee details.");
+                DoctorData.Doctor = new EmployeeViewModel();
+            }
+        }
+
+        private async Task FetchAppointmentCountsAsync()
+        {
+            DoctorData.AppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/count", "totalAppointments");
+            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/future/count", "totalFutureAppointments");
+            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/completed/count", "totalCompletedAppointments");
+            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/cancelled/count", "totalCancelledAppointments");
+        }
+
+        private async Task<int> FetchAppointmentCountAsync(string url, string jsonProperty)
+        {
+            try
+            {
+                var response = await _client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                        var jsonData = JsonSerializer.Deserialize<JsonElement>(json);
+                        if (jsonData.TryGetProperty(jsonProperty, out var propertyValue))
+                        {
+                            return propertyValue.GetInt32();
+                        }
+                        else
+                        {
+                            _logger.LogError($"{jsonProperty} not found in response. Response: {json}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError($"Response for {url} is empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch appointment count from {url}. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while fetching appointment count from {url}");
+            }
+
+            return 0; // Default to 0 if fetching fails
+        }
+
         private async Task FetchEmployeeData()
         {
             try
@@ -73,12 +175,23 @@ namespace OOP_Final_Project.Pages.Employees
                     var employeeJson = await responseEmployee.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                    DoctorData.Employee = JsonSerializer.Deserialize<Employee>(employeeJson, options) ?? new Employee();
+                    // Deserialize to EmployeeViewModel
+                    var employeeData = JsonSerializer.Deserialize<EmployeeViewModel>(employeeJson, options);
+                    if (employeeData != null)
+                    {
+                        DoctorData.Doctor = employeeData;
+                        _logger.LogInformation("Employee data fetched successfully.");
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to deserialize employee data.");
+                        DoctorData.Doctor = new EmployeeViewModel();
+                    }
                 }
                 else
                 {
                     _logger.LogError($"Failed to fetch employee details. Status code: {responseEmployee.StatusCode}");
-                    DoctorData = new DoctorViewModel();
+                    DoctorData.Doctor = new EmployeeViewModel();
                 }
 
                 // - Fetch appointment details
