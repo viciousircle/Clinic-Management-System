@@ -46,18 +46,21 @@ public class EmployeesController : ControllerBase
     public IActionResult GetAll()
     {
         var employees = _context.Employees
-        .Select(employee => new
+        .Select(employee => new EmployeeViewModel
         {
-            employee.Id,
-            employee.FirstName,
-            employee.LastName,
-            employee.Email,
-            employee.Phone,
-            employee.AccountId,
-            employee.IsActive,
+            Id = employee.Id,
+            FirstName = employee.FirstName,
+            LastName = employee.LastName,
+            Email = employee.Email,
+            Phone = employee.Phone,
+            AccountId = employee.AccountId,
+            IsActive = employee.IsActive
         })
         .ToList();
-        return Ok(new { Employees = employees });
+
+        var response = new { Employees = employees };
+
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
@@ -79,7 +82,9 @@ public class EmployeesController : ControllerBase
         if (employee == null)
             return NotFound();
 
-        return Ok(new { Employee = employee });
+        var response = new { Employee = employee };
+
+        return Ok(response);
     }
 
 

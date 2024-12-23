@@ -9,6 +9,8 @@ public class DoctorViewModel
 {
     public EmployeeViewModel Doctor { get; set; } = new EmployeeViewModel();
 
+    public List<EmployeeViewModel> DoctorList { get; set; } = new List<EmployeeViewModel>();
+
     public int AppointmentCount { get; set; }
 
     public int FutureAppointmentCount { get; set; }
