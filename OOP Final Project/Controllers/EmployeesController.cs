@@ -132,129 +132,132 @@ public class EmployeesController : ControllerBase
         return Ok(new { Appointments = appointments });
     }
 
-    [HttpGet("{id}/appointments/today")]
-    public IActionResult GetAppointmentsToday(int id)
-    {
-        var today = DateTime.Today;
+    // [HttpGet("{id}/appointments/today")]
+    // public IActionResult GetAppointmentsToday(int id)
+    // {
+    //     var today = DateTime.Today;
 
-        var appointments = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-            .Include(appt => appt.Doctor)
-            .Include(appt => appt.Patient)
-            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-            .Where(joined => joined.doc.Date.Date == today)
-            .Select(joined => new
-            {
-                joined.appt.Id,
-                joined.appt.DoctorId,
-                Patient = new
-                {
-                    joined.appt.Patient.Id,
-                    joined.appt.Patient.FirstName,
-                    joined.appt.Patient.LastName,
-                    joined.diag.IsSick,
-                    joined.diag.PatientStatus,
-                },
-                AppointmentRecord = new
-                {
-                    joined.doc.TimeBook,
-                    Date = joined.doc.Date.Date,
-                    joined.doc.TimeStart,
-                    joined.doc.TimeEnd,
-                    joined.doc.Location,
-                },
-                Diagnose = new
-                {
-                    joined.diag.DiagnoseDetails,
-                }
-            })
-            .ToList();
+    //     var appointments = _context.Appointments
+    //         .Where(appt => appt.DoctorId == id)
+    //         .Include(appt => appt.Doctor)
+    //         .Include(appt => appt.Patient)
+    //         .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+    //         .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+    //         .Where(joined => joined.doc.Date.Date == today)
+    //         .Select(joined => new
+    //         {
+    //             joined.appt.Id,
+    //             joined.appt.DoctorId,
+    //             Patient = new
+    //             {
+    //                 joined.appt.Patient.Id,
+    //                 joined.appt.Patient.FirstName,
+    //                 joined.appt.Patient.LastName,
+    //                 joined.diag.IsSick,
+    //                 joined.diag.PatientStatus,
+    //             },
+    //             AppointmentRecord = new
+    //             {
+    //                 joined.doc.TimeBook,
+    //                 Date = joined.doc.Date.Date,
+    //                 joined.doc.TimeStart,
+    //                 joined.doc.TimeEnd,
+    //                 joined.doc.Location,
+    //             },
+    //             Diagnose = new
+    //             {
+    //                 joined.diag.DiagnoseDetails,
+    //             }
+    //         })
+    //         .ToList();
 
-        return Ok(new { Date = today, Appointments = appointments });
-    }
+    //     return Ok(new { Date = today, Appointments = appointments });
+    // }
 
-    [HttpGet("{id}/appointments/on/{date}")]
-    public IActionResult GetAppointmentsOnSpecificDay(int id, DateTime date)
-    {
-        var appointments = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-            .Include(appt => appt.Doctor)
-            .Include(appt => appt.Patient)
-            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-            .Where(joined => joined.doc.Date.Date == date.Date)
-            .Select(joined => new
-            {
-                joined.appt.Id,
-                joined.appt.DoctorId,
-                Patient = new
-                {
-                    joined.appt.Patient.Id,
-                    joined.appt.Patient.FirstName,
-                    joined.appt.Patient.LastName,
-                    joined.diag.IsSick,
-                    joined.diag.PatientStatus,
-                },
-                AppointmentRecord = new
-                {
-                    joined.doc.TimeBook,
-                    Date = joined.doc.Date.Date,
-                    joined.doc.TimeStart,
-                    joined.doc.TimeEnd,
-                    joined.doc.Location,
-                },
-                Diagnose = new
-                {
-                    joined.diag.DiagnoseDetails,
-                }
-            })
-            .ToList();
+    // [HttpGet("{id}/appointments/on/{date}")]
+    // public IActionResult GetAppointmentsOnSpecificDay(int id, DateTime date)
+    // {
+    //     var appointments = _context.Appointments
+    //         .Where(appt => appt.DoctorId == id)
+    //         .Include(appt => appt.Doctor)
+    //         .Include(appt => appt.Patient)
+    //         .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+    //         .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+    //         .Where(joined => joined.doc.Date.Date == date.Date)
+    //         .Select(joined => new
+    //         {
+    //             joined.appt.Id,
+    //             joined.appt.DoctorId,
+    //             Patient = new
+    //             {
+    //                 joined.appt.Patient.Id,
+    //                 joined.appt.Patient.FirstName,
+    //                 joined.appt.Patient.LastName,
+    //                 joined.diag.IsSick,
+    //                 joined.diag.PatientStatus,
+    //             },
+    //             AppointmentRecord = new
+    //             {
+    //                 joined.doc.TimeBook,
+    //                 Date = joined.doc.Date.Date,
+    //                 joined.doc.TimeStart,
+    //                 joined.doc.TimeEnd,
+    //                 joined.doc.Location,
+    //             },
+    //             Diagnose = new
+    //             {
+    //                 joined.diag.DiagnoseDetails,
+    //             }
+    //         })
+    //         .ToList();
 
-        return Ok(new { Date = date.Date, Appointments = appointments });
-    }
+    //     return Ok(new { Date = date.Date, Appointments = appointments });
+    // }
 
-    [HttpGet("{id}/appointments/past")]
-    public IActionResult GetPastAppointments(int id)
-    {
-        var today = DateTime.Today;
+    // [HttpGet("{id}/appointments/past")]
+    // public IActionResult GetPastAppointments(int id)
+    // {
+    //     var today = DateTime.Today;
 
-        var appointments = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-            .Include(appt => appt.Doctor)
-            .Include(appt => appt.Patient)
-            .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
-            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
-            .Where(joined => joined.doc.Date.Date < today)
-            .Select(joined => new
-            {
-                joined.appt.Id,
-                joined.appt.DoctorId,
-                Patient = new
-                {
-                    joined.appt.Patient.Id,
-                    joined.appt.Patient.FirstName,
-                    joined.appt.Patient.LastName,
-                    joined.diag.IsSick,
-                    joined.diag.PatientStatus,
-                },
-                AppointmentRecord = new
-                {
-                    joined.doc.TimeBook,
-                    joined.doc.Date,
-                    joined.doc.TimeStart,
-                    joined.doc.TimeEnd,
-                    joined.doc.Location,
-                },
-                Diagnose = new
-                {
-                    joined.diag.DiagnoseDetails,
-                }
-            })
-            .ToList();
+    //     var appointments = _context.Appointments
+    //         .Where(appt => appt.DoctorId == id)
+    //         .Include(appt => appt.Doctor)
+    //         .Include(appt => appt.Patient)
+    //         .Join(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, doc) => new { appt, doc })
+    //         .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.doc, diag })
+    //         .Where(joined => joined.doc.Date.Date < today)
+    //         .Select(joined => new
+    //         {
+    //             joined.appt.Id,
+    //             joined.appt.DoctorId,
+    //             Patient = new
+    //             {
+    //                 joined.appt.Patient.Id,
+    //                 joined.appt.Patient.FirstName,
+    //                 joined.appt.Patient.LastName,
+    //                 joined.diag.IsSick,
+    //                 joined.diag.PatientStatus,
+    //             },
+    //             AppointmentRecord = new
+    //             {
+    //                 joined.doc.TimeBook,
+    //                 joined.doc.Date,
+    //                 joined.doc.TimeStart,
+    //                 joined.doc.TimeEnd,
+    //                 joined.doc.Location,
+    //             },
+    //             Diagnose = new
+    //             {
+    //                 joined.diag.DiagnoseDetails,
+    //             }
+    //         })
+    //         .ToList();
 
-        return Ok(new { Date = today, PastAppointments = appointments });
-    }
+    //     return Ok(new { Date = today, PastAppointments = appointments });
+    // }
+
+
+
 
     // ------------------- Appointments Counts -------------------
 
@@ -325,18 +328,27 @@ public class EmployeesController : ControllerBase
     public IActionResult GetAllPatientsByEmployeeId(int id)
     {
         var patients = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-            .Join(_context.Patients, appt => appt.PatientId, patient => patient.Id, (appt, patient) => patient)
-            .Distinct()
-            .Select(patient => new
-            {
-                patient.Id,
-                patient.FirstName,
-                patient.LastName,
-                patient.Email,
-                Phone = System.Text.RegularExpressions.Regex.Replace(patient.Phone, @"\s*x\d+$", "") // Remove extension
-            })
-            .ToList();
+        .Where(appt => appt.DoctorId == id)
+        .Join(_context.Patients, appt => appt.PatientId, patient => patient.Id, (appt, patient) => new
+        {
+            patient.Id,
+            patient.FirstName,
+            patient.LastName,
+            patient.Email,
+            patient.Phone,
+            patient.Address
+        })
+        .Distinct()
+        .Select(patient => new PatientViewModel
+        {
+            Id = patient.Id,
+            FirstName = patient.FirstName,
+            LastName = patient.LastName,
+            Email = patient.Email,
+            Phone = System.Text.RegularExpressions.Regex.Replace(patient.Phone, @"\s*x\d+$", ""),
+            Address = patient.Address
+        })
+        .ToList();
 
         return Ok(new { EmployeeId = id, Patients = patients });
     }

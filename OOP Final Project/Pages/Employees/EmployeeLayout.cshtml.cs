@@ -234,12 +234,12 @@ namespace OOP_Final_Project.Pages.Employees
                 {
                     var json = await response.Content.ReadAsStringAsync();
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var patientResponse = JsonSerializer.Deserialize<PatientResponse>(json, options);
+                    var patientsResponse = JsonSerializer.Deserialize<PatientsResponse>(json, options);
 
-                    if (patientResponse?.Patients != null)
+                    if (patientsResponse?.Patients != null)
                     {
-                        DoctorData.Patients = patientResponse.Patients;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Patients} patients.");
+                        DoctorData.Patients = patientsResponse.Patients;
+                        _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} patients.");
                     }
                     else
                     {
