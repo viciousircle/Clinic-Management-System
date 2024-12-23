@@ -23,6 +23,12 @@ public class DoctorViewModel
     public List<PatientViewModel> Patients { get; set; } = new List<PatientViewModel>();
 
     public List<AppointmentViewModel> Appointments { get; set; } = new List<AppointmentViewModel>();
+
+    public List<AppointmentViewModel> TodayAppointments { get; set; } = new List<AppointmentViewModel>();    // For today's appointments
+
+    public List<AppointmentViewModel> AppointmentsOnDate { get; set; } = new List<AppointmentViewModel>();    // For appointments on a specific date
+
+    public List<AppointmentViewModel> PastAppointments { get; set; } = new List<AppointmentViewModel>();     // For past appointments
 }
 
 public class EmployeeViewModel

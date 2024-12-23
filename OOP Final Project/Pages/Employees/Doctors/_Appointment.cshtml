@@ -94,9 +94,11 @@
             <div class="d-flex gap-md-2">
                 <!-- View Options -->
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-dark ">Today</button>
-                    <button type="button" class="btn btn-outline-dark ">View All</button>
-                    <button type="button" class="btn btn-outline-dark  ">Previous</button>
+                    <button type="button" class="btn btn-dark" onclick="loadAppointments('today')">Today</button>
+                    <button type="button" class="btn btn-outline-dark" onclick="loadAppointments('all')">View
+                        All</button>
+                    <button type="button" class="btn btn-outline-dark"
+                        onclick="loadAppointments('previous')">Previous</button>
                 </div>
 
                 @* TODO: Cái này chỉ hiện khi ấn vào view all hoặc previous thôi *@
@@ -139,6 +141,7 @@
             </thead>
 
             <tbody>
+                @* Initial appointments data can be rendered here *@
                 @foreach (var appointment in Model.Appointments)
                 {
                     <tr>
@@ -167,6 +170,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    function loadAppointments(view) {
+        let url = '';
+        switch (view) {
+            case 'today':
+                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=today';
+                break;
+            case 'all':
+                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=all';
+                break;
+            case 'previous':
+                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=previous';
+                break;
+        }
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('#appointmentsTable tbody').innerHTML = html;
+            })
+            .catch(error => console.error('Error loading appointments:', error));
+    }
+
     let selectedRow = null; // To store the selected row for marking as done
 
     document.getElementById("makeNewAppointmentBtn").addEventListener("click", function () {

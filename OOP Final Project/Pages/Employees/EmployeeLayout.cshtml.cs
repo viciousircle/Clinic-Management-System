@@ -54,31 +54,49 @@ namespace OOP_Final_Project.Pages.Employees
             await FetchAllEmployeesAsync();
             await FetchAppointmentCountsAsync();
             await FetchPatientsAsync();
-            await FetchAppointmentsAsync();
-            await FetchAppointmentsTodayAsync();
-            await FetchAppointmentsByDateAsync(DateTime.Parse("2025-05-04"));
-            await FetchPastAppointmentsAsync();
+            // await FetchAppointmentsAsync();
+            // await FetchAppointmentsTodayAsync();
+            // await FetchAppointmentsByDateAsync(DateTime.Parse("2025-05-04"));
+            // await FetchPastAppointmentsAsync();
         }
 
 
         // -- Get Partial View ---------------------------
-        public async Task<IActionResult> OnGetLoadPartialAsync(string section)
+        public async Task<IActionResult> OnGetLoadPartialAsync(string section, string view)
         {
-
             await FetchAllDataAsync();
+
+            switch (view)
+            {
+                case "today":
+                    await FetchAppointmentsTodayAsync();
+                    break;
+                case "all":
+                    await FetchAppointmentsAsync();
+                    break;
+                case "previous":
+                    await FetchPastAppointmentsAsync();
+                    break;
+            }
+
+            if (section == "AppointmentTableRows")
+            {
+                return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
+            }
 
             switch (section)
             {
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
-                case "Appointment":
-                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
                 case "Patient":
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
+                case "Appointment":
+                    return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
+
                 default:
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
