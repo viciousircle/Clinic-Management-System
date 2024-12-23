@@ -404,7 +404,7 @@ public class EmployeesController : ControllerBase
                 Email = result.Patient.Email,
                 Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone, @"\s*x\d+$", ""),
                 Address = result.Patient.Address,
-                LatestVisit = result.LatestVisit?.Date.ToString("dd-MM-yyyy") ?? "N/A" // Format date as dd-MM-yyyy or use "N/A"
+                LatestVisit = result.LatestVisit?.Date.ToString("dd-MM-yyyy") ?? "N/A"
             })
             .Distinct()
             .ToList();
@@ -412,7 +412,19 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, Patients = patients });
     }
 
+    [HttpGet("{id}/patients/count")]
+    public IActionResult GetTotalPatientsByEmployeeId(int id)
+    {
+        var totalPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Select(appt => appt.PatientId)
+            .Distinct()
+            .Count();
 
+        var response = new { EmployeeId = id, TotalPatients = totalPatients };
+
+        return Ok(response);
+    }
 
 }
 

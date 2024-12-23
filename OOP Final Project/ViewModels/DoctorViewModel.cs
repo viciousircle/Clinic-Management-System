@@ -23,6 +23,9 @@ public class DoctorViewModel
     public List<AppointmentViewModel> AppointmentsOnDate { get; set; } = new List<AppointmentViewModel>();
     public List<AppointmentViewModel> PastAppointments { get; set; } = new List<AppointmentViewModel>();
 
+    // --- Patient Count --------------------
+    public int PatientCount { get; set; }
+    public int ObservedPatientCount { get; set; }
     // --- Patient Lists --------------------
     public List<PatientViewModel> Patients { get; set; } = new List<PatientViewModel>();
 

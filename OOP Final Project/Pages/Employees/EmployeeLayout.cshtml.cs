@@ -82,14 +82,12 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
                 case "Appointment":
-
                     await FetchAppointmentCountsAsync();
 
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
-
                 case "Patient":
+                    await FetchPatientCountAsync();
                     await FetchPatientsAsync();
-
 
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
                 case "Schedule":
@@ -246,6 +244,7 @@ namespace OOP_Final_Project.Pages.Employees
             return 0;
         }
 
+
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointments -------------------------
@@ -395,7 +394,56 @@ namespace OOP_Final_Project.Pages.Employees
         }
 
 
+        // ! ------------------------------------------------------------------------------------------------
 
+        // --- Fetch Appointment Counts -------------------
+        // -- [GET] api/employees/96/appointments/count ---
+
+        private async Task FetchPatientCountAsync()
+        {
+            DoctorData.PatientCount = await FetchPatientCountAsync("api/employees/96/patients/count", "totalPatients");
+            // DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/96/patients/observed/count", "totalObservedPatients");
+        }
+
+        private async Task<int> FetchPatientCountAsync(string url, string jsonProperty)
+        {
+            try
+            {
+                var response = await _client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                        var jsonData = JsonSerializer.Deserialize<JsonElement>(json);
+                        if (jsonData.TryGetProperty(jsonProperty, out var propertyValue))
+                        {
+                            _logger.LogInformation($"Fetched {jsonProperty}: {propertyValue.GetInt32()}");
+                            return propertyValue.GetInt32();
+                        }
+                        else
+                        {
+                            _logger.LogError($"{jsonProperty} not found in response. Response: {json}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError($"Response for {url} is empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch appointment count from {url}. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while fetching appointment count from {url}");
+            }
+
+            return 0;
+        }
 
 
     }
