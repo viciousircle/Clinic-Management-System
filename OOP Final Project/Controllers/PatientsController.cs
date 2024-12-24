@@ -77,13 +77,7 @@ public class PatientsController : ControllerBase
         return Ok(patient);
     }
 
-    // [HttpPost]
-    // public IActionResult Create(Patient patient)
-    // {
-    //     _context.Patients.Add(patient);
-    //     _context.SaveChanges();
-    //     return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
-    // }
+
 
 
 }
