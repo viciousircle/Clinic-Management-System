@@ -2,6 +2,7 @@
 
 @foreach (var appointment in Model.Appointments)
 {
+    var isPastAppointment = appointment.AppointmentRecord.Date < DateTime.Today;
     <tr>
     <td>@appointment.Patient.FirstName @appointment.Patient.LastName</td>
     <td>@appointment.AppointmentRecord.Date.ToShortDateString()</td>
@@ -9,9 +10,16 @@
     <td>@appointment.Diagnose.DiagnoseDetails</td>
     <td>
         <div>
-            <button type="button" class="btn btn-sm btn-outline-danger" onclick="openHealthCheckModal(this)">Health
-                Check</button>
-        </div>
-    </td>
-</tr>
+            @if (isPastAppointment)
+                {
+                    <button type="button" class="btn btn-sm btn-outline-dark px-4">Details</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="openHealthCheckModal(this)">Health
+                        Check</button>
+                }
+            </div>
+        </td>
+    </tr>
 }
