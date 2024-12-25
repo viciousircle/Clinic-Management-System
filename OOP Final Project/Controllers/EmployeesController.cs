@@ -579,5 +579,10 @@ public class EmployeesController : ControllerBase
 
     // ! -----------------------------------------------------------
 
+    // ! --- Medicines ---------------------------------------------
+
+    // ? [GET] /api/employees/{id}/medicines : Get all medicines by employee id
+
+
 }
 
