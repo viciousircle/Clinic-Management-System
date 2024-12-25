@@ -542,21 +542,9 @@ public class DataSeeder
             .RuleFor(a => a.DoctorId, f => f.PickRandom(validDoctors).Id) // Random doctor from valid doctors
             .RuleFor(a => a.PatientId, f => f.PickRandom(patients).Id);   // Random patient
 
-        return faker.Generate(1000); // Generate 1000 appointments
+        return faker.Generate(7000); // Generate 1000 appointments
     }
 
-    //! Create a Faker instance for Prescription
-    public static List<Prescription> SeedPrescriptions(List<Appointment> appointments)
-    {
-        var faker = new Faker<Prescription>()
-            .RuleFor(p => p.Id, f => f.IndexFaker + 1)
-            .RuleFor(p => p.AppointmentId, f => f.PickRandom(appointments).Id);
-
-        // TODO Adjust the number of appointments as needed
-        return faker.Generate(800);
-    }
-
-    // ? Level 4
 
     //! Create a Faker instance for EmployeeSchedule
     public static List<EmployeeSchedule> SeedEmployeeSchedules(List<Schedule> schedules, List<Employee> employees)
@@ -592,6 +580,84 @@ public class DataSeeder
 
         return employeeSchedules;
     }
+
+
+
+
+
+    //! Create a Faker instance for DocumentCancel
+    public static List<DocumentCancel> SeedDocumentCancels(List<Appointment> appointments)
+    {
+        var faker = new Faker<DocumentCancel>()
+            .RuleFor(dc => dc.Id, f => f.IndexFaker + 1)
+            .RuleFor(dc => dc.DocumentTypeId, f => 5)
+            .RuleFor(dc => dc.AppointmentId, f => f.PickRandom(appointments).Id)
+            .RuleFor(dc => dc.Reason, f => GenerateReason(f))
+            .RuleFor(dc => dc.TimeCancel, f => f.Date.Recent().TruncateSeconds()); // Truncate the time part
+
+        return faker.Generate(50);
+    }
+    private static string GenerateReason(Faker f)
+    {
+        // Create a sentence with random words
+        var sentence = f.Lorem.Sentence(f.Random.Int(1, 200)); // Generate a sentence with up to 200 words
+        var words = sentence.Split(' ');
+
+        // If the sentence has more than 200 words, limit it
+        if (words.Length > 200)
+        {
+            sentence = string.Join(" ", words.Take(200));
+        }
+
+        return sentence;
+    }
+
+
+    //! Create a Faker instance for Prescription
+    //! Create a Faker instance for Prescription
+    public static List<Prescription> SeedPrescriptions(List<Appointment> appointments, List<DocumentCancel> documentCancels)
+    {
+        // Filter out appointments that have a corresponding cancellation
+        var nonCancelledAppointments = appointments
+            .Where(a => !documentCancels.Any(dc => dc.AppointmentId == a.Id)) // Exclude cancelled appointments
+            .ToList();
+
+        // Check if there are any non-cancelled appointments
+        if (!nonCancelledAppointments.Any())
+        {
+            Console.WriteLine("No valid appointments found for prescriptions.");
+            return new List<Prescription>(); // Return an empty list if no valid appointments
+        }
+
+        // Generate prescriptions using Faker
+        var faker = new Faker<Prescription>()
+            .RuleFor(p => p.Id, f => f.IndexFaker + 1)
+            .RuleFor(p => p.AppointmentId, f => f.PickRandom(nonCancelledAppointments).Id);
+
+        // Generate prescriptions, ensuring exactly 6000 prescriptions
+        int prescriptionCount = 6000;
+        var prescriptions = faker.Generate(prescriptionCount);
+
+        // If there are more than 6000 non-cancelled appointments, select the first 6000
+        if (nonCancelledAppointments.Count > prescriptionCount)
+        {
+            prescriptions = prescriptions.Take(prescriptionCount).ToList();
+        }
+        else
+        {
+            // If there are fewer non-cancelled appointments than 6000, generate multiple prescriptions per appointment
+            var remainingCount = prescriptionCount - nonCancelledAppointments.Count;
+
+            // Add additional prescriptions to meet the target of 6000
+            prescriptions.AddRange(faker.Generate(remainingCount));
+        }
+
+        return prescriptions; // Return the generated prescriptions
+    }
+
+
+    // ? Level 4
+
 
     //! Create a Faker instance for PrescriptionMedicine
     public static List<PrescriptionMedicine> SeedPrescriptionMedicines(List<Prescription> prescriptions, List<Medicine> medicines)
@@ -730,16 +796,6 @@ public class DataSeeder
     }
 
 
-    //! Create a Faker instance for DocumentCancel
-    public static List<DocumentCancel> SeedDocumentCancels(List<Appointment> appointments)
-    {
-        var faker = new Faker<DocumentCancel>()
-            .RuleFor(dc => dc.Id, f => f.IndexFaker + 1)
-            .RuleFor(dc => dc.DocumentTypeId, f => 5) // Assuming a fixed DocumentType for cancellations
-            .RuleFor(dc => dc.AppointmentId, f => f.PickRandom(appointments).Id)
-            .RuleFor(dc => dc.Reason, f => f.Lorem.Sentence())
-            .RuleFor(dc => dc.TimeCancel, f => f.Date.Recent());
-        return faker.Generate(50);
-    }
+
 
 }
