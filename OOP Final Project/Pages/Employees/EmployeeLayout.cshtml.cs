@@ -178,13 +178,13 @@ namespace OOP_Final_Project.Pages.Employees
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Employee Details By ID ---------------------
-        // -- [GET] api/employees/96 -----------------------
+        // -- [GET] api/employees/6 -----------------------
         private async Task FetchEmployeeDetailsAsync()
         {
             try
             {
                 // _logger.LogInformation("Fetching employee details from API..."); //For logging purposes
-                var response = await _client.GetAsync("api/employees/96");
+                var response = await _client.GetAsync("api/employees/6");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -224,16 +224,16 @@ namespace OOP_Final_Project.Pages.Employees
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointment Counts -------------------
-        // -- [GET] api/employees/96/appointments/count ---
-        // -- [GET] api/employees/96/appointments/future/count ---
-        // -- [GET] api/employees/96/appointments/completed/count ---
-        // -- [GET] api/employees/96/appointments/cancelled/count ---
+        // -- [GET] api/employees/6/appointments/count ---
+        // -- [GET] api/employees/6/appointments/future/count ---
+        // -- [GET] api/employees/6/appointments/completed/count ---
+        // -- [GET] api/employees/6/appointments/cancelled/count ---
         private async Task FetchAppointmentCountsAsync()
         {
-            DoctorData.AppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/count", "totalAppointments");
-            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/future/count", "totalFutureAppointments");
-            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/completed/count", "totalCompletedAppointments");
-            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/cancelled/count", "totalCancelledAppointments");
+            DoctorData.AppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/count", "totalAppointments");
+            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/future/count", "totalFutureAppointments");
+            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/completed/count", "totalCompletedAppointments");
+            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/cancelled/count", "totalCancelledAppointments");
         }
 
         private async Task<int> FetchAppointmentCountAsync(string url, string jsonProperty)
@@ -279,10 +279,10 @@ namespace OOP_Final_Project.Pages.Employees
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointments -------------------------
-        // -- [GET] api/employees/96/appointments ---------
-        // -- [GET] api/employees/96/appointments/today ---
-        // -- [GET] api/employees/96/appointments/{date} --
-        // -- [GET] api/employees/96/appointments/past ----
+        // -- [GET] api/employees/6/appointments ---------
+        // -- [GET] api/employees/6/appointments/today ---
+        // -- [GET] api/employees/6/appointments/{date} --
+        // -- [GET] api/employees/6/appointments/past ----
         // This method will handle the common logic for fetching appointments
         private async Task FetchAppointmentsAsync(string url, string dateDescription = null)
         {
@@ -350,13 +350,13 @@ namespace OOP_Final_Project.Pages.Employees
         // Method to fetch all appointments
         private Task FetchAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/96/appointments");
+            return FetchAppointmentsAsync("api/employees/6/appointments");
         }
 
         // Method to fetch today's appointments
         private Task FetchAppointmentsTodayAsync()
         {
-            return FetchAppointmentsAsync("api/employees/96/appointments/today", "today");
+            return FetchAppointmentsAsync("api/employees/6/appointments/today", "today");
 
         }
 
@@ -364,22 +364,22 @@ namespace OOP_Final_Project.Pages.Employees
         private Task FetchAppointmentsByDateAsync(DateTime date)
         {
             var formattedDate = date.ToString("yyyy-MM-dd");
-            return FetchAppointmentsAsync($"api/employees/96/appointments/on/{formattedDate}", $"Successfully fetched appointments for the specified date: {formattedDate}");
+            return FetchAppointmentsAsync($"api/employees/6/appointments/on/{formattedDate}", $"Successfully fetched appointments for the specified date: {formattedDate}");
         }
 
         // Method to fetch past appointments
         private Task FetchPastAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/96/appointments/past", "in the past");
+            return FetchAppointmentsAsync("api/employees/6/appointments/past", "in the past");
 
         }
 
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Patients -----------------------------
-        // -- [GET] api/employees/96/patients -------------
-        // -- [GET] api/employees/96/patients/observed ----
-        // -- [GET] api/employees/96/patients/{status} ----
+        // -- [GET] api/employees/6/patients -------------
+        // -- [GET] api/employees/6/patients/observed ----
+        // -- [GET] api/employees/6/patients/{status} ----
 
         private async Task FetchPatientsAsync(string url, string description = null)
         {
@@ -429,13 +429,13 @@ namespace OOP_Final_Project.Pages.Employees
         // Fetch all patients
         private Task FetchAllPatientsAsync()
         {
-            return FetchPatientsAsync("api/employees/96/patients", "all patients");
+            return FetchPatientsAsync("api/employees/6/patients", "all patients");
         }
 
         // Fetch observed patients
         private Task FetchObservedPatientsAsync()
         {
-            return FetchPatientsAsync("api/employees/96/patients/observed", "observed patients");
+            return FetchPatientsAsync("api/employees/6/patients/observed", "observed patients");
         }
 
 
@@ -443,12 +443,12 @@ namespace OOP_Final_Project.Pages.Employees
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointment Counts -------------------
-        // -- [GET] api/employees/96/appointments/count ---
+        // -- [GET] api/employees/6/appointments/count ---
 
         private async Task FetchPatientCountAsync()
         {
-            DoctorData.PatientCount = await FetchPatientCountAsync("api/employees/96/patients/count", "totalPatients");
-            DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/96/patients/observed/count", "totalObservedPatients");
+            DoctorData.PatientCount = await FetchPatientCountAsync("api/employees/6/patients/count", "totalPatients");
+            DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/6/patients/observed/count", "totalObservedPatients");
         }
 
         private async Task<int> FetchPatientCountAsync(string url, string jsonProperty)
