@@ -151,7 +151,7 @@
 <div>
     @await Html.PartialAsync("Modals/_newAppointmentModal")
     @await Html.PartialAsync("Modals/_HealthCheckModal")
-    @await Html.PartialAsync("Modals/_appointmentDetailsModal") <!-- Ensure this line is included -->
+    @await Html.PartialAsync("Modals/_appointmentDetailsModal")
 
 </div>
 
@@ -260,35 +260,37 @@
     }
 
     function openAppointmentDetailsModal(button) {
-        console.log(button);
+        console.log(button); // Debugging output
 
-        // Ensure 'button' is a DOM element
         if (!button || !button.closest) {
             console.error('Invalid button element passed:', button);
             return;
         }
 
-        // Get the closest row (tr) of the button
-        const selectedRow = button.closest("tr");
 
-        if (!selectedRow) {
-            console.error('Could not find the row containing the button');
-            return;
+        // Extract data from the button's attributes
+        const patientID = button.getAttribute('data-patient-id') || "N/A";
+        const patientName = button.getAttribute('data-patient-name') || "N/A";
+        const patientPhone = button.getAttribute('data-patient-phone') || "N/A";
+        const patientAddress = button.getAttribute('data-patient-address') || "N/A";
+        const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
+
+        // Populate the modal fields
+        document.getElementById('appointmentDetailsPatientID').value = patientID;
+        document.getElementById('appointmentDetailsPatientName').value = patientName;
+        document.getElementById('appointmentDetailsPatientPhone').value = patientPhone;
+        document.getElementById('appointmentDetailsPatientAddress').value = patientAddress;
+        document.getElementById('appointmentDetailsPatientLatestVisit').value = patientLatestVisit;
+
+        // Get the modal element by ID
+        const modalElement = document.getElementById('appointmentDetailsModal');
+        if (!modalElement) {
+            console.error('Modal element not found: appointmentDetailsModal');
+            return; // Exit the function if the modal is not found
         }
 
-        // Extract the patient's name from the first cell (adjust the cell index if needed)
-        const patientName = selectedRow.cells[0].textContent.trim();
-
-        // Set the patient name in the modal input field
-        const patientNameInput = document.getElementById('appointmentDetailsPatientName');
-        if (patientNameInput) {
-            patientNameInput.value = patientName;
-        } else {
-            console.error('Patient name input field not found');
-        }
-
-        // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById('appointmentDetailsModal'));
+        // Show the modal using Bootstrap
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }
 

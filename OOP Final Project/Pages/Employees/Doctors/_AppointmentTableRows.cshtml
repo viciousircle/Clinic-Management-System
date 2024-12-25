@@ -12,7 +12,10 @@
         <div>
             @if (isPastAppointment)
                 {
-                    <button type="button" class="btn btn-sm btn-outline-dark px-4"
+                    <button type="button" class="btn btn-sm btn-outline-dark px-4" data-patient-id="@appointment.Patient.Id"
+                        data-patient-name="@appointment.Patient.FirstName @appointment.Patient.LastName"
+                        data-patient-phone="@appointment.Patient.Phone" data-patient-address="@appointment.Patient.Email"
+                        data-patient-latest-visit="@appointment.Patient.LatestVisit"
                         onclick="openAppointmentDetailsModal(this)">Details</button>
 
                 }
