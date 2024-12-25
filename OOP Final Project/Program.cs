@@ -86,7 +86,7 @@ Console.WriteLine("Application setup completed.");
 app.Run();
 
 
-
+// ! Seed data method --------------------------------------------
 static void SeedData(IServiceProvider serviceProvider)
 {
     using var scope = serviceProvider.CreateScope();
@@ -95,7 +95,9 @@ static void SeedData(IServiceProvider serviceProvider)
     Console.WriteLine("Starting data seeding...");
 
 
-    // Check if data already exists before seeding to prevent duplicates
+    //! Check if data already exists before seeding to prevent duplicates
+
+    // ? Level 1
 
     if (!dbContext.AccountTypes.Any())
     {
@@ -109,44 +111,69 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.Clinics.AddRange(clinics);
     }
 
+    if (!dbContext.Schedules.Any())
+    {
+        var schedules = DataSeeder.SeedSchedules();
+        dbContext.Schedules.AddRange(schedules);
+    }
+
+    if (!dbContext.MedicineTypes.Any())
+    {
+        var medicineTypes = DataSeeder.SeedMedicineTypes();
+        dbContext.MedicineTypes.AddRange(medicineTypes);
+    }
+
+    if (!dbContext.DocumentTypes.Any())
+    {
+        var documentTypes = DataSeeder.SeedDocumentTypes();
+        dbContext.DocumentTypes.AddRange(documentTypes);
+    }
+
+    // ? Level 2
+
     if (!dbContext.Departments.Any())
     {
         var departments = DataSeeder.SeedDepartments(dbContext.Clinics.ToList(), dbContext.AccountTypes.ToList());
         dbContext.Departments.AddRange(departments);
     }
 
+    if (!dbContext.Accounts.Any())
+    {
+        var accounts = DataSeeder.SeedAccounts(dbContext.AccountTypes.ToList(), dbContext.Clinics.ToList(), 4000);
+        dbContext.Accounts.AddRange(accounts);
+    }
 
-    // if (!dbContext.Schedules.Any())
-    // {
-    //     var schedules = DataSeeder.SeedSchedules();
-    //     dbContext.Schedules.AddRange(schedules);
-    // }
+    // ? Level 3
 
-    // if (!dbContext.MedicineTypes.Any())
-    // {
-    //     var medicineTypes = DataSeeder.SeedMedicineTypes();
-    //     dbContext.MedicineTypes.AddRange(medicineTypes);
-    // }
+    if (!dbContext.Patients.Any())
+    {
+        // Fetch clinics and accounts from the database
+        var clinics = dbContext.Clinics.ToList();
+        var accounts = dbContext.Accounts.ToList();
 
-    // if (!dbContext.DocumentTypes.Any())
-    // {
-    //     var documentTypes = DataSeeder.SeedDocumentTypes();
-    //     dbContext.DocumentTypes.AddRange(documentTypes);
-    // }
+        // Ensure valid accounts (AccountTypeId == 5) exist
+        var patientAccounts = accounts.Where(a => a.AccountTypeId == 5).ToList();
 
+        if (!patientAccounts.Any())
+        {
+            Console.WriteLine("No accounts with AccountTypeId == 5 found. No patients will be created.");
+        }
+        else
+        {
+            // Seed patients
+            var patients = DataSeeder.SeedPatients(clinics, accounts);
 
+            // Add patients to the database
+            dbContext.Patients.AddRange(patients);
+            dbContext.SaveChanges();
 
-    // if (!dbContext.Accounts.Any())
-    // {
-    //     var accounts = DataSeeder.SeedAccounts(dbContext.AccountTypes.ToList(), dbContext.Clinics.ToList(), 4000);
-    //     dbContext.Accounts.AddRange(accounts);
-    // }
-
-    // if (!dbContext.Patients.Any())
-    // {
-    //     var patients = DataSeeder.SeedPatients(dbContext.Clinics.ToList(), dbContext.Accounts.ToList());
-    //     dbContext.Patients.AddRange(patients);
-    // }
+            Console.WriteLine($"{patients.Count} patients seeded successfully.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Patients already exist in the database. Seeding skipped.");
+    }
 
     // // Level 3
 
