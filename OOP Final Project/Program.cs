@@ -61,10 +61,10 @@ using (var scope = app.Services.CreateScope())
 
     //- Drop the database (this will drop all tables) ----------------
 
-    // if (dbContext.Database.EnsureDeleted())
-    // {
-    //     Console.WriteLine("Database dropped successfully.");
-    // }
+    if (dbContext.Database.EnsureDeleted())
+    {
+        Console.WriteLine("Database dropped successfully.");
+    }
 
 
     // ----------------------------------------------------------------
@@ -74,11 +74,16 @@ using (var scope = app.Services.CreateScope())
 
     Console.WriteLine("Starting data seeding...");
 
-    // Seed the data after migrations are applied
+    //- Seed the data after migrations are applied -------------------
+
     SeedDataLevel1(scope.ServiceProvider);
     SeedDataLevel2(scope.ServiceProvider);
     SeedDataLevel3(scope.ServiceProvider);
     SeedDataLevel4(scope.ServiceProvider);
+    SeedDataLevel5(scope.ServiceProvider);
+    SeedDataLevel6(scope.ServiceProvider);
+
+    // ----------------------------------------------------------------
 
     Console.WriteLine("Data seeding completed.");
 
@@ -248,6 +253,48 @@ static void SeedDataLevel4(IServiceProvider serviceProvider)
     dbContext.SaveChanges();
 }
 
+static void SeedDataLevel5(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    Console.WriteLine("Starting data seeding level 5...");
+
+
+    if (!dbContext.DocumentCancels.Any())
+    {
+        var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
+        dbContext.DocumentCancels.AddRange(documentCancels);
+    }
+
+    Console.WriteLine("Data seeding complete.");
+    // Save changes once all data is added
+    dbContext.SaveChanges();
+}
+
+static void SeedDataLevel6(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    Console.WriteLine("Starting data seeding level 6...");
+
+    // ? Level 6
+
+    if (!dbContext.Prescriptions.Any())
+    {
+        var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
+        var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
+        var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
+        dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
+    }
+
+    Console.WriteLine("Data seeding complete.");
+    // Save changes once all data is added
+    dbContext.SaveChanges();
+}
+
+
 static void SeedData(IServiceProvider serviceProvider)
 {
     using var scope = serviceProvider.CreateScope();
@@ -374,21 +421,21 @@ static void SeedData(IServiceProvider serviceProvider)
 
     //  ? Level 7
 
-    // if (!dbContext.DocumentCancels.Any())
-    // {
-    //     var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
-    //     dbContext.DocumentCancels.AddRange(documentCancels);
-    // }
+    if (!dbContext.DocumentCancels.Any())
+    {
+        var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
+        dbContext.DocumentCancels.AddRange(documentCancels);
+    }
 
     // ? Level 8
 
-    // if (!dbContext.Prescriptions.Any())
-    // {
-    //     var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
-    //     var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
-    //     var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
-    //     dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
-    // }
+    if (!dbContext.Prescriptions.Any())
+    {
+        var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
+        var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
+        var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
+        dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
+    }
 
 
 
