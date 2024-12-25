@@ -356,6 +356,7 @@ public class EmployeesController : ControllerBase
 
 
 
+
     // ! ------------------- Appointments Counts -------------------
     // ? [GET] /api/employees/{id}/appointments/count : Get total appointments by employee id
     // ? [GET] /api/employees/{id}/appointments/future/count : Get total future appointments by employee id

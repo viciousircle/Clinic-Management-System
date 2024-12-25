@@ -32,12 +32,13 @@ public class DataSeeder
     {
         var faker = new Faker<Clinic>()
             .RuleFor(c => c.Id, f => f.IndexFaker + 1)
-            .RuleFor(c => c.Name, f => f.Company.CompanyName())
+            .RuleFor(c => c.Name, (f, c) => $"Clinic {c.Id}")
             .RuleFor(c => c.Address, f => f.Address.FullAddress())
             .RuleFor(c => c.Details, f => f.Lorem.Paragraph());
 
         return faker.Generate(count);
     }
+
 
 
     //! Create a Faker instance for Schedule
