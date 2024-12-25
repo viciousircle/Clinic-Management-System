@@ -646,12 +646,17 @@ public class DataSeeder
             return new List<Prescription>(); // Return an empty list if no valid appointments
         }
 
-        // Generate exactly 6000 prescriptions using Faker
+        // Generate a random number between 6000 and 7000 for the number of prescriptions
+        Random rand = new Random();
+        int prescriptionCount = rand.Next(6000, 7001); // Generates a random number between 6000 and 7000
+
+        Console.WriteLine($"Generating {prescriptionCount} prescriptions...");
+
+        // Generate prescriptions using Faker
         var faker = new Faker<Prescription>()
-            .RuleFor(p => p.Id, f => f.IndexFaker + 1)
             .RuleFor(p => p.AppointmentId, f => f.PickRandom(nonCancelledAppointments).Id);
 
-        var prescriptions = faker.Generate(6000);
+        var prescriptions = faker.Generate(prescriptionCount); // Generate the random quantity of prescriptions
 
         return prescriptions; // Return the generated prescriptions
     }
@@ -662,55 +667,95 @@ public class DataSeeder
     //! Create a Faker instance for PrescriptionMedicine
     public static List<PrescriptionMedicine> SeedPrescriptionMedicines(List<Prescription> prescriptions, List<Medicine> medicines)
     {
-        var faker = new Faker<PrescriptionMedicine>()
-            .RuleFor(pm => pm.PrescriptionId, f => f.PickRandom(prescriptions).Id)
-            .RuleFor(pm => pm.MedicineId, f => f.PickRandom(medicines).Id)
-            .RuleFor(pm => pm.DosageAmount, f => f.Random.Int(1, 5).ToString())
-            .RuleFor(pm => pm.Frequency, f => f.Random.Int(1, 4).ToString())
-            .RuleFor(pm => pm.FrequencyUnit, f => f.PickRandom(new[] { "day", "week", "hour" }))
-            .RuleFor(pm => pm.Route, f => f.PickRandom(new[] { "oral", "injection", "topical" }))
-            .RuleFor(pm => pm.Instructions, f => f.Lorem.Sentence());
-        return faker.Generate(2000);
+        var prescriptionMedicines = new List<PrescriptionMedicine>();
+        var faker = new Faker<PrescriptionMedicine>();
+
+        foreach (var prescription in prescriptions)
+        {
+            // Generate a random number of medicines for each prescription (between 3 and 7)
+            int medicineCount = new Random().Next(3, 8);
+
+            var generatedMedicines = faker
+                .RuleFor(pm => pm.PrescriptionId, f => prescription.Id)
+                .RuleFor(pm => pm.MedicineId, f => f.PickRandom(medicines).Id)
+                .RuleFor(pm => pm.DosageAmount, f => f.Random.Int(1, 5).ToString())
+                .RuleFor(pm => pm.Frequency, f => f.Random.Int(1, 4).ToString())
+                .RuleFor(pm => pm.FrequencyUnit, f => f.PickRandom(new[] { "day", "week", "hour" }))
+                .RuleFor(pm => pm.Route, f => f.PickRandom(new[] { "oral", "injection", "topical" }))
+                .RuleFor(pm => pm.Instructions, f => f.Lorem.Sentence())
+                .Generate(medicineCount);
+
+            prescriptionMedicines.AddRange(generatedMedicines);
+        }
+
+        return prescriptionMedicines;
     }
 
     //! Create a Faker instance for DocumentPrescribe
     public static List<DocumentPrescribe> SeedDocumentPrescribes(List<Prescription> prescriptions, List<Employee> pharmacists)
     {
-        var faker = new Faker<DocumentPrescribe>()
-            .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
-            .RuleFor(dp => dp.DocumentTypeId, f => 3)
-            .RuleFor(dp => dp.PrescriptionId, f => f.PickRandom(prescriptions).Id)
-            .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(pharmacists).Id);
-        return faker.Generate(800);
+        var faker = new Faker<DocumentPrescribe>();
+        var documentPrescribes = new List<DocumentPrescribe>();
+
+        foreach (var prescription in prescriptions)
+        {
+            var documentPrescribe = faker
+                .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
+                .RuleFor(dp => dp.DocumentTypeId, f => 3)
+                .RuleFor(dp => dp.PrescriptionId, f => prescription.Id)
+                .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(pharmacists).Id)
+                .Generate();
+
+            documentPrescribes.Add(documentPrescribe);
+        }
+
+        return documentPrescribes;
+    }
+
+
+    //! Create a Faker instance for DocumentDiagnosis
+    public static List<DocumentDiagnose> SeedDocumentDiagnoses(List<Appointment> appointments)
+    {
+        var faker = new Faker<DocumentDiagnose>();
+        var documentDiagnoses = new List<DocumentDiagnose>();
+
+        foreach (var appointment in appointments)
+        {
+            var documentDiagnose = faker
+                .RuleFor(dd => dd.Id, f => f.IndexFaker + 1)
+                .RuleFor(dd => dd.DocumentTypeId, f => 2)
+                .RuleFor(dd => dd.AppointmentId, f => appointment.Id)
+                .RuleFor(dd => dd.PatientStatus, f => f.PickRandom(new[] { "stable", "critical", "recovering" }))
+                .RuleFor(dd => dd.IsSick, f => f.Random.Bool())
+                .RuleFor(dd => dd.DiagnoseDetails, f => f.Lorem.Paragraph())
+                .Generate();
+
+            documentDiagnoses.Add(documentDiagnose);
+        }
+
+        return documentDiagnoses;
     }
 
     //! Create a Faker instance for DocumentAppointment
     public static List<DocumentAppointment> SeedDocumentAppointments(List<Appointment> appointments, List<EmployeeSchedule> employeeSchedules)
     {
-        var faker = new Faker<DocumentAppointment>()
-            .RuleFor(da => da.Id, f => f.IndexFaker + 1)
-            .RuleFor(da => da.DocumentTypeId, f => 1) // 1 represents Appointment document type
-            .RuleFor(da => da.AppointmentId, f => f.PickRandom(appointments).Id)
-            .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date
-            .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // Random TimeBook
-            .RuleFor(da => da.Location, f => f.Address.FullAddress());
+        var faker = new Faker<DocumentAppointment>();
+        var documentAppointments = new List<DocumentAppointment>();
 
-        var documentAppointments = faker.Generate(1300);
-
-        foreach (var docAppointment in documentAppointments)
+        foreach (var appointment in appointments)
         {
-            // Safely retrieve the doctor associated with the appointment
-            var appointment = appointments.FirstOrDefault(a => a.Id == docAppointment.AppointmentId);
-            if (appointment == null || appointment.DoctorId == 0)
-            {
-                // Handle missing appointment or doctor gracefully
-                Console.WriteLine($"No valid appointment or doctor found for DocumentAppointment Id {docAppointment.Id}");
-                continue;
-            }
+            var documentAppointment = faker
+                .RuleFor(da => da.Id, f => f.IndexFaker + 1)
+                .RuleFor(da => da.DocumentTypeId, f => 1) // 1 represents Appointment document type
+                .RuleFor(da => da.AppointmentId, f => appointment.Id)
+                .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date
+                .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // Random TimeBook
+                .RuleFor(da => da.Location, f => f.Address.FullAddress())
+                .Generate();
 
-            // Get the doctor's schedule for the day
+            // Safely retrieve the doctor associated with the appointment
             var doctorSchedule = employeeSchedules
-                .FirstOrDefault(es => es.EmployeeId == appointment.DoctorId && es.Schedule?.Date == docAppointment.Date.DayOfWeek);
+                .FirstOrDefault(es => es.EmployeeId == appointment.DoctorId && es.Schedule?.Date == documentAppointment.Date.DayOfWeek);
 
             if (doctorSchedule != null && doctorSchedule.Schedule != null)
             {
@@ -723,36 +768,23 @@ public class DataSeeder
                     var timeSpan = new Faker().Date.Between(
                         DateTime.Today.Add(startTime),
                         DateTime.Today.Add(endTime));
-                    docAppointment.TimeStart = timeSpan.TimeOfDay;
-                    docAppointment.TimeEnd = docAppointment.TimeStart.Add(TimeSpan.FromHours(1)); // 1-hour duration
+                    documentAppointment.TimeStart = timeSpan.TimeOfDay;
+                    documentAppointment.TimeEnd = documentAppointment.TimeStart.Add(TimeSpan.FromHours(1)); // 1-hour duration
                 }
             }
             else
             {
                 // Default TimeStart and TimeEnd when no schedule is found
-                Console.WriteLine($"No schedule found for DoctorId {appointment.DoctorId} on {docAppointment.Date.DayOfWeek}");
                 var dateFaker = new Faker();
                 var randomTime = dateFaker.Date.Soon().TimeOfDay;
-                docAppointment.TimeStart = randomTime;
-                docAppointment.TimeEnd = randomTime.Add(TimeSpan.FromHours(1));
+                documentAppointment.TimeStart = randomTime;
+                documentAppointment.TimeEnd = randomTime.Add(TimeSpan.FromHours(1));
             }
+
+            documentAppointments.Add(documentAppointment);
         }
 
         return documentAppointments;
-    }
-
-
-    //! Create a Faker instance for DocumentDiagnosis
-    public static List<DocumentDiagnose> SeedDocumentDiagnoses(List<Appointment> appointments)
-    {
-        var faker = new Faker<DocumentDiagnose>()
-            .RuleFor(dd => dd.Id, f => f.IndexFaker + 1)
-            .RuleFor(dd => dd.DocumentTypeId, f => 2)
-            .RuleFor(dd => dd.AppointmentId, f => f.PickRandom(appointments).Id)
-            .RuleFor(dd => dd.PatientStatus, f => f.PickRandom(new[] { "stable", "critical", "recovering" }))
-            .RuleFor(dd => dd.IsSick, f => f.Random.Bool())
-            .RuleFor(dd => dd.DiagnoseDetails, f => f.Lorem.Paragraph());
-        return faker.Generate(400);
     }
 
     //! Create a Faker instance for DocumentBill
@@ -773,23 +805,26 @@ public class DataSeeder
             return new List<DocumentBill>(); // Return an empty list if no valid receptionists
         }
 
-        if (!appointments.Any())
+        var faker = new Faker<DocumentBill>();
+        var documentBills = new List<DocumentBill>();
+
+        foreach (var appointment in appointments)
         {
-            Console.WriteLine("No appointments found for Document Bills.");
-            return new List<DocumentBill>(); // Return an empty list if no appointments
+            var documentBill = faker
+                .RuleFor(db => db.Id, f => f.IndexFaker + 1) // Auto-increment Id
+                .RuleFor(db => db.DocumentTypeId, f => 4) // Assuming DocumentTypeId is always 4
+                .RuleFor(db => db.AppointmentId, f => appointment.Id) // Random appointment
+                .RuleFor(db => db.ReceptionistId, f => f.PickRandom(validReceptionists).Id) // Random valid receptionist
+                .RuleFor(db => db.TotalCost, f => f.Finance.Amount(100, 1000)) // Random Total Cost between 100 and 1000
+                .RuleFor(db => db.AmountPaid, (f, db) => f.Finance.Amount(0, db.TotalCost)) // AmountPaid less than or equal to TotalCost
+                .Generate();
+
+            documentBills.Add(documentBill);
         }
 
-        // Generate DocumentBills using Faker
-        var faker = new Faker<DocumentBill>()
-            .RuleFor(db => db.Id, f => f.IndexFaker + 1) // Auto-increment Id
-            .RuleFor(db => db.DocumentTypeId, f => 4) // Assuming DocumentTypeId is always 4
-            .RuleFor(db => db.AppointmentId, f => f.PickRandom(appointments).Id) // Random appointment
-            .RuleFor(db => db.ReceptionistId, f => f.PickRandom(validReceptionists).Id) // Random valid receptionist
-            .RuleFor(db => db.TotalCost, f => f.Finance.Amount(100, 1000)) // Random Total Cost between 100 and 1000
-            .RuleFor(db => db.AmountPaid, (f, db) => f.Finance.Amount(0, db.TotalCost)); // AmountPaid less than or equal to TotalCost
-
-        return faker.Generate(1000); // Generate 1000 Document Bills
+        return documentBills;
     }
+
 
 
 }
