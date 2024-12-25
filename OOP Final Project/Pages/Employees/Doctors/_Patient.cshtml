@@ -55,10 +55,10 @@
                 <div class="d-flex gap-md-2">
                     <!-- View Options -->
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-dark"
-                            onclick="loadPatients('observedPatients')">Observed</button>
-                        <button type="button" class="btn btn-outline-dark" onclick="loadPatients('allPatients')">View
-                            All</button>
+                        <button type="button" class="btn btn-dark" id="observedBtn"
+                            onclick="toggleButtonClass(this); loadPatients('observedPatients')">Observed</button>
+                        <button type="button" class="btn btn-outline-dark" id="viewAllBtn"
+                            onclick="toggleButtonClass(this); loadPatients('allPatients')">View All</button>
                     </div>
 
                     <!-- Date Filter -->
@@ -112,12 +112,22 @@
     }
 </style>
 
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Call observedPatients by default
         loadPatients('observedPatients');
     });
 
+    function toggleButtonClass(button) {
+        const buttons = document.querySelectorAll('.btn-group .btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('btn-dark');
+            btn.classList.add('btn-outline-dark');
+        });
+        button.classList.remove('btn-outline-dark');
+        button.classList.add('btn-dark');
+    }
 
     function openPatientDetailsModal(button) {
         if (!button || !button.closest) {
