@@ -365,7 +365,6 @@ public class DataSeeder
     }
 
 
-
     // ? Level 3
 
     //! Create a Faker instance for Employee
@@ -478,8 +477,8 @@ public class DataSeeder
     {
         // Filter the list of employees to only include pharmacists with valid Account and Department
         var pharmacistAccounts = accounts
-         .Where(a => a.AccountTypeId == 3) // AccountTypeId 3 corresponds to "Pharmacist"
-         .ToList();
+            .Where(a => a.AccountTypeId == 3) // AccountTypeId 3 corresponds to "Pharmacist"
+            .ToList();
 
         // Filter employees to only include those with a pharmacist account
         var pharmacists = employees
@@ -496,17 +495,16 @@ public class DataSeeder
         // Generate medicines using Faker
         var faker = new Faker<Medicine>()
             .RuleFor(m => m.Id, f => f.IndexFaker + 1) // Auto-increment Id
-            .RuleFor(m => m.Name, f => f.Commerce.ProductName()) // Random product name
+            .RuleFor(m => m.Name, f => f.Commerce.ProductName().Split(' ').First() + "ine") // Medicine-like name
             .RuleFor(m => m.MedicineTypeId, f => f.PickRandom(medicineTypes).Id) // Random medicine type
             .RuleFor(m => m.ImporterId, f => f.PickRandom(pharmacists).AccountId) // Random pharmacist as importer
-            .RuleFor(m => m.ExpiredDate, f => f.Date.Future(2)) // Random expiration date within 2 years
-            .RuleFor(m => m.ImportDate, f => f.Date.Past(1)) // Random import date within the past year
+            .RuleFor(m => m.ExpiredDate, f => f.Date.Future(2).Date) // Future expiration date (yyyy-MM-dd format)
+            .RuleFor(m => m.ImportDate, f => f.Date.Past(1).Date) // Past import date (yyyy-MM-dd format)
             .RuleFor(m => m.Quantity, f => f.Random.Int(1, 500)); // Random quantity between 1 and 500
 
         // Generate the specified number of medicines
         return faker.Generate(medicineCount);
     }
-
 
     //! Create a Faker instance for Appointment
     public static List<Appointment> SeedAppointments(List<Employee> employees, List<Patient> patients, List<Account> accounts)
