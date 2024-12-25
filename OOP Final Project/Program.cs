@@ -66,6 +66,7 @@ using (var scope = app.Services.CreateScope())
     //     Console.WriteLine("Database dropped successfully.");
     // }
 
+
     // ----------------------------------------------------------------
 
     // Apply any pending migrations
@@ -76,7 +77,7 @@ using (var scope = app.Services.CreateScope())
     // Seed the data after migrations are applied
     SeedData(scope.ServiceProvider);
 
-    Console.WriteLine("Data seeding completed.");
+    // Console.WriteLine("Data seeding completed.");
 
 }
 Console.WriteLine("Application setup completed.");
@@ -185,12 +186,15 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.Employees.AddRange(employees);
     }
 
-    // // TODO - Fix this shit/
-    // if (!dbContext.Medicines.Any())
-    // {
-    //     var medicines = DataSeeder.SeedMedicines(dbContext.MedicineTypes.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList(), 1000);
-    //     dbContext.Medicines.AddRange(medicines);
-    // }
+    // ? Level 6
+
+    if (!dbContext.Medicines.Any())
+    {
+        var medicines = DataSeeder.SeedMedicines(dbContext.MedicineTypes.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList(), 1000);
+        dbContext.Medicines.AddRange(medicines);
+    }
+
+    // ? Level 7
 
     // if (!dbContext.Appointments.Any())
     // {
