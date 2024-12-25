@@ -32,17 +32,18 @@ public class EmployeesController : ControllerBase
     public IActionResult GetAll()
     {
         var employees = _context.Employees
-        .Select(employee => new EmployeeViewModel
-        {
-            Id = employee.Id,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            Email = employee.Email,
-            Phone = employee.Phone,
-            AccountId = employee.AccountId,
-            IsActive = employee.IsActive
-        })
-        .ToList();
+        .Where(employee => employee.IsActive) // Optional: filter active employees
+    .Select(employee => new EmployeeViewModel
+    {
+        Id = employee.Id,
+        FirstName = employee.FirstName,
+        LastName = employee.LastName,
+        Email = employee.Email,
+        Phone = employee.Phone,
+        AccountId = employee.AccountId,
+        IsActive = employee.IsActive
+    })
+    .ToList();
 
         var response = new { Employees = employees };
 
