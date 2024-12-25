@@ -260,13 +260,38 @@
     }
 
     function openAppointmentDetailsModal(button) {
-        // Store the selected row
-        selectedRow = button.closest("tr");
+        console.log(button);
+
+        // Ensure 'button' is a DOM element
+        if (!button || !button.closest) {
+            console.error('Invalid button element passed:', button);
+            return;
+        }
+
+        // Get the closest row (tr) of the button
+        const selectedRow = button.closest("tr");
+
+        if (!selectedRow) {
+            console.error('Could not find the row containing the button');
+            return;
+        }
+
+        // Extract the patient's name from the first cell (adjust the cell index if needed)
+        const patientName = selectedRow.cells[0].textContent.trim();
+
+        // Set the patient name in the modal input field
+        const patientNameInput = document.getElementById('appointmentDetailsPatientName');
+        if (patientNameInput) {
+            patientNameInput.value = patientName;
+        } else {
+            console.error('Patient name input field not found');
+        }
 
         // Show the modal
         const modal = new bootstrap.Modal(document.getElementById('appointmentDetailsModal'));
         modal.show();
     }
+
 
     function markAsDone() {
         if (selectedRow) {
