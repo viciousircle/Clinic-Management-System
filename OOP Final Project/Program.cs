@@ -82,7 +82,7 @@ using (var scope = app.Services.CreateScope())
     SeedDataLevel4(scope.ServiceProvider);
     SeedDataLevel5(scope.ServiceProvider);
     SeedDataLevel6(scope.ServiceProvider);
-    // SeedDataLevel7(scope.ServiceProvider);
+    SeedDataLevel7(scope.ServiceProvider);
 
     // ----------------------------------------------------------------
 

@@ -332,6 +332,7 @@ public class DataSeeder
         return accounts;
     }
 
+    // ? Level 3
 
     // //! Create a Faker instance for Patient
     public static List<Patient> SeedPatients(List<Clinic> clinics, List<Account> accounts)
@@ -363,8 +364,6 @@ public class DataSeeder
         Console.WriteLine($"{patients.Count} patients generated, matching accounts with AccountTypeId == 5.");
         return patients;
     }
-
-
 
     //! Create a Faker instance for Employee
     public static List<Employee> SeedEmployees(
@@ -470,6 +469,7 @@ public class DataSeeder
         return employees;
     }
 
+    // ? Level 4
 
     //! Create a Faker instance for Medicine
     public static List<Medicine> SeedMedicines(List<MedicineType> medicineTypes, List<Employee> employees, List<Account> accounts, int medicineCount)
@@ -597,6 +597,7 @@ public class DataSeeder
         return employeeSchedules;
     }
 
+    // ? Level 5
 
     //! Create a Faker instance for DocumentCancel
     public static List<DocumentCancel> SeedDocumentCancels(List<Appointment> appointments)
@@ -626,6 +627,7 @@ public class DataSeeder
         return sentence;
     }
 
+    // ? Level 6
 
     //! Create a Faker instance for Prescription
     public static List<Prescription> SeedPrescriptions(List<Appointment> appointments, List<DocumentCancel> documentCancels)
@@ -655,9 +657,7 @@ public class DataSeeder
     }
 
 
-
-    // ? Level 4
-
+    // ? Level 7
 
     //! Create a Faker instance for PrescriptionMedicine
     public static List<PrescriptionMedicine> SeedPrescriptionMedicines(List<Prescription> prescriptions, List<Medicine> medicines)
@@ -673,7 +673,16 @@ public class DataSeeder
         return faker.Generate(2000);
     }
 
-    // ? Level 5
+    //! Create a Faker instance for DocumentPrescribe
+    public static List<DocumentPrescribe> SeedDocumentPrescribes(List<Prescription> prescriptions, List<Employee> pharmacists)
+    {
+        var faker = new Faker<DocumentPrescribe>()
+            .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
+            .RuleFor(dp => dp.DocumentTypeId, f => 3)
+            .RuleFor(dp => dp.PrescriptionId, f => f.PickRandom(prescriptions).Id)
+            .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(pharmacists).Id);
+        return faker.Generate(800);
+    }
 
     //! Create a Faker instance for DocumentAppointment
     public static List<DocumentAppointment> SeedDocumentAppointments(List<Appointment> appointments, List<EmployeeSchedule> employeeSchedules)
@@ -733,7 +742,6 @@ public class DataSeeder
     }
 
 
-
     //! Create a Faker instance for DocumentDiagnosis
     public static List<DocumentDiagnose> SeedDocumentDiagnoses(List<Appointment> appointments)
     {
@@ -745,18 +753,6 @@ public class DataSeeder
             .RuleFor(dd => dd.IsSick, f => f.Random.Bool())
             .RuleFor(dd => dd.DiagnoseDetails, f => f.Lorem.Paragraph());
         return faker.Generate(400);
-    }
-
-
-    //! Create a Faker instance for DocumentPrescribe
-    public static List<DocumentPrescribe> SeedDocumentPrescribes(List<Prescription> prescriptions, List<Employee> pharmacists)
-    {
-        var faker = new Faker<DocumentPrescribe>()
-            .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
-            .RuleFor(dp => dp.DocumentTypeId, f => 3)
-            .RuleFor(dp => dp.PrescriptionId, f => f.PickRandom(prescriptions).Id)
-            .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(pharmacists).Id);
-        return faker.Generate(800);
     }
 
     //! Create a Faker instance for DocumentBill
@@ -794,8 +790,6 @@ public class DataSeeder
 
         return faker.Generate(1000); // Generate 1000 Document Bills
     }
-
-
 
 
 }
