@@ -179,11 +179,11 @@ static void SeedData(IServiceProvider serviceProvider)
 
     // ? Level 5
 
-    // if (!dbContext.Employees.Any())
-    // {
-    //     var employees = DataSeeder.SeedEmployees(dbContext.Accounts.ToList(), dbContext.Clinics.ToList(), dbContext.Departments.ToList());
-    //     dbContext.Employees.AddRange(employees);
-    // }
+    if (!dbContext.Employees.Any())
+    {
+        var employees = DataSeeder.SeedEmployees(dbContext.Accounts.ToList(), dbContext.Clinics.ToList(), dbContext.Departments.ToList());
+        dbContext.Employees.AddRange(employees);
+    }
 
     // // TODO - Fix this shit/
     // if (!dbContext.Medicines.Any())

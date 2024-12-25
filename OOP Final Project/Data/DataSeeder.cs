@@ -370,9 +370,9 @@ public class DataSeeder
 
     //! Create a Faker instance for Employee
     public static List<Employee> SeedEmployees(
-    List<Account> accounts,
-    List<Clinic> clinics,
-    List<Department> departments)
+        List<Account> accounts,
+        List<Clinic> clinics,
+        List<Department> departments)
     {
         var employees = new List<Employee>();
         var faker = new Faker();
@@ -397,7 +397,7 @@ public class DataSeeder
                     AccountId = managerAccount.Id,
                     Account = managerAccount,
                     Email = $"{clinic.Name.ToLower()}_manager@clinic.com",
-                    Phone = faker.Phone.PhoneNumber(),
+                    Phone = faker.Random.ReplaceNumbers("###-###-####"), // Custom phone format
                     IsActive = true
                 });
             }
@@ -418,7 +418,7 @@ public class DataSeeder
                         AccountId = receptionistAccount.Id,
                         Account = receptionistAccount,
                         Email = $"{clinic.Name.ToLower()}_receptionist{i}@clinic.com",
-                        Phone = faker.Phone.PhoneNumber(),
+                        Phone = faker.Random.ReplaceNumbers("###-###-####"), // Custom phone format
                         IsActive = true
                     });
                 }
@@ -440,7 +440,7 @@ public class DataSeeder
                         AccountId = pharmacistAccount.Id,
                         Account = pharmacistAccount,
                         Email = $"{clinic.Name.ToLower()}_pharmacist{i}@clinic.com",
-                        Phone = faker.Phone.PhoneNumber(),
+                        Phone = faker.Random.ReplaceNumbers("###-###-####"), // Custom phone format
                         IsActive = true
                     });
                 }
@@ -462,7 +462,7 @@ public class DataSeeder
                         AccountId = doctorAccount.Id,
                         Account = doctorAccount,
                         Email = $"{clinic.Name.ToLower()}_doctor{i}@clinic.com",
-                        Phone = faker.Phone.PhoneNumber(),
+                        Phone = faker.Random.ReplaceNumbers("###-###-####"), // Custom phone format
                         IsActive = true
                     });
                 }
