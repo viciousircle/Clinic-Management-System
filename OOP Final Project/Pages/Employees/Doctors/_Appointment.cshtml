@@ -260,36 +260,30 @@
     }
 
     function openAppointmentDetailsModal(button) {
-        console.log(button); // Debugging output
 
         if (!button || !button.closest) {
             console.error('Invalid button element passed:', button);
             return;
         }
 
-
-        // Extract data from the button's attributes
         const patientID = button.getAttribute('data-patient-id') || "N/A";
         const patientName = button.getAttribute('data-patient-name') || "N/A";
         const patientPhone = button.getAttribute('data-patient-phone') || "N/A";
         const patientAddress = button.getAttribute('data-patient-address') || "N/A";
         const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
 
-        // Populate the modal fields
         document.getElementById('appointmentDetailsPatientID').value = patientID;
         document.getElementById('appointmentDetailsPatientName').value = patientName;
         document.getElementById('appointmentDetailsPatientPhone').value = patientPhone;
         document.getElementById('appointmentDetailsPatientAddress').value = patientAddress;
         document.getElementById('appointmentDetailsPatientLatestVisit').value = patientLatestVisit;
 
-        // Get the modal element by ID
         const modalElement = document.getElementById('appointmentDetailsModal');
         if (!modalElement) {
             console.error('Modal element not found: appointmentDetailsModal');
-            return; // Exit the function if the modal is not found
+            return;
         }
 
-        // Show the modal using Bootstrap
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }
