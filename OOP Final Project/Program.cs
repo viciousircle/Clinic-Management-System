@@ -194,27 +194,35 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.Medicines.AddRange(medicines);
     }
 
-    // ? Level 7
+    if (!dbContext.Appointments.Any())
+    {
+        var appointments = DataSeeder.SeedAppointments(dbContext.Employees.ToList(), dbContext.Patients.ToList(), dbContext.Accounts.ToList());
+        dbContext.Appointments.AddRange(appointments);
+    }
 
-    // if (!dbContext.Appointments.Any())
-    // {
-    //     var appointments = DataSeeder.SeedAppointments(dbContext.Employees.ToList(), dbContext.Patients.ToList(), dbContext.Accounts.ToList());
-    //     dbContext.Appointments.AddRange(appointments);
-    // }
+    //  ? Level 7
 
-    // if (!dbContext.Prescriptions.Any())
-    // {
-    //     var prescriptions = DataSeeder.SeedPrescriptions(dbContext.Appointments.ToList());
-    //     dbContext.Prescriptions.AddRange(prescriptions);
-    // }
+    if (!dbContext.DocumentCancels.Any())
+    {
+        var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
+        dbContext.DocumentCancels.AddRange(documentCancels);
+    }
 
-    // // Level 4
+    // ? Level 8
 
-    // if (!dbContext.EmployeeSchedules.Any())
-    // {
-    //     var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList());
-    //     dbContext.EmployeeSchedules.AddRange(employeeSchedules);
-    // }
+    if (!dbContext.Prescriptions.Any())
+    {
+        var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
+        var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
+        var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
+        dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
+    }
+
+    if (!dbContext.EmployeeSchedules.Any())
+    {
+        var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList());
+        dbContext.EmployeeSchedules.AddRange(employeeSchedules);
+    }
 
     // if (!dbContext.PrescriptionMedicines.Any())
     // {
@@ -222,7 +230,6 @@ static void SeedData(IServiceProvider serviceProvider)
     //     dbContext.PrescriptionMedicines.AddRange(prescriptionMedicines);
     // }
 
-    // // Level 5
 
     // if (!dbContext.DocumentAppointments.Any())
     // {
@@ -248,11 +255,7 @@ static void SeedData(IServiceProvider serviceProvider)
     //     dbContext.DocumentBills.AddRange(documentBills);
     // }
 
-    // if (!dbContext.DocumentCancels.Any())
-    // {
-    //     var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
-    //     dbContext.DocumentCancels.AddRange(documentCancels);
-    // }
+
 
     Console.WriteLine("Data seeding complete.");
     // Save changes once all data is added
