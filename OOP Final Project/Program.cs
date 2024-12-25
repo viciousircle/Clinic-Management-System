@@ -75,9 +75,12 @@ using (var scope = app.Services.CreateScope())
     Console.WriteLine("Starting data seeding...");
 
     // Seed the data after migrations are applied
-    SeedData(scope.ServiceProvider);
+    SeedDataLevel1(scope.ServiceProvider);
+    SeedDataLevel2(scope.ServiceProvider);
+    SeedDataLevel3(scope.ServiceProvider);
+    SeedDataLevel4(scope.ServiceProvider);
 
-    // Console.WriteLine("Data seeding completed.");
+    Console.WriteLine("Data seeding completed.");
 
 }
 Console.WriteLine("Application setup completed.");
@@ -86,14 +89,173 @@ Console.WriteLine("Application setup completed.");
 
 app.Run();
 
-
 // ! Seed data method --------------------------------------------
+
+static void SeedDataLevel1(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    Console.WriteLine("Starting data seeding level 1...");
+
+    // ? Level 1
+
+    if (!dbContext.AccountTypes.Any())
+    {
+        var accountTypes = DataSeeder.SeedAccountTypes();
+        dbContext.AccountTypes.AddRange(accountTypes);
+    }
+
+    if (!dbContext.Clinics.Any())
+    {
+        var clinics = DataSeeder.SeedClinics(2);
+        dbContext.Clinics.AddRange(clinics);
+    }
+
+    if (!dbContext.Schedules.Any())
+    {
+        var schedules = DataSeeder.SeedSchedules();
+        dbContext.Schedules.AddRange(schedules);
+    }
+
+    if (!dbContext.MedicineTypes.Any())
+    {
+        var medicineTypes = DataSeeder.SeedMedicineTypes();
+        dbContext.MedicineTypes.AddRange(medicineTypes);
+    }
+
+    if (!dbContext.DocumentTypes.Any())
+    {
+        var documentTypes = DataSeeder.SeedDocumentTypes();
+        dbContext.DocumentTypes.AddRange(documentTypes);
+    }
+
+    Console.WriteLine("Data seeding complete.");
+    // Save changes once all data is added
+    dbContext.SaveChanges();
+
+}
+
+static void SeedDataLevel2(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    Console.WriteLine("Starting data seeding level 2...");
+
+    // ? Level 2
+
+    if (!dbContext.Departments.Any())
+    {
+        var departments = DataSeeder.SeedDepartments(dbContext.Clinics.ToList(), dbContext.AccountTypes.ToList());
+        dbContext.Departments.AddRange(departments);
+    }
+
+
+    if (!dbContext.Accounts.Any())
+    {
+        var accounts = DataSeeder.SeedAccounts(dbContext.AccountTypes.ToList(), dbContext.Clinics.ToList(), 4000);
+        dbContext.Accounts.AddRange(accounts);
+    }
+
+    Console.WriteLine("Data seeding complete.");
+    // Save changes once all data is added
+    dbContext.SaveChanges();
+
+
+}
+
+static void SeedDataLevel3(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    Console.WriteLine("Starting data seeding level 3...");
+
+
+    if (!dbContext.Patients.Any())
+    {
+        // Fetch clinics and accounts from the database
+        var clinics = dbContext.Clinics.ToList();
+        var accounts = dbContext.Accounts.ToList();
+
+        // Ensure valid accounts (AccountTypeId == 5) exist
+        var patientAccounts = accounts.Where(a => a.AccountTypeId == 5).ToList();
+
+        if (!patientAccounts.Any())
+        {
+            Console.WriteLine("No accounts with AccountTypeId == 5 found. No patients will be created.");
+        }
+        else
+        {
+            // Seed patients
+            var patients = DataSeeder.SeedPatients(clinics, accounts);
+
+            // Add patients to the database
+            dbContext.Patients.AddRange(patients);
+            dbContext.SaveChanges();
+
+            Console.WriteLine($"{patients.Count} patients seeded successfully.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Patients already exist in the database. Seeding skipped.");
+    }
+
+
+    if (!dbContext.Employees.Any())
+    {
+        var employees = DataSeeder.SeedEmployees(dbContext.Accounts.ToList(), dbContext.Clinics.ToList(), dbContext.Departments.ToList());
+        dbContext.Employees.AddRange(employees);
+    }
+
+
+
+
+    Console.WriteLine("Data seeding complete.");
+    // Save changes once all data is added
+    dbContext.SaveChanges();
+}
+
+static void SeedDataLevel4(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    Console.WriteLine("Starting data seeding level 4...");
+
+    if (!dbContext.Medicines.Any())
+    {
+        var medicines = DataSeeder.SeedMedicines(dbContext.MedicineTypes.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList(), 1000);
+        dbContext.Medicines.AddRange(medicines);
+    }
+
+    if (!dbContext.Appointments.Any())
+    {
+        var appointments = DataSeeder.SeedAppointments(dbContext.Employees.ToList(), dbContext.Patients.ToList(), dbContext.Accounts.ToList());
+        dbContext.Appointments.AddRange(appointments);
+    }
+
+    if (!dbContext.EmployeeSchedules.Any())
+    {
+        var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList());
+        dbContext.EmployeeSchedules.AddRange(employeeSchedules);
+    }
+
+    Console.WriteLine("Data seeding complete.");
+    // Save changes once all data is added
+    dbContext.SaveChanges();
+}
+
 static void SeedData(IServiceProvider serviceProvider)
 {
     using var scope = serviceProvider.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     Console.WriteLine("Starting data seeding...");
+
+
 
 
     //! Check if data already exists before seeding to prevent duplicates
@@ -130,6 +292,8 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.DocumentTypes.AddRange(documentTypes);
     }
 
+
+
     // ? Level 2
 
     if (!dbContext.Departments.Any())
@@ -138,13 +302,14 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.Departments.AddRange(departments);
     }
 
-    // ? Level 3
 
     if (!dbContext.Accounts.Any())
     {
         var accounts = DataSeeder.SeedAccounts(dbContext.AccountTypes.ToList(), dbContext.Clinics.ToList(), 4000);
         dbContext.Accounts.AddRange(accounts);
     }
+
+
 
     // ? Level 4
 
@@ -178,13 +343,14 @@ static void SeedData(IServiceProvider serviceProvider)
         Console.WriteLine("Patients already exist in the database. Seeding skipped.");
     }
 
-    // ? Level 5
 
     if (!dbContext.Employees.Any())
     {
         var employees = DataSeeder.SeedEmployees(dbContext.Accounts.ToList(), dbContext.Clinics.ToList(), dbContext.Departments.ToList());
         dbContext.Employees.AddRange(employees);
     }
+
+
 
     // ? Level 6
 
@@ -200,29 +366,31 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.Appointments.AddRange(appointments);
     }
 
+    if (!dbContext.EmployeeSchedules.Any())
+    {
+        var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList());
+        dbContext.EmployeeSchedules.AddRange(employeeSchedules);
+    }
+
     //  ? Level 7
 
-    if (!dbContext.DocumentCancels.Any())
-    {
-        var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
-        dbContext.DocumentCancels.AddRange(documentCancels);
-    }
+    // if (!dbContext.DocumentCancels.Any())
+    // {
+    //     var documentCancels = DataSeeder.SeedDocumentCancels(dbContext.Appointments.ToList());
+    //     dbContext.DocumentCancels.AddRange(documentCancels);
+    // }
 
     // ? Level 8
 
-    if (!dbContext.Prescriptions.Any())
-    {
-        var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
-        var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
-        var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
-        dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
-    }
+    // if (!dbContext.Prescriptions.Any())
+    // {
+    //     var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
+    //     var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
+    //     var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
+    //     dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
+    // }
 
-    if (!dbContext.EmployeeSchedules.Any())
-    {
-        var employeeSchedules = DataSeeder.SeedEmployeeSchedules(dbContext.Schedules.ToList(), dbContext.Employees.ToList());
-        dbContext.EmployeeSchedules.AddRange(employeeSchedules);
-    }
+
 
     // if (!dbContext.PrescriptionMedicines.Any())
     // {

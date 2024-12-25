@@ -547,42 +547,56 @@ public class DataSeeder
 
 
     //! Create a Faker instance for EmployeeSchedule
-    public static List<EmployeeSchedule> SeedEmployeeSchedules(List<Schedule> schedules, List<Employee> employees)
+    public static List<EmployeeSchedule> SeedEmployeeSchedules(List<Schedule> schedules, List<Employee> employees, List<Account> accounts)
     {
         var faker = new Faker<EmployeeSchedule>();
         var employeeSchedules = new List<EmployeeSchedule>();
+        var roomNumber = 201;
 
         foreach (var employee in employees)
         {
+            var account = accounts.FirstOrDefault(a => a.Id == employee.AccountId);
+
+            // Assign location
+            var location = account.AccountTypeId == 2 ? "Lobby" : $"Room {roomNumber++}";
+
             // Randomly select one schedule for the employee to be active
             var activeSchedule = faker.RuleFor(es => es.ScheduleId, f => f.PickRandom(schedules).Id)
-                                      .RuleFor(es => es.EmployeeId, f => f.PickRandom(employees).Id)
-                                      .RuleFor(es => es.TimeFrom, f => f.Date.Recent())
-                                      .RuleFor(es => es.TimeTo, f => f.Date.Soon())
+                                      .RuleFor(es => es.EmployeeId, f => employee.Id)
+                                      .RuleFor(es => es.TimeFrom, (f, es) => f.Date.Past(1))  // Generate the date
+                                      .RuleFor(es => es.TimeTo, (f, es) => f.Date.Future(1))  // Generate the date
                                       .RuleFor(es => es.IsActive, f => true) // Active schedule
-                                      .RuleFor(es => es.WorkLocation, f => f.Address.City())
+                                      .RuleFor(es => es.WorkLocation, f => location)
                                       .Generate(1)
                                       .First();
+
+            // Format the dates to yyyy-MM-dd after they are generated
+            activeSchedule.TimeFrom = DateTime.Parse(activeSchedule.TimeFrom.ToString("yyyy-MM-dd"));
+            activeSchedule.TimeTo = DateTime.Parse(activeSchedule.TimeTo.ToString("yyyy-MM-dd"));
 
             employeeSchedules.Add(activeSchedule);
 
             // For the remaining schedules, set them as inactive
             var inactiveSchedules = faker.RuleFor(es => es.ScheduleId, f => f.PickRandom(schedules.Where(s => s.Id != activeSchedule.ScheduleId)).Id)
-                                          .RuleFor(es => es.EmployeeId, f => f.PickRandom(employees).Id)
-                                          .RuleFor(es => es.TimeFrom, f => f.Date.Recent())
-                                          .RuleFor(es => es.TimeTo, f => f.Date.Soon())
+                                          .RuleFor(es => es.EmployeeId, f => employee.Id)
+                                          .RuleFor(es => es.TimeFrom, (f, es) => f.Date.Past(1))  // Generate the date
+                                          .RuleFor(es => es.TimeTo, (f, es) => f.Date.Future(1))  // Generate the date
                                           .RuleFor(es => es.IsActive, f => false) // Inactive schedule
-                                          .RuleFor(es => es.WorkLocation, f => f.Address.City())
+                                          .RuleFor(es => es.WorkLocation, f => location)
                                           .Generate(schedules.Count - 1);
+
+            // Format the dates to yyyy-MM-dd after they are generated
+            foreach (var schedule in inactiveSchedules)
+            {
+                schedule.TimeFrom = DateTime.Parse(schedule.TimeFrom.ToString("yyyy-MM-dd"));
+                schedule.TimeTo = DateTime.Parse(schedule.TimeTo.ToString("yyyy-MM-dd"));
+            }
 
             employeeSchedules.AddRange(inactiveSchedules);
         }
 
         return employeeSchedules;
     }
-
-
-
 
 
     //! Create a Faker instance for DocumentCancel
@@ -597,6 +611,10 @@ public class DataSeeder
 
         return faker.Generate(50);
     }
+
+
+
+
     private static string GenerateReason(Faker f)
     {
         // Create a sentence with random words
