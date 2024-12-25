@@ -21,31 +21,51 @@
                             data-bs-parent="#appointmentAccordion">
                             <div class="accordion-body">
                                 <form id="patientInfoForm">
-                                    <div class="mb-3">
-                                        <label for="patientID" class="form-label">ID</label>
-                                        <input type="number" class="form-control text-muted"
-                                            id="appointmentDetailsPatientID" placeholder="N/A" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="appointmentDetailsPatientName" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control text-muted"
-                                            id="appointmentDetailsPatientName" placeholder="N/A" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="appointmentDetailsPatientPhone" class="form-label">Phone</label>
-                                        <input type="text" class="form-control text-muted"
-                                            id="appointmentDetailsPatientPhone" placeholder="N/A" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="appointmentDetailsPatientAddress" class="form-label">Address</label>
-                                        <input type="text" class="form-control text-muted"
-                                            id="appointmentDetailsPatientAddress" placeholder="N/A" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="appointmentDetailsPatientLatestVisit" class="form-label">Latest
-                                            Visit</label>
-                                        <input type="text" class="form-control text-muted"
-                                            id="appointmentDetailsPatientLatestVisit" placeholder="N/A" disabled>
+                                    <div class="d-flex" style="gap: 2rem;">
+                                        <div class="d-flex gap-md-2 flex-column w-100">
+                                            <div class="mb-3">
+                                                <label for="patientID" class="form-label">ID</label>
+                                                <input type="number" class="form-control text-muted"
+                                                    id="appointmentDetailsPatientID" placeholder="N/A" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="appointmentDetailsPatientName" class="form-label">Full
+                                                    Name</label>
+                                                <input type="text" class="form-control text-muted"
+                                                    id="appointmentDetailsPatientName" placeholder="N/A" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="appointmentDetailsPatientPhone"
+                                                    class="form-label">Phone</label>
+                                                <input type="text" class="form-control text-muted"
+                                                    id="appointmentDetailsPatientPhone" placeholder="N/A" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex gap-md-2 flex-column w-100">
+
+                                            <div class="mb-3">
+                                                <label for="appointmentDetailsPatientEmail"
+                                                    class="form-label">Email</label>
+                                                <input type="text" class="form-control text-muted"
+                                                    id="appointmentDetailsPatientEmail" placeholder="N/A" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="appointmentDetailsPatientAddress"
+                                                    class="form-label">Address</label>
+                                                <input type="text" class="form-control text-muted"
+                                                    id="appointmentDetailsPatientAddress" placeholder="N/A" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="appointmentDetailsPatientLatestVisit"
+                                                    class="form-label">Latest
+                                                    Visit</label>
+                                                <input type="text" class="form-control text-muted"
+                                                    id="appointmentDetailsPatientLatestVisit" placeholder="N/A"
+                                                    disabled>
+                                            </div>
+
+                                        </div>
                                     </div>
 
                                 </form>
@@ -69,30 +89,21 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Health Records -->
+
+                    <!-- Health check records -->
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingHealthRecords">
+                        <h2 class="accordion-header" id="headingHealthCheck">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseHealthRecords" aria-expanded="false"
-                                aria-controls="collapseHealthRecords">
-                                Health Records
+                                data-bs-target="#collapseHealthCheck" aria-expanded="false"
+                                aria-controls="collapseHealthCheck">
+                                Health Check Records
                             </button>
                         </h2>
-                        <div id="collapseHealthRecords" class="accordion-collapse collapse"
+                        <div id="collapseHealthCheck" class="accordion-collapse collapse"
                             data-bs-parent="#appointmentAccordion">
                             <div class="accordion-body">
-                                <div class="mb-3">
-                                    <label for="temperature" class="form-label">Temperature (°C)</label>
-                                    <input type="number" class="form-control" id="temperature" placeholder="N/A">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="bloodPressure" class="form-label">Blood Pressure</label>
-                                    <input type="text" class="form-control" id="bloodPressure" placeholder="N/A">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="pulseRate" class="form-label">Pulse Rate</label>
-                                    <input type="number" class="form-control" id="pulseRate" placeholder="N/A">
-                                </div>
+                                <textarea class="form-control" id="healthCheckInput" rows="4"
+                                    placeholder="Describe health check records"></textarea>
                             </div>
                         </div>
                     </div>

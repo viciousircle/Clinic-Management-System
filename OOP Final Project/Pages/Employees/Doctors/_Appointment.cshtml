@@ -269,12 +269,14 @@
         const patientID = button.getAttribute('data-patient-id') || "N/A";
         const patientName = button.getAttribute('data-patient-name') || "N/A";
         const patientPhone = button.getAttribute('data-patient-phone') || "N/A";
+        const patientEmail = button.getAttribute('data-patient-email') || "N/A";
         const patientAddress = button.getAttribute('data-patient-address') || "N/A";
         const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
 
         document.getElementById('appointmentDetailsPatientID').value = patientID;
         document.getElementById('appointmentDetailsPatientName').value = patientName;
         document.getElementById('appointmentDetailsPatientPhone').value = patientPhone;
+        document.getElementById('appointmentDetailsPatientEmail').value = patientEmail;
         document.getElementById('appointmentDetailsPatientAddress').value = patientAddress;
         document.getElementById('appointmentDetailsPatientLatestVisit').value = patientLatestVisit;
 
