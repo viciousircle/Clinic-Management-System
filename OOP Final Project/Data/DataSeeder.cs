@@ -635,6 +635,8 @@ public class DataSeeder
             .Where(a => !documentCancels.Any(dc => dc.AppointmentId == a.Id)) // Exclude cancelled appointments
             .ToList();
 
+        Console.WriteLine($"Non-cancelled appointments: {nonCancelledAppointments.Count}");
+
         // Check if there are any non-cancelled appointments
         if (!nonCancelledAppointments.Any())
         {
@@ -642,38 +644,12 @@ public class DataSeeder
             return new List<Prescription>(); // Return an empty list if no valid appointments
         }
 
-        // Generate prescriptions using Faker
+        // Generate exactly 6000 prescriptions using Faker
         var faker = new Faker<Prescription>()
             .RuleFor(p => p.Id, f => f.IndexFaker + 1)
             .RuleFor(p => p.AppointmentId, f => f.PickRandom(nonCancelledAppointments).Id);
 
-        // We want exactly 6000 prescriptions
-        int prescriptionCount = 6000;
-        var prescriptions = new List<Prescription>();
-
-        // If there are more than 6000 non-cancelled appointments, generate exactly 6000 prescriptions
-        if (nonCancelledAppointments.Count >= prescriptionCount)
-        {
-            prescriptions.AddRange(faker.Generate(prescriptionCount));
-        }
-        else
-        {
-            // If there are fewer non-cancelled appointments, generate multiple prescriptions per appointment
-            var remainingCount = prescriptionCount - nonCancelledAppointments.Count;
-
-            // Add prescriptions for all non-cancelled appointments first
-            prescriptions.AddRange(faker.Generate(nonCancelledAppointments.Count));
-
-            // Continue generating prescriptions for the remaining count
-            while (prescriptions.Count < prescriptionCount)
-            {
-                // Reuse non-cancelled appointments to generate the remaining prescriptions
-                prescriptions.AddRange(faker.Generate(remainingCount));
-            }
-
-            // Ensure exactly 6000 prescriptions by limiting the number to 6000
-            prescriptions = prescriptions.Take(prescriptionCount).ToList();
-        }
+        var prescriptions = faker.Generate(6000);
 
         return prescriptions; // Return the generated prescriptions
     }
