@@ -137,13 +137,15 @@ static void SeedData(IServiceProvider serviceProvider)
         dbContext.Departments.AddRange(departments);
     }
 
+    // ? Level 3
+
     if (!dbContext.Accounts.Any())
     {
         var accounts = DataSeeder.SeedAccounts(dbContext.AccountTypes.ToList(), dbContext.Clinics.ToList(), 4000);
         dbContext.Accounts.AddRange(accounts);
     }
 
-    // ? Level 3
+    // ? Level 4
 
     if (!dbContext.Patients.Any())
     {
@@ -175,7 +177,7 @@ static void SeedData(IServiceProvider serviceProvider)
         Console.WriteLine("Patients already exist in the database. Seeding skipped.");
     }
 
-    // // Level 3
+    // ? Level 5
 
     // if (!dbContext.Employees.Any())
     // {

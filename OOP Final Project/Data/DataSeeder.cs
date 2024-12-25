@@ -350,7 +350,7 @@ public class DataSeeder
             .RuleFor(p => p.FirstName, f => f.Name.FirstName())
             .RuleFor(p => p.LastName, f => f.Name.LastName())
             .RuleFor(p => p.Email, (f, p) => f.Internet.Email(p.FirstName, p.LastName))
-            .RuleFor(p => p.Phone, f => f.Phone.PhoneNumber())
+            .RuleFor(p => p.Phone, f => f.Random.ReplaceNumbers("###-###-####")) // Custom phone number format
             .RuleFor(p => p.Address, f => f.Address.FullAddress());
 
         // Generate one patient for each valid account
@@ -363,7 +363,6 @@ public class DataSeeder
         Console.WriteLine($"{patients.Count} patients generated, matching accounts with AccountTypeId == 5.");
         return patients;
     }
-
 
 
 
