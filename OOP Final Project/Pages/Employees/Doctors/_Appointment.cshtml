@@ -129,6 +129,7 @@
             </div>
         </div>
 
+
         <!-- Appointments Table -->
         <table class="table table-hover table-bordered shadow-sm text-center " id="appointmentsTable">
             <thead class="table-light">
@@ -140,11 +141,26 @@
                     <th style="font-weight: 400; width: 20%;">Actions</th>
                 </tr>
             </thead>
-
             <tbody>
-
+                <!-- Appointment rows will be loaded here -->
             </tbody>
         </table>
+
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <button class="page-link" id="prevPage" onclick="changePage(-1)">Previous</button>
+                </li>
+                <li class="page-item">
+                    <span class="page-link" id="currentPage">1</span>
+                </li>
+                <li class="page-item">
+                    <button class="page-link" id="nextPage" onclick="changePage(1)">Next</button>
+                </li>
+            </ul>
+        </nav>
+
     </div>
 </div>
 
@@ -158,43 +174,39 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        loadAppointments('today');
-    });
 
-    function loadAppointments(view) {
-        let url = '';
-        switch (view) {
-            case 'today':
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=today';
-                document.getElementById('dateFilterContainer').style.display = 'none';
-                updateButtonStyles('btnToday');
-                break;
-            case 'all':
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=all';
-                document.getElementById('dateFilterContainer').style.display = 'block';
-                updateButtonStyles('btnAll');
-                break;
-            case 'previous':
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=previous';
-                document.getElementById('dateFilterContainer').style.display = 'block';
-                updateButtonStyles('btnPrevious');
-                break;
-            default:
-                view = 'today';
-                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=today';
-                document.getElementById('dateFilterContainer').style.display = 'none';
-                updateButtonStyles('btnToday');
-                break;
-        }
+    // ...existing code...
 
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    function loadAppointments(view, page = 1) {
+        let url = `/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=${view}&page=${page}&rowsPerPage=${rowsPerPage}`;
         fetch(url)
             .then(response => response.text())
             .then(html => {
                 document.querySelector('#appointmentsTable tbody').innerHTML = html;
+                document.getElementById('currentPage').textContent = page;
             })
             .catch(error => console.error('Error loading appointments:', error));
     }
+
+    function changePage(direction) {
+        currentPage += direction;
+        if (currentPage < 1) currentPage = 1;
+        loadAppointments('all', currentPage);
+    }
+
+    // ...existing code...
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadAppointments('today');
+    });
+
+
+
+
 
     function updateButtonStyles(activeButtonId) {
         const buttons = ['btnToday', 'btnAll', 'btnPrevious'];
