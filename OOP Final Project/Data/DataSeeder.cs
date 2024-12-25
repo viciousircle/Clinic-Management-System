@@ -5,6 +5,15 @@ using OOP_Final_Project.Models;
 
 namespace OOP_Final_Project.Data;
 
+// Helper method to truncate fractional seconds
+public static class DateTimeExtensions
+{
+    public static DateTime TruncateSeconds(this DateTime dateTime)
+    {
+        return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
+    }
+}
+
 public class DataSeeder
 {
 
@@ -26,7 +35,6 @@ public class DataSeeder
         return accountTypes;
     }
 
-
     //! Create a Faker instance for Clinic
     public static List<Clinic> SeedClinics(int count)
     {
@@ -38,8 +46,6 @@ public class DataSeeder
 
         return faker.Generate(count);
     }
-
-
 
     //! Create a Faker instance for Schedule
     public static List<Schedule> SeedSchedules()
@@ -201,7 +207,6 @@ public class DataSeeder
     }
 
 
-
     //! Create a Faker instance for MedicineType
     public static List<MedicineType> SeedMedicineTypes()
     {
@@ -235,7 +240,6 @@ public class DataSeeder
         return documentTypes;
     }
 
-
     // ? Level 2
 
     //! Create a Faker instance for Department
@@ -265,16 +269,24 @@ public class DataSeeder
 
 
     //! Create a Faker instance for Account
+
     public static List<Account> SeedAccounts(List<AccountType> accountTypes, List<Clinic> clinics, int patientCount)
     {
         var accounts = new List<Account>();
         int idCounter = 1;
 
         // - Clinic Accounts
-
         foreach (var clinic in clinics)
         {
-            accounts.Add(new Account { Id = idCounter++, AccountTypeId = 1, AccountType = accountTypes.First(at => at.Id == 1), UserName = $"{clinic.Name}_manager", Password = "Manager123" });
+            accounts.Add(new Account
+            {
+                Id = idCounter++,
+                AccountTypeId = 1,
+                AccountType = accountTypes.First(at => at.Id == 1),
+                UserName = $"{clinic.Name}_manager",
+                Password = "Manager123",
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)).TruncateSeconds() // Helper function to truncate seconds
+            });
 
             accounts.AddRange(Enumerable.Range(0, 2).Select(_ => new Account
             {
@@ -283,7 +295,7 @@ public class DataSeeder
                 AccountType = accountTypes.First(at => at.Id == 2),
                 UserName = $"{clinic.Name}_receptionist{_ + 1}",
                 Password = $"Receptionist{_ + 1}",
-                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)) // Random date within the past year
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)).TruncateSeconds()
             }));
 
             accounts.AddRange(Enumerable.Range(0, 2).Select(_ => new Account
@@ -293,7 +305,7 @@ public class DataSeeder
                 AccountType = accountTypes.First(at => at.Id == 3),
                 UserName = $"{clinic.Name}_pharmacist{_ + 1}",
                 Password = $"Pharmacist{_ + 1}",
-                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)) // Random date within the past year
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)).TruncateSeconds()
             }));
 
             accounts.AddRange(Enumerable.Range(0, 5).Select(_ => new Account
@@ -303,7 +315,7 @@ public class DataSeeder
                 AccountType = accountTypes.First(at => at.Id == 4),
                 UserName = $"{clinic.Name}_doctor{_ + 1}",
                 Password = $"Doctor{_ + 1}",
-                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365))   // Random date within the past year
+                CreateDate = DateTime.Now.AddDays(-new Random().Next(1, 365)).TruncateSeconds()
             }));
         }
 
@@ -313,7 +325,7 @@ public class DataSeeder
             .RuleFor(a => a.AccountTypeId, f => 5) // 5 represents Patient account type
             .RuleFor(a => a.UserName, f => f.Internet.UserName())
             .RuleFor(a => a.Password, f => f.Internet.Password(8))
-            .RuleFor(a => a.CreateDate, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now));
+            .RuleFor(a => a.CreateDate, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now).TruncateSeconds());
 
         accounts.AddRange(faker.Generate(patientCount)); // Add patient accounts
 
@@ -321,15 +333,16 @@ public class DataSeeder
     }
 
 
-    //! Create a Faker instance for Patient
-    // TODO: Xme lai, chuyen cai generate sang applicationdbcontext
+    // //! Create a Faker instance for Patient
     public static List<Patient> SeedPatients(List<Clinic> clinics, List<Account> accounts)
     {
-        // Check if accounts with the required AccountTypeId (5) exist
+        // Filter accounts with AccountTypeId == 5
         var validAccounts = accounts.Where(a => a.AccountTypeId == 5).ToList();
+
         if (!validAccounts.Any())
         {
             Console.WriteLine("No valid accounts available for patient assignment.");
+            return new List<Patient>();
         }
 
         var faker = new Faker<Patient>()
@@ -338,12 +351,18 @@ public class DataSeeder
             .RuleFor(p => p.LastName, f => f.Name.LastName())
             .RuleFor(p => p.Email, (f, p) => f.Internet.Email(p.FirstName, p.LastName))
             .RuleFor(p => p.Phone, f => f.Phone.PhoneNumber())
-            .RuleFor(p => p.Address, f => f.Address.FullAddress())
-            .RuleFor(p => p.AccountId, f => f.PickRandom(validAccounts).Id);
+            .RuleFor(p => p.Address, f => f.Address.FullAddress());
 
-        return faker.Generate(new Random().Next(3000, 5000));
+        // Generate one patient for each valid account
+        var patients = validAccounts.Select(account =>
+            faker
+                .RuleFor(p => p.AccountId, _ => account.Id) // Assign the AccountId directly
+                .Generate()
+        ).ToList();
+
+        Console.WriteLine($"{patients.Count} patients generated, matching accounts with AccountTypeId == 5.");
+        return patients;
     }
-
 
 
 
