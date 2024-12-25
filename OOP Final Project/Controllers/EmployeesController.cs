@@ -7,32 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using OOP_Final_Project.Data;
 using OOP_Final_Project.Models;
 using OOP_Final_Project.ViewModels;
+using OOP_Final_Project.ViewModels.Shared;
 
 
 namespace OOP_Final_Project.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
-// - GET /api/employees: List all employees.
-// - GET /api/employees/{id}: Get a specific employee by ID.
-
-// - GET /api/employees/{id}/appointments: Get all appointments for an employee.
-// - GET /api/employees/{id}/appointments/count: Get the total number of appointments for an employee.
-
-// - GET /api/employees/{id}/appointments/future: Get all future appointments for an employee in the next 30 days.
-// - GET /api/employees/{id}/appointments/future/count: Get the total number of future appointments for an employee in the next 30 days.
-
-// - GET /api/employees/{id}/appointments/completed: Get all completed appointments for an employee.
-// - GET /api/employees/{id}/appointments/completed/count: Get the total number of completed appointments for an employee.
-
-// - GET /api/employees/{id}/appointments/cancelled: Get all cancelled appointments for an employee.
-// - GET /api/employees/{id}/appointments/cancelled/count: Get the total number of cancelled appointments for an employee.
-
-// - GET /api/employees/{id}/patients: Get all patients for an employee.
-
-
-// - POST /api/employees: Add a new employee.
 
 public class EmployeesController : ControllerBase
 {
@@ -43,21 +24,26 @@ public class EmployeesController : ControllerBase
         _context = context;
     }
 
+    // ! ------------------- Employees -------------------
+    // ? [GET] /api/employees : Get all employees
+    // ? [GET] /api/employees/{id} : Get employee by id
+
     [HttpGet]
     public IActionResult GetAll()
     {
         var employees = _context.Employees
-        .Select(employee => new EmployeeViewModel
-        {
-            Id = employee.Id,
-            FirstName = employee.FirstName,
-            LastName = employee.LastName,
-            Email = employee.Email,
-            Phone = employee.Phone,
-            AccountId = employee.AccountId,
-            IsActive = employee.IsActive
-        })
-        .ToList();
+        .Where(employee => employee.IsActive) // Optional: filter active employees
+    .Select(employee => new EmployeeViewModel
+    {
+        Id = employee.Id,
+        FirstName = employee.FirstName,
+        LastName = employee.LastName,
+        Email = employee.Email,
+        Phone = employee.Phone,
+        AccountId = employee.AccountId,
+        IsActive = employee.IsActive
+    })
+    .ToList();
 
         var response = new { Employees = employees };
 
@@ -88,8 +74,14 @@ public class EmployeesController : ControllerBase
         return Ok(response);
     }
 
+    // ! ----------------------------------------------------
 
-    // ------------------- Appointments -------------------
+    // ! ------------------- Appointments -------------------
+    // ? [GET] /api/employees/{id}/appointments : Get all appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/today : Get today's appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/on/{date} : Get appointments by employee id and date
+    // ? [GET] /api/employees/{id}/appointments/past : Get past appointments by employee id
+
     [HttpGet("{id}/appointments")]
     public IActionResult GetAllAppointmentsByEmployeeId(int id)
     {
@@ -305,8 +297,72 @@ public class EmployeesController : ControllerBase
     }
 
 
+    // ! -----------------------------------------------------------
 
-    // ------------------- Appointments Counts -------------------
+    // ! ------------------- Appointment --------------------------------
+    // ? [GET] /api/employees/{id}/appointments/{appointmentId} : Get appointment by employee id and appointment id
+
+    [HttpGet("{id}/appointments/{appointmentId}")]
+    public IActionResult GetAppointmentByEmployeeIdAndAppointmentId(int id, int appointmentId)
+    {
+        var appointment = _context.Appointments
+            .Where(appt => appt.DoctorId == id && appt.Id == appointmentId)
+            .Include(appt => appt.Doctor)
+            .Include(appt => appt.Patient)
+            .GroupJoin(_context.DocumentAppointments, appt => appt.Id, doc => doc.AppointmentId, (appt, docAppointments) => new { appt, docAppointments })
+            .Join(_context.DocumentDiagnoses, appt => appt.appt.Id, diag => diag.AppointmentId, (appt, diag) => new { appt.appt, appt.docAppointments, diag })
+            .AsEnumerable()
+            .Select(appt => new
+            {
+                appt.appt.Id,
+                appt.appt.DoctorId,
+                Patient = new PatientViewModel
+                {
+                    Id = appt.appt.Patient.Id,
+                    FirstName = appt.appt.Patient.FirstName,
+                    LastName = appt.appt.Patient.LastName,
+                    Email = appt.appt.Patient.Email,
+                    Phone = System.Text.RegularExpressions.Regex.Replace(appt.appt.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                    Address = appt.appt.Patient.Address,
+                    LatestVisit = appt.docAppointments
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date != default(DateTime) ? appt.docAppointments
+                    .OrderByDescending(doc => doc.Date)
+                    .FirstOrDefault()?.Date.ToString("dd-MM-yyyy") : "N/A"
+                },
+                AppointmentRecord = new AppointmentRecordViewModel
+                {
+                    TimeBook = appt.docAppointments.FirstOrDefault()?.TimeBook ?? default(DateTime),
+                    Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
+                    TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
+                    TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
+                    Location = appt.docAppointments.FirstOrDefault()?.Location,
+                },
+                Diagnose = new DiagnoseViewModel
+                {
+                    DiagnoseDetails = appt.diag.DiagnoseDetails,
+                    IsSick = appt.diag.IsSick,
+                    PatientStatus = appt.diag.PatientStatus
+                }
+            })
+            .FirstOrDefault();
+
+        if (appointment == null)
+        {
+            return NotFound(new { Message = "Appointment not found for the specified employee and appointment ID." });
+        }
+
+        return Ok(new { Appointment = appointment });
+    }
+
+
+
+
+    // ! ------------------- Appointments Counts -------------------
+    // ? [GET] /api/employees/{id}/appointments/count : Get total appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/future/count : Get total future appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/completed/count : Get total completed appointments by employee id
+    // ? [GET] /api/employees/{id}/appointments/cancelled/count : Get total cancelled appointments by employee id
 
     [HttpGet("{id}/appointments/count")]
     public IActionResult GetTotalAppointmentsByEmployeeId(int id)
@@ -369,7 +425,11 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, TotalCancelledAppointments = totalCancelledAppointments });
     }
 
-    // ------------------- Patients -------------------
+    // ! -----------------------------------------------------------
+
+    // ! ------------------- Patients ------------------------------
+    // ? [GET] /api/employees/{id}/patients : Get all patients by employee id
+    // ? [GET] /api/employees/{id}/patients/observed : Get all observed patients by employee id
 
     [HttpGet("{id}/patients")]
     public IActionResult GetAllPatientsByEmployeeId(int id)
@@ -394,8 +454,8 @@ public class EmployeesController : ControllerBase
                         .FirstOrDefault()
                 }
             )
-            .AsEnumerable() // Move processing to in-memory
-            .Select(result => new
+            .AsEnumerable()
+            .Select(result => new PatientViewModel
             {
                 Id = result.Patient.Id,
                 FirstName = result.Patient.FirstName,
@@ -403,7 +463,7 @@ public class EmployeesController : ControllerBase
                 Email = result.Patient.Email,
                 Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone, @"\s*x\d+$", ""),
                 Address = result.Patient.Address,
-                LatestVisit = result.LatestVisit?.Date.ToString("dd-MM-yyyy") ?? "N/A" // Format date as dd-MM-yyyy or use "N/A"
+                LatestVisit = result.LatestVisit?.Date.ToString("dd-MM-yyyy") ?? "N/A"
             })
             .Distinct()
             .ToList();
@@ -411,7 +471,113 @@ public class EmployeesController : ControllerBase
         return Ok(new { EmployeeId = id, Patients = patients });
     }
 
+    [HttpGet("{id}/patients/observed")]
+    public IActionResult GetAllObservedPatientsByEmployeeId(int id)
+    {
+        var observedPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(
+                _context.Patients,
+                appt => appt.PatientId,
+                patient => patient.Id,
+                (appt, patient) => new { Appointment = appt, Patient = patient }
+            )
+            .GroupJoin(
+                _context.DocumentAppointments,
+                apptPatient => apptPatient.Appointment.Id,
+                docAppt => docAppt.AppointmentId,
+                (apptPatient, docAppointments) => new
+                {
+                    apptPatient.Patient,
+                    LatestVisit = docAppointments
+                        .OrderByDescending(doc => doc.Date)
+                        .FirstOrDefault()
+                }
+            )
+            .Join(
+                _context.DocumentDiagnoses,
+                result => result.LatestVisit.AppointmentId,
+                diag => diag.AppointmentId,
+                (result, diag) => new
+                {
+                    result.Patient,
+                    result.LatestVisit,
+                    diag
+                }
+            )
+            .AsEnumerable()
+            .Where(result => result.LatestVisit != null && result.diag != null && result.diag.IsSick)
+            .Select(result => new PatientViewModel
+            {
+                Id = result.Patient.Id,
+                FirstName = result.Patient.FirstName,
+                LastName = result.Patient.LastName,
+                Email = result.Patient.Email,
+                Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                Address = result.Patient.Address,
+                LatestVisit = result.LatestVisit.Date.ToString("dd-MM-yyyy")
+            })
+            .Distinct()
+            .ToList();
 
+        return Ok(new { EmployeeId = id, ObservedPatients = observedPatients });
+    }
+
+    // ! -----------------------------------------------------------
+
+    // ! ------------------- Patients Counts ------------------------
+    // ? [GET] /api/employees/{id}/patients/count : Get total patients by employee id
+    // ? [GET] /api/employees/{id}/patients/observed/count : Get total observed patients by employee id
+
+    [HttpGet("{id}/patients/count")]
+    public IActionResult GetTotalPatientsByEmployeeId(int id)
+    {
+        var totalPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Select(appt => appt.PatientId)
+            .Distinct()
+            .Count();
+
+        var response = new { EmployeeId = id, TotalPatients = totalPatients };
+
+        return Ok(response);
+    }
+
+    [HttpGet("{id}/patients/observed/count")]
+    public IActionResult GetTotalObservedPatientsByEmployeeId(int id)
+    {
+        var totalObservedPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(
+                _context.DocumentAppointments,
+                appt => appt.Id,
+                docAppt => docAppt.AppointmentId,
+                (appt, docAppt) => new { appt, docAppt }
+            )
+            .Join(
+                _context.DocumentDiagnoses,
+                joined => joined.appt.Id,
+                diag => diag.AppointmentId,
+                (joined, diag) => new { joined.appt, joined.docAppt, diag }
+            )
+            .AsEnumerable() // Switch to client-side evaluation
+            .GroupBy(joined => joined.appt.PatientId)
+            .Select(group => new
+            {
+                PatientId = group.Key,
+                LatestAppointment = group.OrderByDescending(g => g.docAppt.Date).FirstOrDefault()
+            })
+            .Where(result => result.LatestAppointment != null && result.LatestAppointment.diag.IsSick)
+            .Select(result => result.PatientId)
+            .Distinct()
+            .Count();
+
+        var response = new { EmployeeId = id, TotalObservedPatients = totalObservedPatients };
+
+        return Ok(response);
+    }
+
+    // ! -----------------------------------------------------------
 
 }
 

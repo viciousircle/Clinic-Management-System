@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json.Serialization;
 using OOP_Final_Project.ViewModels;
+using OOP_Final_Project.ViewModels.Shared;
 using System.Collections.Generic;
 using OOP_Final_Project.Controllers.ApiResponses;
 
@@ -57,37 +58,67 @@ namespace OOP_Final_Project.Pages.Employees
         // -- Get Partial View ---------------------------
         public async Task<IActionResult> OnGetLoadPartialAsync(string section, string view)
         {
+            if (section == "AppointmentTableRows")
+            {
+                switch (view)
+                {
+                    case "today":
+                        await FetchAppointmentsTodayAsync();
+
+                        break;
+                    case "all":
+                        await FetchAppointmentsAsync();
+
+                        break;
+                    case "previous":
+                        await FetchPastAppointmentsAsync();
+                        break;
+
+                }
+                return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
+            }
+
+            if (section == "PatientCards")
+            {
+                switch (view)
+                {
+                    case "observedPatients":
+                        // Fetch observed patients
+                        await FetchObservedPatientsAsync();
+                        return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
+
+                    case "allPatients":
+                        // Fetch all patients
+                        await FetchAllPatientsAsync();
+                        return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
+
+                    default:
+                        return BadRequest("Invalid view parameter.");
+                }
+            }
 
             switch (view)
             {
-                case "today":
-                    await FetchAppointmentsTodayAsync();
+                case "allPatients":
+                    await FetchAllPatientsAsync();
                     break;
-                case "all":
-                    await FetchAppointmentsAsync();
-                    break;
-                case "previous":
-                    await FetchPastAppointmentsAsync();
+                case "observedPatients":
+                    await FetchObservedPatientsAsync();
                     break;
             }
 
-            if (section == "AppointmentTableRows")
-            {
-                return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
-            }
+
 
             switch (section)
             {
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
                 case "Appointment":
-
                     await FetchAppointmentCountsAsync();
 
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
-
                 case "Patient":
-                    await FetchPatientsAsync();
+                    await FetchPatientCountAsync();
 
 
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
@@ -95,12 +126,11 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
-
-
                 default:
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
         }
+
 
 
         // ! ------------------------------------------------------------------------------------------------
@@ -148,13 +178,13 @@ namespace OOP_Final_Project.Pages.Employees
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Employee Details By ID ---------------------
-        // -- [GET] api/employees/96 -----------------------
+        // -- [GET] api/employees/6 -----------------------
         private async Task FetchEmployeeDetailsAsync()
         {
             try
             {
                 // _logger.LogInformation("Fetching employee details from API..."); //For logging purposes
-                var response = await _client.GetAsync("api/employees/96");
+                var response = await _client.GetAsync("api/employees/6");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -194,16 +224,16 @@ namespace OOP_Final_Project.Pages.Employees
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointment Counts -------------------
-        // -- [GET] api/employees/96/appointments/count ---
-        // -- [GET] api/employees/96/appointments/future/count ---
-        // -- [GET] api/employees/96/appointments/completed/count ---
-        // -- [GET] api/employees/96/appointments/cancelled/count ---
+        // -- [GET] api/employees/6/appointments/count ---
+        // -- [GET] api/employees/6/appointments/future/count ---
+        // -- [GET] api/employees/6/appointments/completed/count ---
+        // -- [GET] api/employees/6/appointments/cancelled/count ---
         private async Task FetchAppointmentCountsAsync()
         {
-            DoctorData.AppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/count", "totalAppointments");
-            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/future/count", "totalFutureAppointments");
-            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/completed/count", "totalCompletedAppointments");
-            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync("api/employees/96/appointments/cancelled/count", "totalCancelledAppointments");
+            DoctorData.AppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/count", "totalAppointments");
+            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/future/count", "totalFutureAppointments");
+            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/completed/count", "totalCompletedAppointments");
+            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/cancelled/count", "totalCancelledAppointments");
         }
 
         private async Task<int> FetchAppointmentCountAsync(string url, string jsonProperty)
@@ -245,13 +275,14 @@ namespace OOP_Final_Project.Pages.Employees
             return 0;
         }
 
+
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Appointments -------------------------
-        // -- [GET] api/employees/96/appointments ---------
-        // -- [GET] api/employees/96/appointments/today ---
-        // -- [GET] api/employees/96/appointments/{date} --
-        // -- [GET] api/employees/96/appointments/past ----
+        // -- [GET] api/employees/6/appointments ---------
+        // -- [GET] api/employees/6/appointments/today ---
+        // -- [GET] api/employees/6/appointments/{date} --
+        // -- [GET] api/employees/6/appointments/past ----
         // This method will handle the common logic for fetching appointments
         private async Task FetchAppointmentsAsync(string url, string dateDescription = null)
         {
@@ -319,13 +350,13 @@ namespace OOP_Final_Project.Pages.Employees
         // Method to fetch all appointments
         private Task FetchAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/96/appointments");
+            return FetchAppointmentsAsync("api/employees/6/appointments");
         }
 
         // Method to fetch today's appointments
         private Task FetchAppointmentsTodayAsync()
         {
-            return FetchAppointmentsAsync("api/employees/96/appointments/today", "today");
+            return FetchAppointmentsAsync("api/employees/6/appointments/today", "today");
 
         }
 
@@ -333,25 +364,28 @@ namespace OOP_Final_Project.Pages.Employees
         private Task FetchAppointmentsByDateAsync(DateTime date)
         {
             var formattedDate = date.ToString("yyyy-MM-dd");
-            return FetchAppointmentsAsync($"api/employees/96/appointments/on/{formattedDate}", $"Successfully fetched appointments for the specified date: {formattedDate}");
+            return FetchAppointmentsAsync($"api/employees/6/appointments/on/{formattedDate}", $"Successfully fetched appointments for the specified date: {formattedDate}");
         }
 
         // Method to fetch past appointments
         private Task FetchPastAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/96/appointments/past", "in the past");
+            return FetchAppointmentsAsync("api/employees/6/appointments/past", "in the past");
 
         }
 
         // ! ------------------------------------------------------------------------------------------------
 
         // --- Fetch Patients -----------------------------
-        // -- [GET] api/employees/96/patients -------------
-        private async Task FetchPatientsAsync()
+        // -- [GET] api/employees/6/patients -------------
+        // -- [GET] api/employees/6/patients/observed ----
+        // -- [GET] api/employees/6/patients/{status} ----
+
+        private async Task FetchPatientsAsync(string url, string description = null)
         {
             try
             {
-                var response = await _client.GetAsync("api/employees/96/patients");
+                var response = await _client.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -359,23 +393,22 @@ namespace OOP_Final_Project.Pages.Employees
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     var patientsResponse = JsonSerializer.Deserialize<PatientsResponse>(json, options);
 
-                    if (patientsResponse?.Patients != null)
+                    if (patientsResponse != null)
                     {
-                        // Manually parse the LatestVisit field to DateTime if needed
-                        foreach (var patient in patientsResponse.Patients)
+                        if (patientsResponse.Patients != null && patientsResponse.Patients.Count > 0)
                         {
-                            if (DateTime.TryParseExact(patient.LatestVisit, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
-                            {
-                                // _logger.LogInformation($"Parsed LatestVisit: {parsedDate:yyyy-MM-dd}"); //For logging purposes
-                            }
-                            else
-                            {
-                                _logger.LogWarning($"Failed to parse LatestVisit for patient ID {patient.Id}: {patient.LatestVisit}");
-                            }
+                            DoctorData.Patients = patientsResponse.Patients;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} patients.");
                         }
-
-                        DoctorData.Patients = patientsResponse.Patients;
-                        _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} patients.");
+                        else if (patientsResponse.ObservedPatients != null && patientsResponse.ObservedPatients.Count > 0)
+                        {
+                            DoctorData.Patients = patientsResponse.ObservedPatients;
+                            _logger.LogInformation($"Successfully fetched {DoctorData.Patients.Count} observed patients.");
+                        }
+                        else
+                        {
+                            _logger.LogError("Failed to deserialize patient data.");
+                        }
                     }
                     else
                     {
@@ -389,12 +422,74 @@ namespace OOP_Final_Project.Pages.Employees
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching patients.");
+                _logger.LogError(ex, $"An error occurred while fetching patients {description ?? ""}.");
             }
+        }
+
+        // Fetch all patients
+        private Task FetchAllPatientsAsync()
+        {
+            return FetchPatientsAsync("api/employees/6/patients", "all patients");
+        }
+
+        // Fetch observed patients
+        private Task FetchObservedPatientsAsync()
+        {
+            return FetchPatientsAsync("api/employees/6/patients/observed", "observed patients");
         }
 
 
 
+        // ! ------------------------------------------------------------------------------------------------
+
+        // --- Fetch Appointment Counts -------------------
+        // -- [GET] api/employees/6/appointments/count ---
+
+        private async Task FetchPatientCountAsync()
+        {
+            DoctorData.PatientCount = await FetchPatientCountAsync("api/employees/6/patients/count", "totalPatients");
+            DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/6/patients/observed/count", "totalObservedPatients");
+        }
+
+        private async Task<int> FetchPatientCountAsync(string url, string jsonProperty)
+        {
+            try
+            {
+                var response = await _client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                        var jsonData = JsonSerializer.Deserialize<JsonElement>(json);
+                        if (jsonData.TryGetProperty(jsonProperty, out var propertyValue))
+                        {
+                            _logger.LogInformation($"Fetched {jsonProperty}: {propertyValue.GetInt32()}");
+                            return propertyValue.GetInt32();
+                        }
+                        else
+                        {
+                            _logger.LogError($"{jsonProperty} not found in response. Response: {json}");
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogError($"Response for {url} is empty.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch appointment count from {url}. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while fetching appointment count from {url}");
+            }
+
+            return 0;
+        }
 
 
     }

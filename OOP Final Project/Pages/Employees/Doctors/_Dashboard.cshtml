@@ -19,7 +19,7 @@
                 <div class="card-body p-4 d-flex flex-column g-2 ">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class=" rounded-3 px-2 py-1 text-muted  btn "
-                            style="border: 1px solid rgb(180, 180, 180); ">Appointments 
+                            style="border: 1px solid rgb(180, 180, 180); ">Appointments
                         </div>
                         <div class="text-light px-2 py-1 rounded-1" style="background-color: #45687e;">
                             Today</div>
@@ -30,7 +30,7 @@
                             <div class=" px-1 py-0 mx-1 my-1 rounded-16px" style="background-color: #457b9d;"></div>
                             <div class="mt-1"
                                 style=" color: #1d3557; display: flex; flex-direction: column; align-items: center; ">
-                                <h6 style="margin: 0; color: #1d3557;">Total  </h6>
+                                <h6 style="margin: 0; color: #1d3557;">Total </h6>
                                 <div>30</div>
                             </div>
 
@@ -109,6 +109,28 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm" style="border-radius: 24px;">
+            <div class="card-body">
+                <div class="card-title text-center">Appointments Comparison</div>
+                <div class="text-center">
+                    <canvas id="appointmentsComparisonChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm" style="border-radius: 24px;">
+            <div class="card-body">
+                <div class="card-title text-center">Daily Cancellations</div>
+                <div class="text-center">
+                    <canvas id="cancellationsChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -118,3 +140,96 @@
 
 
 <script src="/js/Employees/General.js"></script>
+
+<!-- Daily Cancellations (Pie Chart) -->
+<script>
+    const ctx3 = document.getElementById('cancellationsChart').getContext('2d');
+    const cancellationsChart = new Chart(ctx3, {
+        type: 'pie',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Daily Cancellations',
+                data: [2, 5, 3, 4, 3, 2, 1], // Fake data for cancellations
+                backgroundColor: [
+                    'rgba(69, 123, 157, 0.8)',
+                    'rgba(132, 169, 140, 0.8)',
+                    'rgba(184, 140, 110, 0.8)',
+                    'rgba(207, 125, 73, 0.8)',
+                    'rgba(211, 84, 122, 0.8)',
+                    'rgba(142, 163, 211, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                ],
+                borderColor: 'rgba(255, 255, 255, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + ' cancellations';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Weekly Appointments Comparison Chart (Bar Chart) -->
+<script>
+    const ctx2 = document.getElementById('appointmentsComparisonChart').getContext('2d');
+    const appointmentsComparisonChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [
+                {
+                    label: 'Appointments Scheduled',
+                    data: [20, 25, 18, 30, 35, 40, 22],
+                    backgroundColor: 'rgba(69, 123, 157, 0.8)',
+                    borderColor: 'rgba(69, 123, 157, 1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Appointments Completed',
+                    data: [18, 20, 15, 28, 33, 38, 20],
+                    backgroundColor: 'rgba(132, 169, 140, 0.8)',
+                    borderColor: 'rgba(132, 169, 140, 1)',
+                    borderWidth: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false
+                    }
+                }
+            }
+        }
+    });
+</script>
