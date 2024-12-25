@@ -281,14 +281,15 @@ static void SeedDataLevel6(IServiceProvider serviceProvider)
 
     // ? Level 6
 
-    if (!dbContext.Prescriptions.Any())
+    if (dbContext.Prescriptions.Count() < 6000)
     {
         var documentCancels = dbContext.DocumentCancels.ToList();  // Fetch existing document cancels
         var appointments = dbContext.Appointments.ToList(); // Fetch existing appointments
-        var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels);  // Seed prescriptions for non-cancelled appointments
+        var existingPrescriptionsCount = dbContext.Prescriptions.Count();
+        var prescriptionsToGenerate = 6000 - existingPrescriptionsCount;
+        var prescriptions = DataSeeder.SeedPrescriptions(appointments, documentCancels).Take(prescriptionsToGenerate).ToList();  // Seed prescriptions for non-cancelled appointments
         dbContext.Prescriptions.AddRange(prescriptions); // Add seeded prescriptions to the context
     }
-
     Console.WriteLine("Data seeding complete.");
     // Save changes once all data is added
     dbContext.SaveChanges();
