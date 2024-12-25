@@ -158,6 +158,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        loadAppointments('today');
+    });
+
     function loadAppointments(view) {
         let url = '';
         switch (view) {
@@ -175,6 +179,12 @@
                 url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=previous';
                 document.getElementById('dateFilterContainer').style.display = 'block';
                 updateButtonStyles('btnPrevious');
+                break;
+            default:
+                view = 'today';
+                url = '/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=today';
+                document.getElementById('dateFilterContainer').style.display = 'none';
+                updateButtonStyles('btnToday');
                 break;
         }
 
