@@ -9,7 +9,10 @@
                 <i class="fas fa-user-tag"></i>
                 <h5 class="card-title mb-0">@patient.FirstName</h5>
             </div>
-            <button class="btn-sm btn btn-outline-dark px-3 shadow-sm" onclick="showPatientDetails()">
+            <button class="btn-sm btn btn-outline-dark px-3 shadow-sm" data-patient-id="@patient.Id"
+                data-patient-name="@patient.FirstName" data-patient-phone="@patient.Phone"
+                data-patient-address="@patient.Address" data-patient-email="@patient.Email"
+                data-patient-latest-visit="@patient.LatestVisit" onclick="openPatientDetailsModal(this)">
                 Details
             </button>
         </div>

@@ -119,10 +119,32 @@
     });
 
 
-    function showPatientDetails() {
-        // Show modal
-        const modal = new bootstrap.Modal(document.getElementById('patientDetailsModal'));
+    function openPatientDetailsModal(button) {
+        if (!button || !button.closest) {
+            console.error('Invalid button element passed:', button);
+            return;
+        }
+
+        const patientID = button.getAttribute('data-patient-id') || "N/A";
+        const patientName = button.getAttribute('data-patient-name') || "N/A";
+        const patientPhone = button.getAttribute('data-patient-phone') || "N/A";
+        const patientEmail = button.getAttribute('data-patient-email') || "N/A";
+        const patientAddress = button.getAttribute('data-patient-address') || "N/A";
+        const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
+
+
+        document.getElementById('patientDetailsPatientID').value = patientID;
+
+        const modalElement = document.getElementById('patientDetailsModal');
+        if (!modalElement) {
+            console.error('Modal element not found: patientDetailsModal');
+            return;
+        }
+
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
+
+
     }
 
     document.getElementById("makeNewAppointmentBtn").addEventListener("click", function () {
