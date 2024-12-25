@@ -100,6 +100,7 @@
                         onclick="loadAppointments('all')">View All</button>
                     <button type="button" class="btn btn-outline-dark" id="btnPrevious"
                         onclick="loadAppointments('previous')">Previous</button>
+
                 </div>
 
                 <!-- Sort Options -->
@@ -180,6 +181,9 @@
     const rowsPerPage = 10;
 
     function loadAppointments(view, page = 1) {
+        // Update button styles
+        updateButtonStyles(view);
+
         let url = `/Employees/EmployeeLayout?handler=LoadPartial&section=AppointmentTableRows&view=${view}&page=${page}&rowsPerPage=${rowsPerPage}`;
         fetch(url)
             .then(response => response.text())
@@ -203,11 +207,16 @@
     });
 
 
-    function updateButtonStyles(activeButtonId) {
-        const buttons = ['btnToday', 'btnAll', 'btnPrevious'];
-        buttons.forEach(buttonId => {
+    function updateButtonStyles(view) {
+        const buttonMapping = {
+            'today': 'btnToday',
+            'all': 'btnAll',
+            'previous': 'btnPrevious'
+        };
+
+        Object.entries(buttonMapping).forEach(([key, buttonId]) => {
             const button = document.getElementById(buttonId);
-            if (buttonId === activeButtonId) {
+            if (view === key) {
                 button.classList.remove('btn-outline-dark');
                 button.classList.add('btn-dark');
             } else {
