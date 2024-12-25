@@ -175,7 +175,6 @@
 
 <script>
 
-    // ...existing code...
 
     let currentPage = 1;
     const rowsPerPage = 10;
@@ -197,15 +196,11 @@
         loadAppointments('all', currentPage);
     }
 
-    // ...existing code...
 
 
     document.addEventListener('DOMContentLoaded', function () {
         loadAppointments('today');
     });
-
-
-
 
 
     function updateButtonStyles(activeButtonId) {
@@ -273,10 +268,25 @@
     }
 
     function openHealthCheckModal(button) {
-        // Store the selected row
-        selectedRow = button.closest("tr");
+        if (!button || !button.closest) {
+            console.error('Invalid button element passed:', button);
+            return;
+        }
 
-        // Show the modal
+        const patientID = button.getAttribute('data-patient-id') || "N/A";
+        const patientName = button.getAttribute('data-patient-name') || "N/A";
+        const patientPhone = button.getAttribute('data-patient-phone') || "N/A";
+        const patientEmail = button.getAttribute('data-patient-email') || "N/A";
+        const patientAddress = button.getAttribute('data-patient-address') || "N/A";
+        const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
+
+        document.getElementById('healthCheckPatientID').value = patientID;
+        document.getElementById('healthCheckPatientName').value = patientName;
+        document.getElementById('healthCheckPatientPhone').value = patientPhone;
+        document.getElementById('healthCheckPatientEmail').value = patientEmail;
+        document.getElementById('healthCheckPatientAddress').value = patientAddress;
+        document.getElementById('healthCheckPatientLatestVisit').value = patientLatestVisit;
+
         const modal = new bootstrap.Modal(document.getElementById('healthCheckModal'));
         modal.show();
     }
