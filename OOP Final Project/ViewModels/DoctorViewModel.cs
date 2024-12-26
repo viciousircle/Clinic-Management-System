@@ -34,6 +34,12 @@ public class DoctorViewModel
 
     public List<MedicineViewModel> Medicines { get; set; } = new List<MedicineViewModel>();
 
+    public int TotalMedicineCount { get; set; }
+    public int TotalExpiredMedicineCount { get; set; }
+    public int TotalExpiredSoonMedicineCount { get; set; }
+    public int TotalLowStockMedicineCount { get; set; }
+
+
 }
 
 

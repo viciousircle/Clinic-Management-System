@@ -54,13 +54,6 @@ public class MedicinesController : ControllerBase
         return Ok(total);
     }
 
-    [HttpGet("total/available")]
-    public IActionResult GetTotalAvailable()
-    {
-        var total = _context.Medicines.Count(m => m.ExpiredDate > DateTime.Now);
-        return Ok(total);
-    }
-
     [HttpGet("total/expiredSoon")]
     public IActionResult GetTotalExpiredSoon()
     {

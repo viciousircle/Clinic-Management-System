@@ -21,6 +21,8 @@ namespace OOP_Final_Project.Pages.Employees
         private readonly ILogger<EmployeeLayoutModel> _logger;
         private readonly HttpClient _client;
 
+
+        // -- Constructor --------------------------------
         public TestPharmaModel(IHttpClientFactory clientFactory, ILogger<EmployeeLayoutModel> logger)
         {
             _clientFactory = clientFactory;
@@ -32,17 +34,31 @@ namespace OOP_Final_Project.Pages.Employees
             // -- Initialize ViewModel ---------------------
             DoctorData = new DoctorViewModel();
             Employee = new EmployeeViewModel();
+            Medicines = new List<MedicineViewModel>();
 
         }
 
         // -- Properties --------------------------------
         public DoctorViewModel DoctorData { get; set; }
         public EmployeeViewModel Employee { get; set; }
+        public List<MedicineViewModel> Medicines { get; set; } = new List<MedicineViewModel>();
         public List<EmployeeViewModel> Employees { get; set; } = new List<EmployeeViewModel>();
 
+        // -- Methods -----------------------------------
+        public async Task OnGetAsync()
+        {
+            await FetchAllDataAsync();
 
-        // Dynamic handler to load partial views based on the "section" parameter
-        public IActionResult OnGetLoadPartial(string section)
+        }
+
+        // -- Helper Methods -----------------------------
+        private async Task FetchAllDataAsync()
+        {
+        }
+
+
+        // -- Get Partial View ---------------------------
+        public async Task<IActionResult> OnGetLoadPartial(string section)
         {
             switch (section)
             {
@@ -51,6 +67,9 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Prescribe":
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml"); // Ensure the correct path
                 case "Warehouse":
+
+                    await FetchMedicineCountsAsync();
+
                     return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml"); // Ensure the correct path
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
@@ -61,10 +80,63 @@ namespace OOP_Final_Project.Pages.Employees
             }
         }
 
+        // ! ------ API Calls ----------------------------
+
+        // ! Fetch count of medicines --------------------
+        // -- [GET] /api/medicines/total -----------------
+        // -- [GET] /api/medicines/total/expired ----------
+        // -- [GET] /api/medicines/total/expiredSoon ------
+        // -- [GET] /api/medicines/total/lowStock ---------
+
+        private async Task FetchMedicineCountsAsync()
+        {
+            DoctorData.TotalMedicineCount = await FetchMedicineCountAsync("api/medicines/total");
+
+            DoctorData.TotalExpiredMedicineCount = await FetchMedicineCountAsync("api/medicines/total/expired");
+
+            DoctorData.TotalExpiredSoonMedicineCount = await FetchMedicineCountAsync("api/medicines/total/expiredSoon");
+
+            DoctorData.TotalLowStockMedicineCount = await FetchMedicineCountAsync("api/medicines/total/lowStock");
+
+            _logger.LogInformation("Medicine counts fetched successfully");
+            _logger.LogInformation($"Total: {DoctorData.TotalMedicineCount}");
+            _logger.LogInformation($"Expired: {DoctorData.TotalExpiredMedicineCount}");
+            _logger.LogInformation($"Expired Soon: {DoctorData.TotalExpiredSoonMedicineCount}");
+            _logger.LogInformation($"Low Stock: {DoctorData.TotalLowStockMedicineCount}");
 
 
+        }
+
+        private async Task<int> FetchMedicineCountAsync(string url)
+        {
+
+            try
+            {
+                var response = await _client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var count = JsonSerializer.Deserialize<int>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    return count;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching medicine count");
+            }
+
+            return 0;
+        }
 
 
     }
+
 }
+
 
