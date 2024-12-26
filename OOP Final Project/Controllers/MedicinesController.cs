@@ -40,4 +40,40 @@ public class MedicinesController : ControllerBase
         return Ok(medicines);
     }
 
+    [HttpGet("total")]
+    public IActionResult GetTotal()
+    {
+        var total = _context.Medicines.Count();
+        return Ok(total);
+    }
+
+    [HttpGet("total/expired")]
+    public IActionResult GetTotalExpired()
+    {
+        var total = _context.Medicines.Count(m => m.ExpiredDate < DateTime.Now);
+        return Ok(total);
+    }
+
+    [HttpGet("total/available")]
+    public IActionResult GetTotalAvailable()
+    {
+        var total = _context.Medicines.Count(m => m.ExpiredDate > DateTime.Now);
+        return Ok(total);
+    }
+
+    [HttpGet("total/expiredSoon")]
+    public IActionResult GetTotalExpiredSoon()
+    {
+        var total = _context.Medicines.Count(m => m.ExpiredDate < DateTime.Now.AddDays(30));
+        return Ok(total);
+    }
+
+    [HttpGet("total/lowStock")]
+    public IActionResult GetTotalLowStock()
+    {
+        var total = _context.Medicines.Count(m => m.Quantity < 10);
+        return Ok(total);
+    }
+
+
 }

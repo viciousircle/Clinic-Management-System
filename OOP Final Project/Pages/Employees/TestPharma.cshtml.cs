@@ -26,6 +26,8 @@ namespace OOP_Final_Project.Pages.Employees
             _clientFactory = clientFactory;
             _logger = logger;
             _client = _clientFactory.CreateClient();
+            _client.BaseAddress = new Uri("http://localhost:5298/");
+
 
             // -- Initialize ViewModel ---------------------
             DoctorData = new DoctorViewModel();
