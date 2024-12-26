@@ -59,18 +59,18 @@ namespace OOP_Final_Project.Pages.Employees
             switch (section)
             {
                 case "Dashboard":
-                    return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData); // Ensure the correct path
                 case "Prescribe":
-                    return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml", DoctorData); // Ensure the correct path
                 case "Warehouse":
                     await FetchMedicineCountsAsync();
                     return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml", DoctorData); // Ensure the correct path
                 case "Schedule":
-                    return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData); // Ensure the correct path
                 case "Logout":
-                    return Partial("~/Pages/Employees/Shared/_Logout.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Shared/_Logout.cshtml", DoctorData); // Ensure the correct path
                 default:
-                    return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData); // Ensure the correct path
             }
         }
 
