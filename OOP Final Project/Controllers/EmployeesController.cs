@@ -584,5 +584,46 @@ public class EmployeesController : ControllerBase
     // ? [GET] /api/employees/{id}/medicines : Get all medicines by employee id
 
 
+    // ! -----------------------------------------------------------
+
+    // ! --- Prescriptions -----------------------------------------
+
+    [HttpGet("pharmacist/{id}/prescriptions")]
+    public IActionResult GetAllPrescriptionsByPharmacistId(int id)
+    {
+        var prescriptions = _context.DocumentPrescribes
+            .Where(prescription => prescription.PharmacistId == id)
+            .Join(_context.Prescriptions, joined => joined.PrescriptionId, prescription => prescription.Id, (joined, prescription) => new { joined, prescription })
+            .Join(_context.Appointments, joined => joined.prescription.AppointmentId, appointment => appointment.Id, (joined, appointment) => new { joined.prescription, joined.joined, appointment })
+            .Select(joined => new PrescriptionViewModel
+            {
+                Id = joined.prescription.Id,
+                AppointmentId = joined.prescription.AppointmentId,
+                PharmacistId = joined.joined.Pharmacist.Id,
+                PatientName = joined.appointment.Patient.FirstName + " " + joined.appointment.Patient.LastName,
+                DoctorName = joined.appointment.Doctor.FirstName + " " + joined.appointment.Doctor.LastName,
+                AppointmentTime = joined.appointment.DocumentAppointment.Date.ToString("dd-MM-yyyy") + " " + joined.appointment.DocumentAppointment.TimeStart.ToString(@"hh\:mm") + "-" + joined.appointment.DocumentAppointment.TimeEnd.ToString(@"hh\:mm"),
+                Medicines = _context.PrescriptionMedicines
+                    .Where(prescribeMedicine => prescribeMedicine.PrescriptionId == joined.prescription.Id)
+                    .Join(_context.Medicines, joined => joined.MedicineId, medicine => medicine.Id, (joined, medicine) => new MedicinePrescriptionViewModel
+                    {
+                        MedicineId = joined.MedicineId,
+                        MedicineName = medicine.Name,
+                        DosageAmount = joined.DosageAmount,
+                        Frequency = joined.Frequency,
+                        FrequencyUnit = joined.FrequencyUnit,
+                        Route = joined.Route,
+                        // Instruction = joined.Instruction
+                    })
+                    .ToList(),
+                // PrescriptionStatus = joined.prescription.PrescriptionStatus
+            })
+            .ToList();
+
+        return Ok(new { Prescriptions = prescriptions });
+
+    }
+
+
 }
 

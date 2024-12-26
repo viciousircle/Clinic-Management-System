@@ -47,6 +47,9 @@ public class DoctorViewModel
     public int TotalExpiredSoonMedicineCount { get; set; }
     public int TotalLowStockMedicineCount { get; set; }
 
+    public List<PrescriptionViewModel> Prescriptions { get; set; } = new List<PrescriptionViewModel>();
+
+    public PrescriptionViewModel Prescription { get; set; } = new PrescriptionViewModel();
 
 }
 
@@ -61,4 +64,30 @@ public class MedicineViewModel
     public int ImporterId { get; set; }
     public int Quantity { get; set; }
 
+}
+
+
+public class PrescriptionViewModel
+{
+    public int Id { get; set; }
+    public int AppointmentId { get; set; }
+    public int PharmacistId { get; set; }
+    public string PatientName { get; set; }
+    public string DoctorName { get; set; }
+    public string AppointmentTime { get; set; }
+    public string PrescriptionStatus { get; set; }
+
+    public List<MedicinePrescriptionViewModel> Medicines { get; set; } = new List<MedicinePrescriptionViewModel>();
+
+}
+
+public class MedicinePrescriptionViewModel
+{
+    public int MedicineId { get; set; }
+    public string MedicineName { get; set; }
+    public string DosageAmount { get; set; }
+    public string Frequency { get; set; }
+    public string FrequencyUnit { get; set; }
+    public string Route { get; set; }
+    public string Instruction { get; set; }
 }
