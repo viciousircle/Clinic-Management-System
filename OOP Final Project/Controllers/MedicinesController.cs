@@ -29,7 +29,7 @@ public class MedicinesController : ControllerBase
         .Select(m => new MedicineViewModel
         {
             Id = m.Id,
-            MedicineTypeId = m.MedicineTypeId,
+            MedicineTypeName = m.MedicineType.Name,
             Name = m.Name,
             ExpiredDate = m.ExpiredDate.ToString("yyyy-MM-dd"),
             ImportDate = m.ImportDate.ToString("yyyy-MM-dd"),
@@ -75,5 +75,42 @@ public class MedicinesController : ControllerBase
         return Ok(total);
     }
 
+    [HttpGet("expired")]
+    public IActionResult GetExpired()
+    {
+        var medicines = _context.Medicines.Include(m => m.MedicineType).Include(m => m.Importer)
+        .Where(m => m.ExpiredDate < DateTime.Now)
+        .Select(m => new MedicineViewModel
+        {
+            Id = m.Id,
+            MedicineTypeName = m.MedicineType.Name,
+            Name = m.Name,
+            ExpiredDate = m.ExpiredDate.ToString("yyyy-MM-dd"),
+            ImportDate = m.ImportDate.ToString("yyyy-MM-dd"),
+            ImporterId = m.ImporterId,
+            Quantity = m.Quantity
+        }).ToList();
+
+        return Ok(medicines);
+    }
+
+    [HttpGet("lowStock")]
+    public IActionResult GetLowStock()
+    {
+        var medicines = _context.Medicines.Include(m => m.MedicineType).Include(m => m.Importer)
+        .Where(m => m.Quantity < 10)
+        .Select(m => new MedicineViewModel
+        {
+            Id = m.Id,
+            MedicineTypeName = m.MedicineType.Name,
+            Name = m.Name,
+            ExpiredDate = m.ExpiredDate.ToString("yyyy-MM-dd"),
+            ImportDate = m.ImportDate.ToString("yyyy-MM-dd"),
+            ImporterId = m.ImporterId,
+            Quantity = m.Quantity
+        }).ToList();
+
+        return Ok(medicines);
+    }
 
 }

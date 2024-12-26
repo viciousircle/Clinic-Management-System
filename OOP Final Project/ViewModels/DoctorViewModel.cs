@@ -40,7 +40,7 @@ public class DoctorViewModel
 public class MedicineViewModel
 {
     public int Id { get; set; }
-    public int MedicineTypeId { get; set; }
+    public string MedicineTypeName { get; set; }
 
     public string Name { get; set; }
     public string ExpiredDate { get; set; }
@@ -49,6 +49,8 @@ public class MedicineViewModel
     public int ImporterId { get; set; }
 
     public int Quantity { get; set; }
+
+    public MedicineType MedicineType { get; set; }
 
 
 }
