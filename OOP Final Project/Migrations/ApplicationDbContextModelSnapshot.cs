@@ -136,9 +136,6 @@ namespace OOP_Final_Project.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AppointmentId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
@@ -162,8 +159,6 @@ namespace OOP_Final_Project.Migrations
 
                     b.HasIndex("AppointmentId")
                         .IsUnique();
-
-                    b.HasIndex("AppointmentId1");
 
                     b.HasIndex("DocumentTypeId");
 
@@ -472,6 +467,10 @@ namespace OOP_Final_Project.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PrescriptionStatus")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId")
@@ -597,10 +596,6 @@ namespace OOP_Final_Project.Migrations
                         .HasForeignKey("OOP_Final_Project.Models.DocumentAppointment", "AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("OOP_Final_Project.Models.Appointment", null)
-                        .WithMany("DocumentAppointments")
-                        .HasForeignKey("AppointmentId1");
 
                     b.HasOne("OOP_Final_Project.Models.DocumentType", "DocumentType")
                         .WithMany("DocumentAppointments")
@@ -812,8 +807,6 @@ namespace OOP_Final_Project.Migrations
             modelBuilder.Entity("OOP_Final_Project.Models.Appointment", b =>
                 {
                     b.Navigation("DocumentAppointment");
-
-                    b.Navigation("DocumentAppointments");
 
                     b.Navigation("DocumentBill");
 

@@ -652,14 +652,19 @@ public class DataSeeder
 
         Console.WriteLine($"Generating {prescriptionCount} prescriptions...");
 
+        // Define possible statuses
+        var statuses = new[] { "Prepare", "Pick up", "Done" };
+
         // Generate prescriptions using Faker
         var faker = new Faker<Prescription>()
-            .RuleFor(p => p.AppointmentId, f => f.PickRandom(nonCancelledAppointments).Id);
+            .RuleFor(p => p.AppointmentId, f => f.PickRandom(nonCancelledAppointments).Id)
+            .RuleFor(p => p.PrescriptionStatus, f => f.PickRandom(statuses)); // Randomly assign a status
 
         var prescriptions = faker.Generate(prescriptionCount); // Generate the random quantity of prescriptions
 
         return prescriptions; // Return the generated prescriptions
     }
+
 
 
     // ? Level 7

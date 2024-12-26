@@ -26,6 +26,6 @@ namespace OOP_Final_Project.Models
         public virtual DocumentBill? DocumentBill { get; set; }
 
 
-        public virtual ICollection<DocumentAppointment> DocumentAppointments { get; set; } = new List<DocumentAppointment>();
+        // public virtual ICollection<DocumentAppointment> DocumentAppointments { get; set; } = new List<DocumentAppointment>();
     }
 }

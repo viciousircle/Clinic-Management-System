@@ -11,6 +11,8 @@ namespace OOP_Final_Project.Models
         [ForeignKey("Appointment")]
         public int AppointmentId { get; set; }
 
+        public string PrescriptionStatus { get; set; }
+
         // Navigation property: A prescription is associated with an appointment
         public virtual required Appointment Appointment { get; set; }
 
