@@ -136,7 +136,6 @@
                         </select>
                     </div>
 
-                    @* TODO: Cái này chỉ hiện khi ấn vào view all hoặc previous thôi *@
                     <!-- Date Filter -->
                     <div>
                         <button class="btn border-secondary w-100" id="sortExpiryBtn">
@@ -170,7 +169,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var medicine in Model.ExpiredMedicines)
+                @foreach (var medicine in Model.Medicines)
                 {
                     <tr>
                         <td>@medicine.Name</td>
