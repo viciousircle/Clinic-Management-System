@@ -288,6 +288,7 @@ namespace OOP_Final_Project.Pages.Employees
         {
             try
             {
+
                 var response = await _client.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

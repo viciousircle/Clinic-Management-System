@@ -34,6 +34,14 @@ public class DoctorViewModel
 
     public List<MedicineViewModel> Medicines { get; set; } = new List<MedicineViewModel>();
 
+    public List<MedicineViewModel> ExpiredMedicines { get; set; } = new List<MedicineViewModel>();
+
+    public List<MedicineViewModel> ExpiredSoonMedicines { get; set; } = new List<MedicineViewModel>();
+
+    public List<MedicineViewModel> LowStockMedicines { get; set; } = new List<MedicineViewModel>();
+
+    public MedicineViewModel Medicine { get; set; } = new MedicineViewModel();
+
     public int TotalMedicineCount { get; set; }
     public int TotalExpiredMedicineCount { get; set; }
     public int TotalExpiredSoonMedicineCount { get; set; }
@@ -47,16 +55,10 @@ public class MedicineViewModel
 {
     public int Id { get; set; }
     public string MedicineTypeName { get; set; }
-
     public string Name { get; set; }
     public string ExpiredDate { get; set; }
     public string ImportDate { get; set; }
-
     public int ImporterId { get; set; }
-
     public int Quantity { get; set; }
-
-    public MedicineType MedicineType { get; set; }
-
 
 }
