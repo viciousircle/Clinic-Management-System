@@ -21,7 +21,6 @@ namespace OOP_Final_Project.Pages.Employees
         private readonly ILogger<EmployeeLayoutModel> _logger;
         private readonly HttpClient _client;
 
-
         // -- Constructor --------------------------------
         public TestPharmaModel(IHttpClientFactory clientFactory, ILogger<EmployeeLayoutModel> logger)
         {
@@ -30,12 +29,10 @@ namespace OOP_Final_Project.Pages.Employees
             _client = _clientFactory.CreateClient();
             _client.BaseAddress = new Uri("http://localhost:5298/");
 
-
             // -- Initialize ViewModel ---------------------
             DoctorData = new DoctorViewModel();
             Employee = new EmployeeViewModel();
             Medicines = new List<MedicineViewModel>();
-
         }
 
         // -- Properties --------------------------------
@@ -48,14 +45,13 @@ namespace OOP_Final_Project.Pages.Employees
         public async Task OnGetAsync()
         {
             await FetchAllDataAsync();
-
         }
 
         // -- Helper Methods -----------------------------
         private async Task FetchAllDataAsync()
         {
+            await FetchMedicineCountsAsync();
         }
-
 
         // -- Get Partial View ---------------------------
         public async Task<IActionResult> OnGetLoadPartial(string section)
@@ -67,10 +63,8 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Prescribe":
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml"); // Ensure the correct path
                 case "Warehouse":
-
                     await FetchMedicineCountsAsync();
-
-                    return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml"); // Ensure the correct path
+                    return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml", DoctorData); // Ensure the correct path
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml"); // Ensure the correct path
                 case "Logout":
@@ -91,11 +85,8 @@ namespace OOP_Final_Project.Pages.Employees
         private async Task FetchMedicineCountsAsync()
         {
             DoctorData.TotalMedicineCount = await FetchMedicineCountAsync("api/medicines/total");
-
             DoctorData.TotalExpiredMedicineCount = await FetchMedicineCountAsync("api/medicines/total/expired");
-
             DoctorData.TotalExpiredSoonMedicineCount = await FetchMedicineCountAsync("api/medicines/total/expiredSoon");
-
             DoctorData.TotalLowStockMedicineCount = await FetchMedicineCountAsync("api/medicines/total/lowStock");
 
             _logger.LogInformation("Medicine counts fetched successfully");
@@ -103,40 +94,29 @@ namespace OOP_Final_Project.Pages.Employees
             _logger.LogInformation($"Expired: {DoctorData.TotalExpiredMedicineCount}");
             _logger.LogInformation($"Expired Soon: {DoctorData.TotalExpiredSoonMedicineCount}");
             _logger.LogInformation($"Low Stock: {DoctorData.TotalLowStockMedicineCount}");
-
-
         }
 
         private async Task<int> FetchMedicineCountAsync(string url)
         {
-
             try
             {
                 var response = await _client.GetAsync(url);
-
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var count = JsonSerializer.Deserialize<int>(content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
+                    var count = JsonSerializer.Deserialize<int>(content);
                     return count;
                 }
-
+                else
+                {
+                    _logger.LogError($"Failed to fetch data. StatusCode: {response.StatusCode}");
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching medicine count");
             }
-
             return 0;
         }
-
-
     }
-
 }
-
-

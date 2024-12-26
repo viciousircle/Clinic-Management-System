@@ -1,4 +1,6 @@
-﻿<div class="px-5">
+﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
+
+<div class="px-5">
     <!-- Header Section -->
     <div class=" " style="padding-top: 64px;">
         <div class="  d-flex justify-content-between align-items-center mb-4">
@@ -43,7 +45,7 @@
                     <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
                         <div class="text-muted">Total Medicines</div>
                         <div class="d-flex gap-md-3 align-items-center w-100" style="justify-content: space-between;">
-                            <h3 class="mb-0 pb-0 ">500</h3>
+                            <h3 class="mb-0 pb-0 ">@Model.TotalMedicineCount</h3>
                             <small class="text-muted">
                                 <i class="fas fa-cubes"></i> Stock 20.000
                             </small>
@@ -61,7 +63,7 @@
                     <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
                         <div class="text-muted">Expiring Soon</div>
                         <div class="d-flex w-100 align-items-center" style="justify-content: space-between;">
-                            <h3 class="mb-0">200</h3>
+                            <h3 class="mb-0">@Model.TotalExpiredSoonMedicineCount</h3>
                             <small class="text-muted">in the next 30 days</small>
                         </div>
                     </div>
@@ -79,7 +81,7 @@
                     <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
                         <div class="text-muted">Low Stock</div>
                         <div class="d-flex align-items-center w-100" style="justify-content: space-between;">
-                            <h3 class="mb-0 text-warning">30</h3>
+                            <h3 class="mb-0 text-warning">@Model.TotalLowStockMedicineCount</h3>
                             <small class="text-muted">
                                 <i class="fab fa-stack-overflow"></i> Need To restock
                             </small>
@@ -97,7 +99,7 @@
                     <div class="d-flex flex-column align-items-start gap-md-2" style="align-items: center;">
                         <div class="text-muted">Expired</div>
                         <div class="d-flex  align-items-center w-100" style="justify-content: space-between;">
-                            <h3 class="mb-0 text-danger">120</h3>
+                            <h3 class="mb-0 text-danger">@Model.TotalExpiredMedicineCount</h3>
                             <small class="text-muted">
                                 <i class="fas fa-trash-alt"></i> Need to remove
                             </small>
