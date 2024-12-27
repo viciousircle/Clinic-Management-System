@@ -744,18 +744,38 @@ public class DataSeeder
     //! Create a Faker instance for DocumentAppointment
     public static List<DocumentAppointment> SeedDocumentAppointments(List<Appointment> appointments, List<EmployeeSchedule> employeeSchedules)
     {
-        var faker = new Faker<DocumentAppointment>();
+        var faker = new Faker();
         var documentAppointments = new List<DocumentAppointment>();
+
+        // Define working hours for morning and afternoon
+        var morningStart = 8;
+        var morningEnd = 11;
+        var afternoonStart = 13;
+        var afternoonEnd = 17;
 
         foreach (var appointment in appointments)
         {
-            var documentAppointment = faker
-                .RuleFor(da => da.Id, f => f.IndexFaker + 1)
-                .RuleFor(da => da.DocumentTypeId, f => 1) // 1 represents Appointment document type
-                .RuleFor(da => da.AppointmentId, f => appointment.Id)
-                .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date
-                .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // Random TimeBook
-                .Generate();
+            var documentAppointment = new DocumentAppointment
+            {
+                Id = faker.IndexFaker + 1,
+                DocumentTypeId = 1, // 1 represents Appointment document type
+                AppointmentId = appointment.Id,
+                Date = faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1)).Date // Random date (yyyy-MM-dd)
+            };
+
+            // Format TimeBook as yyyy-MM-dd hh:mm:ss (Date + Time)
+            documentAppointment.TimeBook = documentAppointment.Date.Add(faker.Date.Soon().TimeOfDay);
+
+            // Randomly choose between morning and afternoon times
+            var randomHour = faker.PickRandom(new[] { morningStart, morningEnd, afternoonStart, afternoonEnd });
+
+            // Randomly pick a time from the selected hour range
+            int timeStart = faker.Random.Number(randomHour, randomHour + 1); // Ensures time is within the selected range
+            int timeEnd = timeStart + 1; // Time duration is 1 hour
+
+            // Set TimeStart and TimeEnd to the random hour with minutes and seconds set to 0
+            documentAppointment.TimeStart = new TimeSpan(timeStart, 0, 0); // TimeStart as HH:00:00
+            documentAppointment.TimeEnd = new TimeSpan(timeEnd, 0, 0); // TimeEnd as HH:00:00
 
             // Safely retrieve the doctor associated with the appointment
             var doctorSchedule = employeeSchedules
@@ -769,7 +789,7 @@ public class DataSeeder
 
                 if (startTime < endTime) // Ensure the time range is valid
                 {
-                    var timeSpan = new Faker().Date.Between(
+                    var timeSpan = faker.Date.Between(
                         DateTime.Today.Add(startTime),
                         DateTime.Today.Add(endTime));
                     documentAppointment.TimeStart = timeSpan.TimeOfDay;
@@ -779,17 +799,23 @@ public class DataSeeder
             else
             {
                 // Default TimeStart and TimeEnd when no schedule is found
-                var dateFaker = new Faker();
-                var randomTime = dateFaker.Date.Soon().TimeOfDay;
+                var randomTime = faker.Date.Soon().TimeOfDay;
                 documentAppointment.TimeStart = randomTime;
                 documentAppointment.TimeEnd = randomTime.Add(TimeSpan.FromHours(1));
             }
+
+            // Format TimeStart and TimeEnd as hh:00:00 (only hours with 00 minutes and seconds)
+            documentAppointment.TimeStart = new TimeSpan(documentAppointment.TimeStart.Hours, 0, 0); // Ensure minutes and seconds are 0
+            documentAppointment.TimeEnd = new TimeSpan(documentAppointment.TimeEnd.Hours, 0, 0); // Ensure minutes and seconds are 0
 
             documentAppointments.Add(documentAppointment);
         }
 
         return documentAppointments;
     }
+
+
+
 
     //! Create a Faker instance for DocumentBill
     public static List<DocumentBill> SeedDocumentBills(List<Appointment> appointments, List<Employee> employees, List<Account> accounts)
