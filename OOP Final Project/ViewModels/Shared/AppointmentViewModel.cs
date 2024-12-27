@@ -17,7 +17,6 @@ public class AppointmentRecordViewModel
     public DateTime Date { get; set; }
     public TimeSpan TimeStart { get; set; }
     public TimeSpan TimeEnd { get; set; }
-    public string Location { get; set; }
 }
 
 public class DiagnoseViewModel
