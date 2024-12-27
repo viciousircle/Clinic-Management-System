@@ -26,9 +26,6 @@ namespace OOP_Final_Project.Models
         [Required]
         public TimeSpan TimeEnd { get; set; }
 
-        [Required]
-        public string Location { get; set; }
-
         // Navigation properties
         public virtual DocumentType DocumentType { get; set; }
         public virtual Appointment Appointment { get; set; }

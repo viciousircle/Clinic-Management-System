@@ -55,40 +55,40 @@ app.UseAuthentication();  // Enable authentication
 
 // ! For set up database fake data ----------------------------
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-//     //- Drop the database (this will drop all tables) ----------------
+    //- Drop the database (this will drop all tables) ----------------
 
-//     if (dbContext.Database.EnsureDeleted())
-//     {
-//         Console.WriteLine("Database dropped successfully.");
-//     }
+    if (dbContext.Database.EnsureDeleted())
+    {
+        Console.WriteLine("Database dropped successfully.");
+    }
 
 
-//     // ----------------------------------------------------------------
+    // ----------------------------------------------------------------
 
-//     // Apply any pending migrations
-//     dbContext.Database.Migrate();
+    // Apply any pending migrations
+    dbContext.Database.Migrate();
 
-//     Console.WriteLine("Starting data seeding...");
+    Console.WriteLine("Starting data seeding...");
 
-//     //- Seed the data after migrations are applied -------------------
+    //- Seed the data after migrations are applied -------------------
 
-//     SeedDataLevel1(scope.ServiceProvider);
-//     SeedDataLevel2(scope.ServiceProvider);
-//     SeedDataLevel3(scope.ServiceProvider);
-//     SeedDataLevel4(scope.ServiceProvider);
-//     SeedDataLevel5(scope.ServiceProvider);
-//     SeedDataLevel6(scope.ServiceProvider);
-//     SeedDataLevel7(scope.ServiceProvider);
+    SeedDataLevel1(scope.ServiceProvider);
+    SeedDataLevel2(scope.ServiceProvider);
+    SeedDataLevel3(scope.ServiceProvider);
+    SeedDataLevel4(scope.ServiceProvider);
+    SeedDataLevel5(scope.ServiceProvider);
+    SeedDataLevel6(scope.ServiceProvider);
+    SeedDataLevel7(scope.ServiceProvider);
 
-//     // ----------------------------------------------------------------
+    // ----------------------------------------------------------------
 
-//     Console.WriteLine("Data seeding completed.");
+    Console.WriteLine("Data seeding completed.");
 
-// }
+}
 
 
 

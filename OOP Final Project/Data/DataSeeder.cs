@@ -755,7 +755,6 @@ public class DataSeeder
                 .RuleFor(da => da.AppointmentId, f => appointment.Id)
                 .RuleFor(da => da.Date, f => f.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1))) // Random date
                 .RuleFor(da => da.TimeBook, (f, da) => f.Date.Between(da.Date.AddDays(-7), da.Date.AddMinutes(30))) // Random TimeBook
-                .RuleFor(da => da.Location, f => f.Address.FullAddress())
                 .Generate();
 
             // Safely retrieve the doctor associated with the appointment

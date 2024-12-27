@@ -142,10 +142,6 @@ namespace OOP_Final_Project.Migrations
                     b.Property<int>("DocumentTypeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("TimeBook")
                         .HasColumnType("TEXT");
 

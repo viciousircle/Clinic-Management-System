@@ -116,7 +116,6 @@ public class EmployeesController : ControllerBase
                     Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
                     TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
                     TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
-                    Location = appt.docAppointments.FirstOrDefault()?.Location,
                 },
                 Diagnose = new DiagnoseViewModel
                 {
@@ -170,7 +169,6 @@ public class EmployeesController : ControllerBase
                     Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
                     TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
                     TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
-                    Location = appt.docAppointments.FirstOrDefault()?.Location,
                 },
                 Diagnose = new DiagnoseViewModel
                 {
@@ -228,7 +226,6 @@ public class EmployeesController : ControllerBase
                     Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
                     TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
                     TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
-                    Location = appt.docAppointments.FirstOrDefault()?.Location,
                 },
                 Diagnose = new DiagnoseViewModel
                 {
@@ -282,7 +279,6 @@ public class EmployeesController : ControllerBase
                     Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
                     TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
                     TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
-                    Location = appt.docAppointments.FirstOrDefault()?.Location,
                 },
                 Diagnose = new DiagnoseViewModel
                 {
@@ -336,7 +332,6 @@ public class EmployeesController : ControllerBase
                     Date = appt.docAppointments.FirstOrDefault()?.Date ?? default(DateTime),
                     TimeStart = appt.docAppointments.FirstOrDefault()?.TimeStart ?? default(TimeSpan),
                     TimeEnd = appt.docAppointments.FirstOrDefault()?.TimeEnd ?? default(TimeSpan),
-                    Location = appt.docAppointments.FirstOrDefault()?.Location,
                 },
                 Diagnose = new DiagnoseViewModel
                 {
