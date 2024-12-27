@@ -763,13 +763,19 @@ public class DataSeeder
                 Date = faker.Date.Between(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1)).Date // Random date (yyyy-MM-dd)
             };
 
-            // Format TimeBook as yyyy-MM-dd hh:mm:ss (Date + Time)
-            documentAppointment.TimeBook = documentAppointment.Date.Add(faker.Date.Soon().TimeOfDay);
+            // Generate TimeBook (ensure TimeBook is always before Date)
+            var timeBookHour = faker.PickRandom(new[] { morningStart, morningEnd, afternoonStart, afternoonEnd });
+            int timeBook = faker.Random.Number(timeBookHour, timeBookHour + 1); // Ensures time is within the selected range
+            documentAppointment.TimeBook = documentAppointment.Date.AddHours(timeBook); // TimeBook as HH:00:00
 
-            // Randomly choose between morning and afternoon times
+            // Ensure TimeBook is earlier than Date (adjust Date if needed)
+            if (documentAppointment.TimeBook.TimeOfDay > new TimeSpan(12, 0, 0))
+            {
+                documentAppointment.Date = documentAppointment.Date.AddDays(-1); // Adjust date if TimeBook exceeds noon
+            }
+
+            // Randomly pick a time for TimeStart and TimeEnd
             var randomHour = faker.PickRandom(new[] { morningStart, morningEnd, afternoonStart, afternoonEnd });
-
-            // Randomly pick a time from the selected hour range
             int timeStart = faker.Random.Number(randomHour, randomHour + 1); // Ensures time is within the selected range
             int timeEnd = timeStart + 1; // Time duration is 1 hour
 
@@ -813,6 +819,7 @@ public class DataSeeder
 
         return documentAppointments;
     }
+
 
 
 
