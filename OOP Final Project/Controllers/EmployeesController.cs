@@ -433,90 +433,73 @@ public class EmployeesController : ControllerBase
             .Where(appt => appt.DoctorId == id)
             .Join(
                 _context.Patients,
-                appt => appt.PatientId,
+                appointment => appointment.PatientId,
                 patient => patient.Id,
-                (appt, patient) => new { Appointment = appt, Patient = patient }
+                (appointment, patient) => new { appointment, patient }
             )
             .GroupJoin(
                 _context.DocumentAppointments,
-                apptPatient => apptPatient.Appointment.Id,
+                apptPatient => apptPatient.appointment.Id,
                 docAppt => docAppt.AppointmentId,
-                (apptPatient, docAppointments) => new
-                {
-                    apptPatient.Patient,
-                    LatestVisit = docAppointments
-                        .OrderByDescending(doc => doc.Date)
-                        .FirstOrDefault()
-                }
+                (apptPatient, docAppointments) => new { apptPatient, docAppointments }
             )
-            .AsEnumerable()
+            .SelectMany(
+                joined => joined.docAppointments.DefaultIfEmpty(),
+                (joined, docAppointment) => new
+                {
+                    joined.apptPatient.patient,
+                    docAppointment,
+                    Medicines = _context.Prescriptions
+                        .Where(p => p.AppointmentId == joined.apptPatient.appointment.Id)
+                        .SelectMany(p => p.PrescriptionMedicines)
+                        .Select(pm => new MedicinePrescriptionViewModel
+                        {
+                            MedicineId = pm.MedicineId,
+                            MedicineName = pm.Medicine.Name,
+                            DosageAmount = pm.DosageAmount,
+                            Frequency = pm.Frequency,
+                            FrequencyUnit = pm.FrequencyUnit,
+                            Route = pm.Route,
+                            Instruction = pm.Instructions
+                        })
+                        .ToList(),
+                    Diagnosis = _context.DocumentDiagnoses
+                        .Where(d => d.AppointmentId == joined.apptPatient.appointment.Id)
+                        .Select(d => new DiagnoseViewModel
+                        {
+                            DiagnoseDetails = d.DiagnoseDetails,
+                            IsSick = d.IsSick,
+                            PatientStatus = d.PatientStatus
+                        })
+                        .FirstOrDefault(),
+                    ReasonForVisit = _context.DocumentDiagnoses
+                        .Where(da => da.AppointmentId == joined.apptPatient.appointment.Id)
+                        .Select(da => da.PatientStatus)
+                        .FirstOrDefault(),
+                    LatestVisit = docAppointment != null ? docAppointment.Date : (DateTime?)null
+                })
+            .ToList()  // Collect the results first before applying distinct logic
+            .GroupBy(result => result.patient.Id) // Group by patient Id to ensure uniqueness
+            .Select(group => group.First())  // Select the first entry from each group (unique patients)
             .Select(result => new PatientViewModel
             {
-                Id = result.Patient.Id,
-                FirstName = result.Patient.FirstName,
-                LastName = result.Patient.LastName,
-                Email = result.Patient.Email,
-                Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone, @"\s*x\d+$", ""),
-                Address = result.Patient.Address,
-                LatestVisit = result.LatestVisit?.Date.ToString("dd-MM-yyyy") ?? "N/A"
+                Id = result.patient.Id,
+                FirstName = result.patient.FirstName,
+                LastName = result.patient.LastName,
+                Email = result.patient.Email,
+                Phone = System.Text.RegularExpressions.Regex.Replace(result.patient.Phone, @"\s*x\d+$", ""),
+                Address = result.patient.Address,
+                LatestVisit = result.LatestVisit.HasValue ? result.LatestVisit.Value.ToString("dd-MM-yyyy") : "N/A",
+                Medicines = result.Medicines.Any() ? result.Medicines : new List<MedicinePrescriptionViewModel>(),
+                Diagnosis = result.Diagnosis != null ? result.Diagnosis.DiagnoseDetails : "N/A",
+                ReasonForVisit = result.ReasonForVisit ?? "N/A"
             })
-            .Distinct()
             .ToList();
 
         return Ok(new { EmployeeId = id, Patients = patients });
     }
 
-    [HttpGet("{id}/patients/observed")]
-    public IActionResult GetAllObservedPatientsByEmployeeId(int id)
-    {
-        var observedPatients = _context.Appointments
-            .Where(appt => appt.DoctorId == id)
-            .Join(
-                _context.Patients,
-                appt => appt.PatientId,
-                patient => patient.Id,
-                (appt, patient) => new { Appointment = appt, Patient = patient }
-            )
-            .GroupJoin(
-                _context.DocumentAppointments,
-                apptPatient => apptPatient.Appointment.Id,
-                docAppt => docAppt.AppointmentId,
-                (apptPatient, docAppointments) => new
-                {
-                    apptPatient.Patient,
-                    LatestVisit = docAppointments
-                        .OrderByDescending(doc => doc.Date)
-                        .FirstOrDefault()
-                }
-            )
-            .Join(
-                _context.DocumentDiagnoses,
-                result => result.LatestVisit.AppointmentId,
-                diag => diag.AppointmentId,
-                (result, diag) => new
-                {
-                    result.Patient,
-                    result.LatestVisit,
-                    diag
-                }
-            )
-            .AsEnumerable()
-            .Where(result => result.LatestVisit != null && result.diag != null && result.diag.IsSick)
-            .Select(result => new PatientViewModel
-            {
-                Id = result.Patient.Id,
-                FirstName = result.Patient.FirstName,
-                LastName = result.Patient.LastName,
-                Email = result.Patient.Email,
-                Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone ?? "", @"\s*x\d+$", ""),
-                Address = result.Patient.Address,
-                LatestVisit = result.LatestVisit.Date.ToString("dd-MM-yyyy")
-            })
-            .Distinct()
-            .ToList();
 
-        return Ok(new { EmployeeId = id, ObservedPatients = observedPatients });
-    }
 
     // ! -----------------------------------------------------------
 
