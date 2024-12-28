@@ -321,7 +321,7 @@ static void SeedDataLevel7(IServiceProvider serviceProvider)
 
     if (!dbContext.DocumentPrescribes.Any())
     {
-        var documentPrescribes = DataSeeder.SeedDocumentPrescribes(dbContext.Prescriptions.ToList(), dbContext.Employees.ToList());
+        var documentPrescribes = DataSeeder.SeedDocumentPrescribes(dbContext.Prescriptions.ToList(), dbContext.Employees.ToList(), dbContext.Accounts.ToList());
         dbContext.DocumentPrescribes.AddRange(documentPrescribes);
     }
 

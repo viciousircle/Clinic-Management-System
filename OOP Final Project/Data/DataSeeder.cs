@@ -697,8 +697,23 @@ public class DataSeeder
     }
 
     //! Create a Faker instance for DocumentPrescribe
-    public static List<DocumentPrescribe> SeedDocumentPrescribes(List<Prescription> prescriptions, List<Employee> pharmacists)
+    public static List<DocumentPrescribe> SeedDocumentPrescribes(List<Prescription> prescriptions, List<Employee> employees, List<Account> accounts)
     {
+        // Filter employees to only include those with AccountTypeId corresponding to "Pharmacist"
+        var pharmacistAccounts = accounts
+            .Where(a => a.AccountTypeId == 3) // Assuming AccountTypeId 3 corresponds to "Pharmacist"
+            .ToList();
+
+        var validPharmacists = employees
+            .Where(e => pharmacistAccounts.Any(a => a.Id == e.AccountId))
+            .ToList();
+
+        if (!validPharmacists.Any())
+        {
+            Console.WriteLine("No valid pharmacists found for Document Prescribes.");
+            return new List<DocumentPrescribe>(); // Return an empty list if no valid pharmacists
+        }
+
         var faker = new Faker<DocumentPrescribe>();
         var documentPrescribes = new List<DocumentPrescribe>();
 
@@ -708,7 +723,7 @@ public class DataSeeder
                 .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
                 .RuleFor(dp => dp.DocumentTypeId, f => 3)
                 .RuleFor(dp => dp.PrescriptionId, f => prescription.Id)
-                .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(pharmacists).Id)
+                .RuleFor(dp => dp.PharmacistId, f => f.PickRandom(validPharmacists).Id)
                 .Generate();
 
             documentPrescribes.Add(documentPrescribe);
@@ -716,6 +731,7 @@ public class DataSeeder
 
         return documentPrescribes;
     }
+
 
 
     //! Create a Faker instance for DocumentDiagnosis
