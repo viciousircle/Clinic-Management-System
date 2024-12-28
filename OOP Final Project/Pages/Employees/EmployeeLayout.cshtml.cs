@@ -72,6 +72,7 @@ namespace OOP_Final_Project.Pages.Employees
                         break;
                     case "previous":
                         await FetchPastAppointmentsAsync();
+
                         break;
 
                 }
