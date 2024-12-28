@@ -73,6 +73,7 @@ namespace OOP_Final_Project.Pages.Employees
 
                 case "Appointment":
                     await FetchAppointmentCountsAsync();
+                    await FetchAllPatientsAsync();
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
 
                 case "Patient":

@@ -7,7 +7,8 @@
             <h3 class="mb-0">Appointments</h3>
 
             <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal"
-                data-bs-target="#newAppointmentModal">Make new appointment</div>
+                data-patient-name="@Model.Patients.Count" data-bs-target="#newAppointmentModal"
+                onclick="openNewAppoinmentModal(this)">Make new appointment</div>
         </div>
     </div>
 
@@ -331,6 +332,19 @@
         modal.show();
     }
 
+    function openNewAppoinmentModal(button) {
+        const patientName = button.getAttribute('data-patient-name') || "N/A";
+
+        document.getElementById('appointmentDetailsPatientName').value = patientName;
+
+        const modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
+        if (!modal) {
+            console.error('Modal element not found: newAppointmentModal');
+            return;
+        }
+
+        modal.show();
+    }
 
     function markAsDone() {
         if (selectedRow) {
