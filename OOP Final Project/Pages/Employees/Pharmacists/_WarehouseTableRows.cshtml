@@ -1,8 +1,14 @@
 ﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
 
-@foreach (var medicine in Model.Medicines)
+@{
+    var medicines = Model.Medicines?.Any() == true ? Model.Medicines : Model.LowStockMedicines;
+}
+
+@if (medicines?.Any() == true)
 {
-    <tr>
+    @foreach (var medicine in medicines)
+    {
+        <tr>
     <td>@medicine.Name</td>
     <td>@medicine.MedicineTypeName</td>
     <td>@medicine.ImportDate</td>
@@ -18,5 +24,12 @@
             </button>
         </div>
     </td>
+</tr>
+    }
+}
+else
+{
+    <tr>
+    <td colspan="6" class="text-center">No data available</td>
 </tr>
 }

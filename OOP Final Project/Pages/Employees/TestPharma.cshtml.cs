@@ -53,7 +53,7 @@ namespace OOP_Final_Project.Pages.Employees
         }
 
         // -- Partial Methods ----------------------------
-        public async Task<IActionResult> OnGetLoadPartial(string section)
+        public async Task<IActionResult> OnGetLoadPartial(string section, string filter)
         {
             switch (section)
             {
@@ -62,9 +62,12 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Prescribe":
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml", DoctorData);
                 case "Warehouse":
-                    await FetchMedicinesAsync();
+                    await FetchMedicinesAsync(filter);
                     await FetchMedicineCountsAsync();
                     return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml", DoctorData);
+                case "WarehouseTableRows":
+                    await FetchMedicinesAsync(filter);
+                    return Partial("~/Pages/Employees/Pharmacists/_WarehouseTableRows.cshtml", DoctorData);
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
                 case "Logout":
@@ -73,7 +76,6 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
             }
         }
-
 
         // -- API Calls ---------------------------------
 
@@ -117,16 +119,22 @@ namespace OOP_Final_Project.Pages.Employees
         //  -- [GET] api/medicines/expiredSoon -------------
         //  -- [GET] api/medicines/lowStock ----------------
 
-        private async Task FetchMedicinesAsync()
+        private async Task FetchMedicinesAsync(string filter = "all")
         {
             try
             {
-                // Fetch All Medicines
-                var responseAll = await _client.GetAsync("api/medicines");
-                if (responseAll.IsSuccessStatusCode)
+                string url = filter switch
                 {
-                    var content = await responseAll.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"API Response Content for All Medicines: {content}");
+                    "expired" => "api/medicines/expired",
+                    "low-stock" => "api/medicines/lowStock",
+                    _ => "api/medicines"
+                };
+
+                var response = await _client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    _logger.LogInformation($"API Response Content for {filter} Medicines: {content}");
 
                     var medicinesResponse = JsonSerializer.Deserialize<MedicinesResponse>(content, new JsonSerializerOptions
                     {
@@ -135,83 +143,38 @@ namespace OOP_Final_Project.Pages.Employees
 
                     if (medicinesResponse != null)
                     {
-                        DoctorData.Medicines = medicinesResponse.Medicines;
-                        _logger.LogInformation($"Total Medicines: {DoctorData.Medicines.Count}");
+                        if (filter == "all")
+                        {
+                            DoctorData.Medicines = medicinesResponse.Medicines;
+                            _logger.LogInformation($"All Medicines: {DoctorData.Medicines.Count}");
+                        }
+                        else if (filter == "expired")
+                        {
+                            DoctorData.ExpiredMedicines = medicinesResponse.ExpiredMedicines;
+                            _logger.LogInformation($"{filter} Medicines: {DoctorData.Medicines.Count}");
+                        }
+
+                        else if (filter == "low-stock")
+                        {
+                            DoctorData.LowStockMedicines = medicinesResponse.LowStockMedicines;
+                            _logger.LogInformation($"{filter} Medicines: {DoctorData.Medicines.Count}");
+                        }
                     }
                     else
                     {
-                        _logger.LogWarning("No medicines found in response for all medicines.");
+                        _logger.LogWarning($"No {filter} medicines found in response.");
                     }
                 }
                 else
                 {
-                    _logger.LogError($"Failed to fetch all medicines. Status code: {responseAll.StatusCode}");
+                    _logger.LogError($"Failed to fetch {filter} medicines. Status code: {response.StatusCode}");
                 }
-
-                // Fetch Expired Medicines
-                var responseExpired = await _client.GetAsync("api/medicines/expired");
-                if (responseExpired.IsSuccessStatusCode)
-                {
-                    var content = await responseExpired.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"API Response Content for Expired Medicines: {content}");
-
-                    var expiredResponse = JsonSerializer.Deserialize<MedicinesResponse>(content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    if (expiredResponse != null)
-                    {
-                        DoctorData.ExpiredMedicines = expiredResponse.ExpiredMedicines;
-                        _logger.LogInformation($"Expired Medicines: {DoctorData.ExpiredMedicines.Count}");
-                    }
-                    else
-                    {
-                        _logger.LogWarning("No expired medicines found in response.");
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch expired medicines. Status code: {responseExpired.StatusCode}");
-                }
-
-                // Fetch Low Stock Medicines
-                var responseLowStock = await _client.GetAsync("api/medicines/lowStock");
-                if (responseLowStock.IsSuccessStatusCode)
-                {
-                    var content = await responseLowStock.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"API Response Content for Low Stock Medicines: {content}");
-
-                    var lowStockResponse = JsonSerializer.Deserialize<MedicinesResponse>(content, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    if (lowStockResponse != null)
-                    {
-                        DoctorData.LowStockMedicines = lowStockResponse.LowStockMedicines;
-                        _logger.LogInformation($"Low Stock Medicines: {DoctorData.LowStockMedicines.Count}");
-                    }
-                    else
-                    {
-                        _logger.LogWarning("No low stock medicines found in response.");
-                    }
-                }
-                else
-                {
-                    _logger.LogError($"Failed to fetch low stock medicines. Status code: {responseLowStock.StatusCode}");
-                }
-
-                // Log Final Counts
-                _logger.LogInformation($"Final counts - Total Medicines: {DoctorData.Medicines.Count}, Expired: {DoctorData.ExpiredMedicines.Count}, Low Stock: {DoctorData.LowStockMedicines.Count}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error fetching medicines");
+                _logger.LogError(ex, $"Error fetching {filter} medicines");
             }
         }
-
-
 
     }
 }

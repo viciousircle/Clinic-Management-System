@@ -167,31 +167,9 @@
                     <th style="font-weight: 600;">Action</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach (var medicine in Model.Medicines)
-                {
-                    <tr>
-                        <td>@medicine.Name</td>
-                        <td>@medicine.MedicineTypeName</td>
-                        <td>@medicine.ImportDate</td>
-                        <td>@medicine.ExpiredDate</td>
-                        <td>@medicine.Quantity</td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-md-2">
-                                <button class="btn btn-outline-primary">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-outline-danger">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                }
+            <tbody id="warehouseTableBody">
+                @await Html.PartialAsync("Pharmacists/_WarehouseTableRows", Model)
             </tbody>
-
-
-
         </table>
     </div>
 
@@ -248,9 +226,7 @@
             })
             .catch(err => console.error("Export error:", err));
     }
-</script>
 
-<script>
     // Attach event listeners to the buttons
     document.getElementById("viewAllBtn").addEventListener("click", function () {
         filterMedicines("all");
@@ -267,28 +243,12 @@
 
     // Function to filter medicines based on the selected filter
     function filterMedicines(filter) {
-        // Get all the table rows
-        const rows = document.querySelectorAll("#warehouseTable tbody tr");
-
-        // Loop through each row
-        rows.forEach(row => {
-            const quantity = parseInt(row.querySelector("td:nth-child(5)").innerText);
-            const expiredDate = new Date(row.querySelector("td:nth-child(4)").innerText);
-            const currentDate = new Date();
-            const isExpired = expiredDate < currentDate;
-            const isLowStock = quantity < 10;
-
-            // Use if-else to determine whether to display the row
-            if (filter === "all") {
-                row.style.display = "";
-            } else if (filter === "low-stock" && isLowStock) {
-                row.style.display = "";
-            } else if (filter === "expired" && isExpired) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
+        fetch(`/Employees/TestPharma?handler=LoadPartial&section=WarehouseTableRows&filter=${filter}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("warehouseTableBody").innerHTML = html;
+            })
+            .catch(err => console.error("Error fetching filtered medicines:", err));
     }
 
     // Function to toggle button classes
@@ -304,4 +264,6 @@
             }
         });
     }
+
+
 </script>
