@@ -254,12 +254,15 @@
     // Attach event listeners to the buttons
     document.getElementById("viewAllBtn").addEventListener("click", function () {
         filterMedicines("all");
+        toggleButtonClass(this);
     });
     document.getElementById("lowStockBtn").addEventListener("click", function () {
         filterMedicines("low-stock");
+        toggleButtonClass(this);
     });
     document.getElementById("expiredBtn").addEventListener("click", function () {
         filterMedicines("expired");
+        toggleButtonClass(this);
     });
 
     // Function to filter medicines based on the selected filter
@@ -284,6 +287,20 @@
                 row.style.display = "";
             } else {
                 row.style.display = "none";
+            }
+        });
+    }
+
+    // Function to toggle button classes
+    function toggleButtonClass(activeButton) {
+        const buttons = document.querySelectorAll(".btn-group .btn");
+        buttons.forEach(button => {
+            if (button === activeButton) {
+                button.classList.remove("btn-outline-dark");
+                button.classList.add("btn-dark");
+            } else {
+                button.classList.remove("btn-dark");
+                button.classList.add("btn-outline-dark");
             }
         });
     }
