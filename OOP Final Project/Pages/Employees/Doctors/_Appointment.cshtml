@@ -7,7 +7,7 @@
             <h3 class="mb-0">Appointments</h3>
 
             <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal"
-                data-patient-name="@Model.Patients.Count" data-bs-target="#newAppointmentModal"
+                data-patients="@Model.Patients" data-bs-target="#newAppointmentModal"
                 onclick="openNewAppoinmentModal(this)">Make new appointment</div>
         </div>
     </div>
@@ -333,9 +333,9 @@
     }
 
     function openNewAppoinmentModal(button) {
-        const patientName = button.getAttribute('data-patient-name') || "N/A";
+        const patients = button.getAttribute('data-patients') || "N/A";
 
-        document.getElementById('appointmentDetailsPatientName').value = patientName;
+        document.getElementById('appointmentDetailsPatientName').value = patients;
 
         const modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
         if (!modal) {
