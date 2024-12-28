@@ -35,6 +35,7 @@
 
     <hr>
 
+
     <!-- Statistics Section -->
     <div class="my-4 d-flex flex-wrap gap-md-1">
         <!-- Total Appointments -->
@@ -118,12 +119,11 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="d-flex gap-md-2">
                     <!-- View Options -->
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn  btn-dark ">View All</button>
-                        <button type="button" class="btn btn-outline-dark">Low stock</button>
-                        <button type="button" class="btn btn-outline-dark  ">Expired</button>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-dark" id="viewAllBtn">View All</button>
+                        <button type="button" class="btn btn-outline-dark" id="lowStockBtn">Low stock</button>
+                        <button type="button" class="btn btn-outline-dark" id="expiredBtn">Expired</button>
                     </div>
-
 
                     <!-- Sort Options -->
                     <div>
@@ -168,7 +168,26 @@
                 </tr>
             </thead>
             <tbody>
-                @await Html.PartialAsync("Pharmacists/_WarehouseTableRows")
+                @foreach (var medicine in Model.Medicines)
+                {
+                    <tr>
+                        <td>@medicine.Name</td>
+                        <td>@medicine.MedicineTypeName</td>
+                        <td>@medicine.ImportDate</td>
+                        <td>@medicine.ExpiredDate</td>
+                        <td>@medicine.Quantity</td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-md-2">
+                                <button class="btn btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-outline-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
             </tbody>
 
 
@@ -228,5 +247,44 @@
                 link.click();
             })
             .catch(err => console.error("Export error:", err));
+    }
+</script>
+
+<script>
+    // Attach event listeners to the buttons
+    document.getElementById("viewAllBtn").addEventListener("click", function () {
+        filterMedicines("all");
+    });
+    document.getElementById("lowStockBtn").addEventListener("click", function () {
+        filterMedicines("low-stock");
+    });
+    document.getElementById("expiredBtn").addEventListener("click", function () {
+        filterMedicines("expired");
+    });
+
+    // Function to filter medicines based on the selected filter
+    function filterMedicines(filter) {
+        // Get all the table rows
+        const rows = document.querySelectorAll("#warehouseTable tbody tr");
+
+        // Loop through each row
+        rows.forEach(row => {
+            const quantity = parseInt(row.querySelector("td:nth-child(5)").innerText);
+            const expiredDate = new Date(row.querySelector("td:nth-child(4)").innerText);
+            const currentDate = new Date();
+            const isExpired = expiredDate < currentDate;
+            const isLowStock = quantity < 10;
+
+            // Use if-else to determine whether to display the row
+            if (filter === "all") {
+                row.style.display = "";
+            } else if (filter === "low-stock" && isLowStock) {
+                row.style.display = "";
+            } else if (filter === "expired" && isExpired) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
     }
 </script>
