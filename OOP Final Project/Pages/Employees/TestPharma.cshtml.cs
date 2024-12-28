@@ -65,6 +65,9 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Prescribe":
                     await FetchPrescriptionsByDateAsync(4, "26-05-2024");
                     await FetchPrescriptionsByEmployeeIdAsync(4);
+                    await FetchPrescriptionsByDatePrepareAsync(4, "26-05-2024");
+                    await FetchPrescriptionByDatePickupAsync(4, "26-05-2024");
+                    await FetchPrescriptionByDateDoneAsync(4, "26-05-2024");
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml", DoctorData);
                 case "Warehouse":
                     await FetchMedicinesAsync(filter);
@@ -218,7 +221,8 @@ namespace OOP_Final_Project.Pages.Employees
                 _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId}");
             }
         }
-        // ...existing code...
+
+
         private async Task FetchPrescriptionsByDateAsync(int employeeId, string date)
         {
             try
@@ -273,7 +277,9 @@ namespace OOP_Final_Project.Pages.Employees
                 _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId} on {date}");
             }
         }
-        // ...existing code...
+
+
+
         private async Task FetchPrescriptionsTodayAsync(int employeeId)
         {
             try
@@ -287,6 +293,172 @@ namespace OOP_Final_Project.Pages.Employees
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId} today.");
+            }
+        }
+
+        private async Task FetchPrescriptionsByDatePrepareAsync(int employeeId, string date)
+        {
+            try
+            {
+                // Define the expected date format
+                string format = "dd-MM-yyyy";
+                DateTime parsedDate;
+
+                // Try parsing the provided date with the specified format
+                bool isValidDate = DateTime.TryParseExact(date, format, null, System.Globalization.DateTimeStyles.None, out parsedDate);
+
+                if (!isValidDate)
+                {
+                    _logger.LogError($"Invalid date format: {date}");
+                    return; // Exit if the date is invalid
+                }
+
+                string normalizedDate = parsedDate.ToString("dd-MM-yyyy"); // Ensure the date is in the correct format
+
+                var response = await _client.GetAsync($"api/employees/pharmacist/{employeeId}/prescriptions");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var prescriptionsResponse = JsonSerializer.Deserialize<PrescriptionsResponse>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    if (prescriptionsResponse != null)
+                    {
+                        // Filter prescriptions that match the provided date and have status "Prepare"
+                        DoctorData.OnDatePreparePrescriptions = prescriptionsResponse.Prescriptions
+                            .Where(p => p.AppointmentTime.Contains(normalizedDate) && p.PrescriptionStatus == "Prepare") // Assuming PrescriptionStatus is a string
+                            .ToList();
+
+                        _logger.LogInformation($"Prescriptions for Employee {employeeId} on {normalizedDate} with 'Prepare' status: {DoctorData.OnDatePreparePrescriptions.Count}");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"No prescriptions found for Employee {employeeId} on {normalizedDate}.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch prescriptions for Employee {employeeId}. Status Code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId} on {date} with 'Prepare' status.");
+            }
+        }
+
+        private async Task FetchPrescriptionByDatePickupAsync(int employeeId, string date)
+        {
+            try
+            {
+                // Define the expected date format
+                string format = "dd-MM-yyyy";
+                DateTime parsedDate;
+
+                // Try parsing the provided date with the specified format
+                bool isValidDate = DateTime.TryParseExact(date, format, null, System.Globalization.DateTimeStyles.None, out parsedDate);
+
+                if (!isValidDate)
+                {
+                    _logger.LogError($"Invalid date format: {date}");
+                    return; // Exit if the date is invalid
+                }
+
+                string normalizedDate = parsedDate.ToString("dd-MM-yyyy"); // Ensure the date is in the correct format
+
+                var response = await _client.GetAsync($"api/employees/pharmacist/{employeeId}/prescriptions");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var prescriptionsResponse = JsonSerializer.Deserialize<PrescriptionsResponse>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    if (prescriptionsResponse != null)
+                    {
+                        // Filter prescriptions that match the provided date and have status "Pickup"
+                        DoctorData.OnDatePickupPrescriptions = prescriptionsResponse.Prescriptions
+                            .Where(p => p.AppointmentTime.Contains(normalizedDate) && p.PrescriptionStatus == "Pick up") // Assuming PrescriptionStatus is a string
+                            .ToList();
+
+                        _logger.LogInformation($"Prescriptions for Employee {employeeId} on {normalizedDate} with 'Pickup' status: {DoctorData.OnDatePickupPrescriptions.Count}");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"No prescriptions found for Employee {employeeId} on {normalizedDate}.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch prescriptions for Employee {employeeId}. Status Code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId} on {date} with 'Pickup' status.");
+            }
+        }
+
+
+        private async Task FetchPrescriptionByDateDoneAsync(int employeeId, string date)
+        {
+            try
+            {
+                // Define the expected date format
+                string format = "dd-MM-yyyy";
+                DateTime parsedDate;
+
+                // Try parsing the provided date with the specified format
+                bool isValidDate = DateTime.TryParseExact(date, format, null, System.Globalization.DateTimeStyles.None, out parsedDate);
+
+                if (!isValidDate)
+                {
+                    _logger.LogError($"Invalid date format: {date}");
+                    return; // Exit if the date is invalid
+                }
+
+                string normalizedDate = parsedDate.ToString("dd-MM-yyyy"); // Ensure the date is in the correct format
+
+                var response = await _client.GetAsync($"api/employees/pharmacist/{employeeId}/prescriptions");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var prescriptionsResponse = JsonSerializer.Deserialize<PrescriptionsResponse>(content, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+                    if (prescriptionsResponse != null)
+                    {
+                        // Filter prescriptions that match the provided date and have status "Done"
+                        DoctorData.OnDateDonePrescriptions = prescriptionsResponse.Prescriptions
+                            .Where(p => p.AppointmentTime.Contains(normalizedDate) && p.PrescriptionStatus == "Done") // Assuming PrescriptionStatus is a string
+                            .ToList();
+
+                        _logger.LogInformation($"Prescriptions for Employee {employeeId} on {normalizedDate} with 'Done' status: {DoctorData.OnDateDonePrescriptions.Count}");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"No prescriptions found for Employee {employeeId} on {normalizedDate}.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch prescriptions for Employee {employeeId}. Status Code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId} on {date} with 'Done' status.");
             }
         }
     }

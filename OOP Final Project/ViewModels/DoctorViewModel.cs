@@ -52,6 +52,15 @@ public class DoctorViewModel
 
     public PrescriptionViewModel Prescription { get; set; } = new PrescriptionViewModel();
 
+    public List<PrescriptionViewModel> OnDatePreparePrescriptions { get; set; } = new List<PrescriptionViewModel>();
+    public List<PrescriptionViewModel> OnDatePickupPrescriptions { get; set; } = new List<PrescriptionViewModel>();
+    public List<PrescriptionViewModel> OnDateDonePrescriptions { get; set; } = new List<PrescriptionViewModel>();
+
+
+
+
+
+
 }
 
 
