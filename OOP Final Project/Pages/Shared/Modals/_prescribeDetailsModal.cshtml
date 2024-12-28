@@ -1,5 +1,4 @@
-﻿<!-- Modal -->
-<div class="modal fade" id="prescribeDetailModal" tabindex="-1" aria-labelledby="prescribeDetailModalLabel"
+﻿<div class="modal fade" id="prescribeDetailModal" tabindex="-1" aria-labelledby="prescribeDetailModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content" style="border-radius: 24px;">
@@ -63,11 +62,13 @@
                                     <table class="table table-bordered">
                                         <thead class="table-light">
                                             <tr>
-                                                <th scope="col" style="width: 25%;">Medicine Name</th>
-                                                <th scope="col" style="width: 20%;">Dosage</th>
-                                                <th scope="col" style="width: 15%;">Frequency</th>
-                                                <th scope="col" style="width: 15%;">Duration</th>
-                                                <th scope="col" style="width: 20%;">Special Instructions</th>
+                                                <th scope="col" style="width: 5%;">ID</th>
+                                                <th scope="col" style="width: 20%;">Medicine Name</th>
+                                                <th scope="col" style="width: 10%;">Dosage</th>
+                                                <th scope="col" style="width: 10%;">Frequency</th>
+                                                <th scope="col" style="width: 15%;">Frequency Unit</th>
+                                                <th scope="col" style="width: 10%;">Route</th>
+                                                <th scope="col" style="width: 25%;">Instructions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="medicinesTableBody">
@@ -139,7 +140,20 @@
         checkAll.checked = allChecked;
     }
 
+    document.getElementById('prescribeDetailModal').addEventListener('hidden.bs.modal', function () {
+        var backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.parentNode.removeChild(backdrop);
+        }
+    });
+
     function openPrescribeDetailsModal(button) {
+        // Remove any existing backdrops
+        var existingBackdrops = document.querySelectorAll('.modal-backdrop');
+        existingBackdrops.forEach(function (backdrop) {
+            backdrop.parentNode.removeChild(backdrop);
+        });
+
         var modal = new bootstrap.Modal(document.getElementById("prescribeDetailModal"));
 
         var appointmentId = button.getAttribute("data-prescription-appoinment-id");
@@ -169,23 +183,33 @@
             row.setAttribute("onclick", "changeColor(this)");
 
             var nameCell = document.createElement("td");
-            nameCell.textContent = medicine.MedicineName; // Fixed key
+            nameCell.textContent = medicine.MedicineId;
             row.appendChild(nameCell);
 
+            var nameCell = document.createElement("td");
+            nameCell.textContent = medicine.MedicineName;
+            row.appendChild(nameCell);
+
+            var durationCell = document.createElement("td");
+            durationCell.textContent = medicine.Route;
+            row.appendChild(durationCell);
+
+
             var dosageCell = document.createElement("td");
-            dosageCell.textContent = medicine.DosageAmount; // Fixed key
+            dosageCell.textContent = medicine.DosageAmount;
             row.appendChild(dosageCell);
 
             var frequencyCell = document.createElement("td");
-            frequencyCell.textContent = medicine.Frequency; // Fixed key
+            frequencyCell.textContent = medicine.Frequency;
             row.appendChild(frequencyCell);
 
             var durationCell = document.createElement("td");
-            durationCell.textContent = medicine.FrequencyUnit; // Fixed key
+            durationCell.textContent = medicine.FrequencyUnit;
             row.appendChild(durationCell);
 
+
             var instructionsCell = document.createElement("td");
-            instructionsCell.textContent = medicine.Instruction; // Fixed key
+            instructionsCell.textContent = medicine.Instruction;
             row.appendChild(instructionsCell);
 
             medicinesTableBody.appendChild(row);
@@ -193,6 +217,4 @@
 
         modal.show();
     }
-
-
 </script>
