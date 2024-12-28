@@ -501,6 +501,76 @@ public class EmployeesController : ControllerBase
 
 
 
+    [HttpGet("{id}/patients/observed")]
+    public IActionResult GetAllObservedPatientsByEmployeeId(int id)
+    {
+        var observedPatients = _context.Appointments
+            .Where(appt => appt.DoctorId == id)
+            .Join(
+                _context.Patients,
+                appt => appt.PatientId,
+                patient => patient.Id,
+                (appt, patient) => new { Appointment = appt, Patient = patient }
+            )
+            .GroupJoin(
+                _context.DocumentAppointments,
+                apptPatient => apptPatient.Appointment.Id,
+                docAppt => docAppt.AppointmentId,
+                (apptPatient, docAppointments) => new
+                {
+                    apptPatient.Patient,
+                    LatestVisit = docAppointments
+                        .OrderByDescending(doc => doc.Date)
+                        .FirstOrDefault()
+                }
+            )
+            .Join(
+                _context.DocumentDiagnoses,
+                result => result.LatestVisit.AppointmentId,
+                diag => diag.AppointmentId,
+                (result, diag) => new
+                {
+                    result.Patient,
+                    result.LatestVisit,
+                    diag
+                }
+            )
+            .AsEnumerable() // Move to client-side evaluation for filtering IsSick
+            .Where(result => result.LatestVisit != null && result.diag != null && result.diag.IsSick)
+            .GroupBy(result => result.Patient.Id)  // Group by Patient ID to ensure uniqueness
+            .Select(group => group.First())  // Select the first entry from each group
+            .Select(result => new PatientViewModel
+            {
+                Id = result.Patient.Id,
+                FirstName = result.Patient.FirstName,
+                LastName = result.Patient.LastName,
+                Email = result.Patient.Email,
+                Phone = System.Text.RegularExpressions.Regex.Replace(result.Patient.Phone ?? "", @"\s*x\d+$", ""),
+                Address = result.Patient.Address,
+                LatestVisit = result.LatestVisit.Date.ToString("dd-MM-yyyy"),
+                Diagnosis = result.diag.DiagnoseDetails ?? "N/A",  // Diagnosis details or fallback
+                ReasonForVisit = result.diag.PatientStatus ?? "N/A",  // Reason for visit (status) or fallback
+                Medicines = _context.Prescriptions
+                    .Where(p => p.AppointmentId == result.LatestVisit.AppointmentId)
+                    .SelectMany(p => p.PrescriptionMedicines)
+                    .Select(pm => new MedicinePrescriptionViewModel
+                    {
+                        MedicineId = pm.MedicineId,
+                        MedicineName = pm.Medicine.Name,
+                        DosageAmount = pm.DosageAmount,
+                        Frequency = pm.Frequency,
+                        FrequencyUnit = pm.FrequencyUnit,
+                        Route = pm.Route,
+                        Instruction = pm.Instructions
+                    })
+                    .ToList()  // Ensure an empty list is returned if no medicines
+            })
+            .ToList();
+
+        return Ok(new { EmployeeId = id, ObservedPatients = observedPatients });
+    }
+
+
     // ! -----------------------------------------------------------
 
     // ! ------------------- Patients Counts ------------------------
