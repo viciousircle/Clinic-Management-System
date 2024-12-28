@@ -61,13 +61,9 @@
                                     </div>
 
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
-
-
 
                     <!-- Panel 3 -->
                     <div class="accordion-item">
@@ -81,55 +77,41 @@
                         <div id="flush-collapseThree" class="accordion-collapse collapse"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#appointmentInfo" aria-expanded="false"
-                                            aria-controls="appointmentInfo">
-                                            Appointment Information
-                                        </button>
-                                        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#healthCheckInfo" aria-expanded="false"
-                                            aria-controls="healthCheckInfo">
-                                            Health Check
-                                        </button>
-                                        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#diagnoseInfo" aria-expanded="false"
-                                            aria-controls="diagnoseInfo">
-                                            Diagnose
-                                        </button>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="appointmentDate" class="form-label">Appointment Date:</label>
+                                        <input type="text" class="form-control" id="appointmentDate" value="2024-11-15"
+                                            disabled>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="collapse" id="appointmentInfo"
-                                            data-bs-parent="#flush-collapseThree">
-                                            <ul class="list-group">
-                                                <li class="list-group-item">Appointment Date: 2024-11-15</li>
-                                                <li class="list-group-item">Doctor: Dr. Smith</li>
-                                                <li class="list-group-item">Reason: Routine Checkup</li>
-                                            </ul>
-                                        </div>
-                                        <div class="collapse" id="healthCheckInfo"
-                                            data-bs-parent="#flush-collapseThree">
-                                            <div class="mb-3">
-                                                <label for="healthCheck" class="form-label">Health Check:</label>
-                                                <input type="text" class="form-control" id="healthCheck"
-                                                    value="Blood Pressure: 120/80, Pulse: 72" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="collapse" id="diagnoseInfo" data-bs-parent="#flush-collapseThree">
-                                            <ul class="list-group">
-                                                <li class="list-group-item">Diagnosis: All vitals are normal.</li>
-                                            </ul>
-                                            <!-- Popover button to show prescribed medicines -->
-                                            <button type="button" class="btn btn-secondary mt-3"
-                                                data-bs-toggle="popover" data-bs-placement="right"
-                                                title="Prescribed Medicines"
-                                                data-bs-content="<ul><li>Aspirin 100mg</li><li>Ibuprofen 200mg</li><li>Paracetamol 500mg</li></ul>">
-                                                View Prescriptions
-                                            </button>
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="doctorName" class="form-label">Doctor:</label>
+                                        <input type="text" class="form-control" id="doctorName" value="Dr. Smith"
+                                            disabled>
                                     </div>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="reason" class="form-label">Reason:</label>
+                                        <input type="text" class="form-control" id="reason" value="Routine Checkup"
+                                            disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="healthCheck" class="form-label">Health Check:</label>
+                                        <input type="text" class="form-control" id="healthCheck"
+                                            value="Blood Pressure: 120/80, Pulse: 72" disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="diagnosis" class="form-label">Diagnosis:</label>
+                                        <input type="text" class="form-control" id="diagnosis"
+                                            value="All vitals are normal." disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="prescriptions" class="form-label">Prescribed Medicines:</label>
+                                        <textarea class="form-control" id="prescriptions" rows="3" disabled>
+Aspirin 100mg
+Ibuprofen 200mg
+Paracetamol 500mg
+                                        </textarea>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -156,28 +138,6 @@
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl, {
                 html: true // Enable HTML content in popover
-            });
-        });
-
-        // Add click event listeners to toggle accordion buttons in panel 3
-        var buttons = document.querySelectorAll('#flush-collapseThree .accordion-button');
-        buttons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var targetCollapse = document.querySelector(button.getAttribute('data-bs-target'));
-
-                // If content is not already collapsed, toggle it
-                if (targetCollapse.classList.contains('show')) {
-                    // Collapse the content if it's already expanded
-                    var collapseInstance = bootstrap.Collapse.getInstance(targetCollapse);
-                    if (collapseInstance) {
-                        collapseInstance.hide();
-                    }
-                } else {
-                    // If the content is collapsed, expand it
-                    var collapseInstance = new bootstrap.Collapse(targetCollapse, {
-                        toggle: true // Automatically toggle the collapse
-                    });
-                }
             });
         });
     });
