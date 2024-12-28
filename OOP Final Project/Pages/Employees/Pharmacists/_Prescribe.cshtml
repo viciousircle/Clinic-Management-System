@@ -1,11 +1,13 @@
-﻿<div class="px-5">
+﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
+
+
+<div class="px-5">
     <!-- Header Section -->
     <div class=" " style="padding-top: 64px;">
         <div class="  d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-0">Prescribe</h3>
 
 
-            @* <div class="btn btn-outline-dark shadow-sm ">Make new appointment</div> *@
 
         </div>
     </div>
@@ -23,7 +25,7 @@
                 <div class="card-body py-2 ">
                     <div class="d-flex  align-items-center gap-md-2" style="justify-content: space-between;">
                         <div class="text-muted">Total</div>
-                        <h3 class="mb-0 pb-0 ">500</h3>
+                        <h3 class="mb-0 pb-0 ">@Model.OnDatePrescriptions.Count</h3>
                     </div>
                 </div>
             </div>
@@ -110,33 +112,48 @@
 
 
         <!-- Patients List Section -->
-        <div class="d-flex flex-wrap  mb-3 text-dark " style="gap: 36px;">
-            <div class="card rounded-12px shadow-sm" style="padding: 6px;">
-                <div class="card-body col-md-3" style="width: 100%;">
-                    <div class="d-flex  align-items-center gap-md-3">
-                        <div class="d-flex  align-items-center gap-md-1">
-                            <i class="fas fa-user-tag"></i>
-                            <h5 class="card-title mb-0">David</h5>
+        <div class="d-flex flex-wrap  mb-3 text-dark ms-4" style="gap: 30px;">
+            @foreach (var prescription in Model.OnDatePrescriptions)
+            {
+                <div class="card rounded-12px shadow-sm" style="padding: 3px;">
+                    <div class="card-body col-md-2" style="width: 100%;">
+                        <div class="d-flex  align-items-center " style="justify-content: space-between;">
+                            <div class="d-flex  align-items-center gap-md-1">
+                                <i class="fas fa-user-tag"></i>
+                                <h5 class="card-title mb-0">Patient</h5>
+                            </div>
+                            <div class="btn-sm btn btn-outline-dark" data-bs-toggle="modal"
+                                data-bs-target="#prescribeDetailModal">
+                                Details
+                            </div>
                         </div>
-                        <div class="btn-sm btn btn-outline-dark" data-bs-toggle="modal"
-                            data-bs-target="#prescribeDetailModal">
-                            Details
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="d-flex gap-md-2 flex-column">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>ID:</div>
-                            <div class="text-dark btn-sm" style="background-color:#f4f4f4;">2020290</div>
-                        </div>
-                        <div class="d-flex  align-items-center" style="justify-content: space-between;">
-                            <div>Date:</div>
-                            <div>2021-10-10</div>
+                        <hr>
+                        <div class="d-flex gap-md-2 flex-column">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>ID:</div>
+                                <div class="text-dark btn-sm" style="background-color:#f4f4f4;">@prescription.Id</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>Patient:</div>
+                                <div class="text-dark btn-sm" style="background-color:#f4f4f4;">@prescription.PatientName
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center gap-md-4">
+                                <div>Time:</div>
+                                <div class="text-dark btn-sm" style="background-color:#f4f4f4;">
+                                    @prescription.AppointmentTime</div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
+
+
+            }
         </div>
+
+
+
 
 
     </div>

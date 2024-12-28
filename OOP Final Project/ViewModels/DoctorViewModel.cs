@@ -48,6 +48,7 @@ public class DoctorViewModel
     public int TotalLowStockMedicineCount { get; set; }
 
     public List<PrescriptionViewModel> Prescriptions { get; set; } = new List<PrescriptionViewModel>();
+    public List<PrescriptionViewModel> OnDatePrescriptions { get; set; } = new List<PrescriptionViewModel>();
 
     public PrescriptionViewModel Prescription { get; set; } = new PrescriptionViewModel();
 

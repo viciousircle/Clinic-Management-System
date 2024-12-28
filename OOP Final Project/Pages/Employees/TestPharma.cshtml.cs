@@ -50,9 +50,9 @@ namespace OOP_Final_Project.Pages.Employees
         private async Task FetchAllDataAsync()
         {
             await FetchMedicineCountsAsync();
-            await FetchPrescriptionsByEmployeeIdAsync(4);
-            await FetchPrescriptionsTodayAsync(4);
-            await FetchPrescriptionsByDateAsync(4, "26-05-2024");
+            // await FetchPrescriptionsByEmployeeIdAsync(4);
+            // await FetchPrescriptionsTodayAsync(4);
+            // await FetchPrescriptionsByDateAsync(4, "26-05-2024");
         }
 
         // -- Partial Methods ----------------------------
@@ -63,6 +63,8 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
                 case "Prescribe":
+                    await FetchPrescriptionsByDateAsync(4, "26-05-2024");
+                    await FetchPrescriptionsByEmployeeIdAsync(4);
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml", DoctorData);
                 case "Warehouse":
                     await FetchMedicinesAsync(filter);
@@ -137,7 +139,6 @@ namespace OOP_Final_Project.Pages.Employees
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    _logger.LogInformation($"API Response Content for {filter} Medicines: {content}");
 
                     var medicinesResponse = JsonSerializer.Deserialize<MedicinesResponse>(content, new JsonSerializerOptions
                     {
@@ -217,7 +218,7 @@ namespace OOP_Final_Project.Pages.Employees
                 _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId}");
             }
         }
-
+        // ...existing code...
         private async Task FetchPrescriptionsByDateAsync(int employeeId, string date)
         {
             try
@@ -251,11 +252,11 @@ namespace OOP_Final_Project.Pages.Employees
                     if (prescriptionsResponse != null)
                     {
                         // Filter prescriptions that match the provided date (ignoring time)
-                        DoctorData.Prescriptions = prescriptionsResponse.Prescriptions
+                        DoctorData.OnDatePrescriptions = prescriptionsResponse.Prescriptions
                             .Where(p => p.AppointmentTime.Contains(normalizedDate)) // Check if the appointment time contains the normalized date
                             .ToList();
 
-                        _logger.LogInformation($"Prescriptions for Employee {employeeId} on {normalizedDate}: {DoctorData.Prescriptions.Count}");
+                        _logger.LogInformation($"Prescriptions for Employee {employeeId} on {normalizedDate}: {DoctorData.OnDatePrescriptions.Count}");
                     }
                     else
                     {
@@ -272,7 +273,7 @@ namespace OOP_Final_Project.Pages.Employees
                 _logger.LogError(ex, $"Error fetching prescriptions for Employee {employeeId} on {date}");
             }
         }
-
+        // ...existing code...
         private async Task FetchPrescriptionsTodayAsync(int employeeId)
         {
             try
