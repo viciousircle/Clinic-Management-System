@@ -59,10 +59,10 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
                 case "Prescribe":
-                    await FetchPrescriptionsByDateAsync(4, "26-05-2024");
-                    await FetchPrescriptionsByDatePrepareAsync(4, "26-05-2024");
-                    await FetchPrescriptionByDatePickupAsync(4, "26-05-2024");
-                    await FetchPrescriptionByDateDoneAsync(4, "26-05-2024");
+                    await FetchPrescriptionsByDateAsync(4, "08-10-2025");
+                    await FetchPrescriptionsByDatePrepareAsync(4, "08-10-2025");
+                    await FetchPrescriptionByDatePickupAsync(4, "08-10-2025");
+                    await FetchPrescriptionByDateDoneAsync(4, "08-10-2025");
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml", DoctorData);
                 case "Warehouse":
                     await FetchMedicinesAsync(filter);
