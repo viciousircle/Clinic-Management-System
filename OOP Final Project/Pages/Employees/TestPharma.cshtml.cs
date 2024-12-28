@@ -49,10 +49,6 @@ namespace OOP_Final_Project.Pages.Employees
         // -- Helper Methods -----------------------------
         private async Task FetchAllDataAsync()
         {
-            await FetchMedicineCountsAsync();
-            // await FetchPrescriptionsByEmployeeIdAsync(4);
-            // await FetchPrescriptionsTodayAsync(4);
-            // await FetchPrescriptionsByDateAsync(4, "26-05-2024");
         }
 
         // -- Partial Methods ----------------------------
@@ -63,8 +59,6 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
                 case "Prescribe":
-                    await FetchPrescriptionsByDateAsync(4, "26-05-2024");
-                    await FetchPrescriptionsByEmployeeIdAsync(4);
                     await FetchPrescriptionsByDatePrepareAsync(4, "26-05-2024");
                     await FetchPrescriptionByDatePickupAsync(4, "26-05-2024");
                     await FetchPrescriptionByDateDoneAsync(4, "26-05-2024");
@@ -74,6 +68,8 @@ namespace OOP_Final_Project.Pages.Employees
                     await FetchMedicineCountsAsync();
                     return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml", DoctorData);
                 case "WarehouseTableRows":
+                    await FetchMedicineCountsAsync();
+
                     await FetchMedicinesAsync(filter);
                     return Partial("~/Pages/Employees/Pharmacists/_WarehouseTableRows.cshtml", DoctorData);
                 case "Schedule":
