@@ -59,6 +59,7 @@ namespace OOP_Final_Project.Pages.Employees
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
                 case "Prescribe":
+                    await FetchPrescriptionsByDateAsync(4, "26-05-2024");
                     await FetchPrescriptionsByDatePrepareAsync(4, "26-05-2024");
                     await FetchPrescriptionByDatePickupAsync(4, "26-05-2024");
                     await FetchPrescriptionByDateDoneAsync(4, "26-05-2024");
