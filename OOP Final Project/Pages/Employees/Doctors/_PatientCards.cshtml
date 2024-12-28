@@ -14,7 +14,7 @@
                 data-patient-address="@patient.Address" data-patient-email="@patient.Email"
                 data-patient-latest-visit="@patient.LatestVisit" data-patient-reason="@patient.ReasonForVisit"
                 data-patient-diagnose="@patient.Diagnosis"
-                data-patient-medicines='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(patient.Medicines))'
+                data-patient-medicines='@System.Text.Json.JsonSerializer.Serialize(@patient.Medicines)'
                 onclick="openPatientDetailsModal(this)">
                 Details
             </button>
