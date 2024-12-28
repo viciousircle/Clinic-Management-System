@@ -1,4 +1,5 @@
-﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
+﻿@using System.Net.Http.Json
+@model OOP_Final_Project.ViewModels.DoctorViewModel
 
 <div class="px-5">
     <!-- Header Section -->
@@ -6,9 +7,8 @@
         <div class="  d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-0">Appointments</h3>
 
-            <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal"
-                data-patients="@Model.Patients" data-bs-target="#newAppointmentModal"
-                onclick="openNewAppoinmentModal(this)">Make new appointment</div>
+            <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal" data-patients='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Patients))
+            ' data-bs-target="#newAppointmentModal" onclick="openNewAppoinmentModal(this)">Make new appointment</div>
         </div>
     </div>
 
@@ -332,19 +332,7 @@
         modal.show();
     }
 
-    function openNewAppoinmentModal(button) {
-        const patients = button.getAttribute('data-patients') || "N/A";
 
-        document.getElementById('appointmentDetailsPatientName').value = patients;
-
-        const modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
-        if (!modal) {
-            console.error('Modal element not found: newAppointmentModal');
-            return;
-        }
-
-        modal.show();
-    }
 
     function markAsDone() {
         if (selectedRow) {

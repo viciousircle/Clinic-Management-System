@@ -108,12 +108,48 @@
 </div>
 
 <script>
-    // Sample patient data (replace with actual data fetching logic)
-    const patients = [
-        { id: 1, name: "John Doe", age: 30, gender: "Male", lastVisit: "2023-12-10", phone: "123-456-7890" },
-        { id: 2, name: "Jane Smith", age: 25, gender: "Female", lastVisit: "2023-12-05", phone: "987-654-3210" },
-        { id: 3, name: "Michael Johnson", age: 40, gender: "Male", lastVisit: "2023-11-20", phone: "456-789-1234" }
-    ];
+
+    function openNewAppoinmentModal(button) {
+        var patientsInformation = button.getAttribute('data-patients') || "[]"; // Ensure it's a valid JSON array
+
+        var patients = JSON.parse(patientsInformation);
+
+        console.log(patients);
+
+        populatePatientsDropdown(patients);
+
+        const modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
+        if (!modal) {
+            console.error('Modal element not found: newAppointmentModal');
+            return;
+        }
+
+        modal.show();
+    }
+
+    function populatePatientsDropdown(patients) {
+        const dropdown = document.getElementById('patientDropdown');
+        if (!dropdown) {
+            console.error('Dropdown element not found: patientDropdown');
+            return;
+        }
+
+        dropdown.innerHTML = ''; // Clear existing dropdown items
+
+
+
+        patients.forEach(patient => {
+            const option = document.createElement('button');
+            option.classList.add('list-group-item', 'list-group-item-action');
+            option.textContent = `ID: ${patient.Id} - ${patient.FirstName} ${patient.LastName} - Latest Visit: ${patient.LatestVisit || 'N/A'}`;
+            option.onclick = () => selectPatient(patient);
+            dropdown.appendChild(option);
+        });
+
+        dropdown.style.display = patients.length > 0 ? 'block' : 'none';
+    }
+
+    let patients = []; // Initialize an empty array for patients
 
     let patientSelected = false;
 
@@ -122,7 +158,7 @@
         if (patientSelected) {
             const confirmChange = confirm("Changing the patient will delete the current patient information. Do you want to proceed?");
             if (!confirmChange) {
-                document.getElementById('patientSearch').value = document.getElementById('patientName').value;
+                document.getElementById('patientSearch').value = document.getElementById('appointmentDetailsPatientName').value;
                 return;
             } else {
                 resetForm();
@@ -148,7 +184,8 @@
 
         // Filter patients based on input
         const filteredPatients = patients.filter(patient =>
-            patient.name.toLowerCase().includes(input) ||
+            patient.firstName.toLowerCase().includes(input) ||
+            patient.lastName.toLowerCase().includes(input) ||
             patient.age.toString().includes(input) ||
             patient.gender.toLowerCase().includes(input) ||
             patient.id.toString().includes(input)
@@ -159,7 +196,7 @@
             filteredPatients.forEach(patient => {
                 const patientItem = document.createElement('button');
                 patientItem.classList.add('list-group-item', 'list-group-item-action');
-                patientItem.textContent = `ID: ${patient.id} - ${patient.name} - ${patient.age} years old, ${patient.gender}`;
+                patientItem.textContent = `ID: ${patient.id} - ${patient.firstName} ${patient.lastName} - ${patient.age} years old, ${patient.gender}`;
                 patientItem.onclick = () => selectPatient(patient);
                 patientDropdown.appendChild(patientItem);
             });
@@ -170,12 +207,12 @@
 
     // Function to select a patient
     function selectPatient(patient) {
-        document.getElementById('patientSearch').value = patient.name;
-        document.getElementById('patientName').value = patient.name;
+        document.getElementById('patientSearch').value = `${patient.firstName} ${patient.lastName}`;
+        document.getElementById('appointmentDetailsPatientName').value = `${patient.firstName} ${patient.lastName}`;
         document.getElementById('patientId').value = patient.id;
-        document.getElementById('patientLastVisit').value = patient.lastVisit || "N/A";
+        document.getElementById('patientLastVisit').value = patient.latestVisit || "N/A";
         document.getElementById('patientPhone').value = patient.phone || "N/A";
-        document.getElementById('patientDiagnose').value = patient.diagnose || "N/A";
+        document.getElementById('patientDiagnose').value = patient.diagnosis || "N/A";
 
         document.getElementById('patientInfo').style.display = "block";
         document.getElementById('patientDropdown').style.display = "none";
@@ -187,7 +224,7 @@
     // Function to reset the form
     function resetForm() {
         document.getElementById('patientSearch').value = '';
-        document.getElementById('patientName').value = 'N/A';
+        document.getElementById('appointmentDetailsPatientName').value = 'N/A';
         document.getElementById('patientId').value = 'N/A';
         document.getElementById('patientLastVisit').value = 'N/A';
         document.getElementById('patientPhone').value = 'N/A';
