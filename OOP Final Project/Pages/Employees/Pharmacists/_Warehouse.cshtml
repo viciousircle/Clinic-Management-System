@@ -35,7 +35,6 @@
 
     <hr>
 
-
     <!-- Statistics Section -->
     <div class="my-4 d-flex flex-wrap gap-md-1">
         <!-- Total Appointments -->
@@ -71,8 +70,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <!-- Completed Appointments -->
         <div class="col-md-3 d-flex flex-column">
@@ -168,7 +165,7 @@
                 </tr>
             </thead>
             <tbody id="warehouseTableBody">
-                @await Html.PartialAsync("Pharmacists/_WarehouseTableRows", Model)
+
             </tbody>
         </table>
     </div>
@@ -178,6 +175,7 @@
 
 <div>
     @await Html.PartialAsync("Modals/_addNewMedicineModal")
+
 </div>
 
 
@@ -207,6 +205,7 @@
 </div>
 
 <script>
+
     function exportMedicines(format) {
         fetch(`/export-medicine?format=${format}`)
             .then(response => {
@@ -265,5 +264,9 @@
         });
     }
 
+    // Set default filter to "all" on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        filterMedicines("all");
+    });
 
 </script>
