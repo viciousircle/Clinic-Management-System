@@ -79,8 +79,10 @@
                             <div class="accordion-body">
                                 <form>
                                     <div class="mb-3">
-                                        <label for="reason" class="form-label">Reason for Visit:</label>
-                                        <input type="text" class="form-control" id="reason" placeholder="N/A" disabled>
+                                        <label for="patientDetailsPatientReason" class="form-label">Reason for
+                                            Visit:</label>
+                                        <input type="text" class="form-control" id="patientDetailsPatientReason"
+                                            placeholder="N/A" disabled>
                                     </div>
 
                                     <div class="mb-3">
@@ -173,9 +175,7 @@
         document.getElementById('patientDetailsPatientAddress').value = patientAddress;
         document.getElementById('patientDetailsPatientEmail').value = patientEmail;
         document.getElementById('patientDetailsPatientLatestVisit').value = patientLatestVisit;
-
-        // Fill previous appointment details (Reason for visit, Diagnosis)
-        document.getElementById('reason').value = patientReason;
+        document.getElementById('patientDetailsPatientReason').value = patientReason;
         document.getElementById('diagnosis').value = patientDiagnose;
 
         // Handle medicines

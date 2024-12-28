@@ -129,41 +129,6 @@
         button.classList.add('btn-dark');
     }
 
-    function openPatientDetailsModal(button) {
-        if (!button || !button.closest) {
-            console.error('Invalid button element passed:', button);
-            return;
-        }
-
-        const patientID = button.getAttribute('data-patient-id') || "N/A";
-        const patientName = button.getAttribute('data-patient-name') || "N/A";
-        const patientPhone = button.getAttribute('data-patient-phone') || "N/A";
-        const patientEmail = button.getAttribute('data-patient-email') || "N/A";
-        const patientAddress = button.getAttribute('data-patient-address') || "N/A";
-        const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
-
-
-        document.getElementById('patientDetailsPatientID').value = patientID;
-        document.getElementById('patientDetailsPatientName').value = patientName;
-        document.getElementById('patientDetailsPatientPhone').value = patientPhone;
-        document.getElementById('patientDetailsPatientEmail').value = patientEmail;
-        document.getElementById('patientDetailsPatientAddress').value = patientAddress;
-        document.getElementById('patientDetailsPatientLatestVisit').value = patientLatestVisit;
-
-
-
-        const modalElement = document.getElementById('patientDetailsModal');
-        if (!modalElement) {
-            console.error('Modal element not found: patientDetailsModal');
-            return;
-        }
-
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-
-
-    }
-
     document.getElementById("makeNewAppointmentBtn").addEventListener("click", function () {
         var modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'), {
             backdrop: false
