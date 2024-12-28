@@ -608,10 +608,10 @@ public class EmployeesController : ControllerBase
                         Frequency = joined.Frequency,
                         FrequencyUnit = joined.FrequencyUnit,
                         Route = joined.Route,
-                        // Instruction = joined.Instruction
+                        Instruction = joined.Instructions
                     })
                     .ToList(),
-                // PrescriptionStatus = joined.prescription.PrescriptionStatus
+                PrescriptionStatus = joined.prescription.PrescriptionStatus
             })
             .ToList();
 
@@ -620,7 +620,47 @@ public class EmployeesController : ControllerBase
     }
 
 
+    [HttpGet("pharmacist/{id}/prescriptions/on/{date}")]
+    public IActionResult GetPrescriptionsByPharmacistIdAndDate(int id, string date)
+    {
+        string[] formats = { "yyyy-MM-dd", "dd-MM-yyyy" };
+        if (!DateTime.TryParseExact(date, formats, null, System.Globalization.DateTimeStyles.None, out var parsedDate))
+        {
+            return BadRequest("Invalid date format. Please use yyyy-MM-dd or dd-MM-yyyy.");
+        }
 
+        var prescriptions = _context.DocumentPrescribes
+            .Where(prescription => prescription.PharmacistId == id)
+            .Join(_context.Prescriptions, joined => joined.PrescriptionId, prescription => prescription.Id, (joined, prescription) => new { joined, prescription })
+            .Join(_context.Appointments, joined => joined.prescription.AppointmentId, appointment => appointment.Id, (joined, appointment) => new { joined.prescription, joined.joined, appointment })
+            .Where(joined => joined.appointment.DocumentAppointment.Date.Date == parsedDate.Date)
+            .Select(joined => new PrescriptionViewModel
+            {
+                Id = joined.prescription.Id,
+                AppointmentId = joined.prescription.AppointmentId,
+                PharmacistId = joined.joined.Pharmacist.Id,
+                PatientName = joined.appointment.Patient.FirstName + " " + joined.appointment.Patient.LastName,
+                DoctorName = joined.appointment.Doctor.FirstName + " " + joined.appointment.Doctor.LastName,
+                AppointmentTime = joined.appointment.DocumentAppointment.Date.ToString("dd-MM-yyyy") + " " + joined.appointment.DocumentAppointment.TimeStart.ToString(@"hh\:mm") + "-" + joined.appointment.DocumentAppointment.TimeEnd.ToString(@"hh\:mm"),
+                Medicines = _context.PrescriptionMedicines
+                    .Where(prescribeMedicine => prescribeMedicine.PrescriptionId == joined.prescription.Id)
+                    .Join(_context.Medicines, joined => joined.MedicineId, medicine => medicine.Id, (joined, medicine) => new MedicinePrescriptionViewModel
+                    {
+                        MedicineId = joined.MedicineId,
+                        MedicineName = medicine.Name,
+                        DosageAmount = joined.DosageAmount,
+                        Frequency = joined.Frequency,
+                        FrequencyUnit = joined.FrequencyUnit,
+                        Route = joined.Route,
+                        Instruction = joined.Instructions
+                    })
+                    .ToList(),
+                PrescriptionStatus = joined.prescription.PrescriptionStatus
+            })
+            .ToList();
+
+        return Ok(new { PrescriptionsOnDate = prescriptions });
+    }
 
 }
 
