@@ -207,12 +207,12 @@
 
     // Function to select a patient
     function selectPatient(patient) {
-        document.getElementById('patientSearch').value = `${patient.firstName} ${patient.lastName}`;
-        document.getElementById('appointmentDetailsPatientName').value = `${patient.firstName} ${patient.lastName}`;
-        document.getElementById('patientId').value = patient.id;
-        document.getElementById('patientLastVisit').value = patient.latestVisit || "N/A";
-        document.getElementById('patientPhone').value = patient.phone || "N/A";
-        document.getElementById('patientDiagnose').value = patient.diagnosis || "N/A";
+        document.getElementById('patientSearch').value = `${patient.FirstName} ${patient.LastName}`;
+        document.getElementById('appointmentDetailsPatientName').value = `${patient.FirstName} ${patient.LastName}`;
+        document.getElementById('patientId').value = patient.Id;
+        document.getElementById('patientLastVisit').value = patient.LatestVisit || "N/A";
+        document.getElementById('patientPhone').value = patient.Phone || "N/A";
+        document.getElementById('patientDiagnose').value = patient.Diagnosis || "N/A";
 
         document.getElementById('patientInfo').style.display = "block";
         document.getElementById('patientDropdown').style.display = "none";
