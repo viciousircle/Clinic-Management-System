@@ -1,0 +1,22 @@
+﻿@model IEnumerable<OOP_Final_Project.ViewModels.MedicineViewModel>
+
+@foreach (var medicine in Model)
+{
+    <tr>
+    <td>@medicine.Name</td>
+    <td>@medicine.MedicineTypeName</td>
+    <td>@medicine.ImportDate</td>
+    <td>@medicine.ExpiredDate</td>
+    <td>@medicine.Quantity</td>
+    <td>
+        <div class="d-flex justify-content-center gap-md-2">
+            <button class="btn btn-outline-primary">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-outline-danger">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+}
