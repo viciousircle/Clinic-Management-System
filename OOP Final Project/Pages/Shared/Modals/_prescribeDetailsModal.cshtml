@@ -70,32 +70,8 @@
                                                 <th scope="col" style="width: 20%;">Special Instructions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <!-- Medicine 1 -->
-                                            <tr id="firstRow">
-                                                <td onclick="changeColor(this.parentElement)">Ibuprofen 200mg</td>
-                                                <td onclick="changeColor(this.parentElement)">200mg</td>
-                                                <td onclick="changeColor(this.parentElement)">Twice a day</td>
-                                                <td onclick="changeColor(this.parentElement)">5 days</td>
-                                                <td onclick="changeColor(this.parentElement)">Take with food</td>
-                                            </tr>
-                                            <!-- Medicine 2 -->
-                                            <tr id="secondRow">
-                                                <td onclick="changeColor(this.parentElement)">Paracetamol 500mg</td>
-                                                <td onclick="changeColor(this.parentElement)">500mg</td>
-                                                <td onclick="changeColor(this.parentElement)">As needed for pain</td>
-                                                <td onclick="changeColor(this.parentElement)">As needed</td>
-                                                <td onclick="changeColor(this.parentElement)">Do not exceed 4 doses per
-                                                    day</td>
-                                            </tr>
-                                            <!-- Medicine 3 -->
-                                            <tr id="thirdRow">
-                                                <td onclick="changeColor(this.parentElement)">Vitamin C 1000mg</td>
-                                                <td onclick="changeColor(this.parentElement)">1000mg</td>
-                                                <td onclick="changeColor(this.parentElement)">Once a day</td>
-                                                <td onclick="changeColor(this.parentElement)">Ongoing</td>
-                                                <td onclick="changeColor(this.parentElement)">Take with water</td>
-                                            </tr>
+                                        <tbody id="medicinesTableBody">
+                                            <!-- Rows will be populated by JavaScript -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -163,7 +139,6 @@
         checkAll.checked = allChecked;
     }
 
-
     function openPrescribeDetailsModal(button) {
         var modal = new bootstrap.Modal(document.getElementById("prescribeDetailModal"));
 
@@ -172,22 +147,52 @@
         var patientName = button.getAttribute("data-prescription-patient");
         var doctorName = button.getAttribute("data-prescription-doctor");
         var medicines = button.getAttribute("data-prescription-medicines");
-        var prescriptionId = button.getAttribute("data-prescription-id");
 
         var appointmentIdElement = document.getElementById("appointmentId");
         var appointmentTimeElement = document.getElementById("appointmentTime");
         var patientNameElement = document.getElementById("patientName");
         var doctorNameElement = document.getElementById("doctorName");
-        var medicinesElement = document.getElementById("medicines");
+        var medicinesTableBody = document.getElementById("medicinesTableBody");
 
         appointmentIdElement.value = appointmentId;
         appointmentTimeElement.value = appointmentTime;
         patientNameElement.value = patientName;
         doctorNameElement.value = doctorName;
-        // Assuming medicinesElement is a text input or textarea
-        medicinesElement.value = medicines;
+
+        // Clear existing rows
+        medicinesTableBody.innerHTML = "";
+
+        // Parse medicines JSON and populate table
+        var medicinesArray = JSON.parse(medicines);
+        medicinesArray.forEach(function (medicine) {
+            var row = document.createElement("tr");
+            row.setAttribute("onclick", "changeColor(this)");
+
+            var nameCell = document.createElement("td");
+            nameCell.textContent = medicine.MedicineName; // Fixed key
+            row.appendChild(nameCell);
+
+            var dosageCell = document.createElement("td");
+            dosageCell.textContent = medicine.DosageAmount; // Fixed key
+            row.appendChild(dosageCell);
+
+            var frequencyCell = document.createElement("td");
+            frequencyCell.textContent = medicine.Frequency; // Fixed key
+            row.appendChild(frequencyCell);
+
+            var durationCell = document.createElement("td");
+            durationCell.textContent = medicine.FrequencyUnit; // Fixed key
+            row.appendChild(durationCell);
+
+            var instructionsCell = document.createElement("td");
+            instructionsCell.textContent = medicine.Instruction; // Fixed key
+            row.appendChild(instructionsCell);
+
+            medicinesTableBody.appendChild(row);
+        });
 
         modal.show();
     }
+
 
 </script>

@@ -117,11 +117,12 @@
                                 data-bs-target="#prescribeDetailModal" data-prescription-patient="@prescription.PatientName"
                                 data-prescription-time="@prescription.AppointmentTime"
                                 data-prescription-doctor="@prescription.DoctorName"
-                                data-prescription-medicines="@prescription.Medicines"
+                                data-prescription-medicines='@System.Text.Json.JsonSerializer.Serialize(prescription.Medicines)'
                                 data-prescription-appoinment-id="@prescription.AppointmentId"
                                 data-prescription-id="@prescription.Id" onclick="openPrescribeDetailsModal(this)">
                                 Details
                             </div>
+
                         </div>
                         <hr>
                         <div class="d-flex gap-md-2 flex-column">
