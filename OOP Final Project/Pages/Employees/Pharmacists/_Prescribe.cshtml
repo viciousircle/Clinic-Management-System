@@ -114,7 +114,12 @@
                                 <h5 class="card-title mb-0">Patient</h5>
                             </div>
                             <div class="btn-sm btn btn-outline-dark" data-bs-toggle="modal"
-                                data-bs-target="#prescribeDetailModal">
+                                data-bs-target="#prescribeDetailModal" data-prescription-patient="@prescription.PatientName"
+                                data-prescription-time="@prescription.AppointmentTime"
+                                data-prescription-doctor="@prescription.DoctorName"
+                                data-prescription-medicines="@prescription.Medicines"
+                                data-prescription-appoinment-id="@prescription.AppointmentId"
+                                data-prescription-id="@prescription.Id" onclick="openPrescribeDetailsModal(this)">
                                 Details
                             </div>
                         </div>
@@ -150,3 +155,8 @@
 
     @await Html.PartialAsync("Modals/_prescribeDetailsModal")
 </div>
+
+
+@section Scripts {
+
+}

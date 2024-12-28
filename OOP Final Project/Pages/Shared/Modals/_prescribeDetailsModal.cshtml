@@ -23,27 +23,24 @@
                             <div class="accordion-body">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="appointmentID" class="form-label">Appointment ID:</label>
-                                        <input type="text" class="form-control" id="appointmentID" value="10001"
-                                            disabled>
+                                        <label for="appointmentId" class="form-label">Appointment ID:</label>
+                                        <input type="text" class="form-control" id="appointmentId" value="N/A" disabled>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="appointmentTime" class="form-label">Appointment Time:</label>
-                                        <input type="text" class="form-control" id="appointmentTime"
-                                            value="12:00 PM, 25th December 2024" disabled>
+                                        <input type="text" class="form-control" id="appointmentTime" value="N/A"
+                                            disabled>
                                     </div>
 
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="patientName" class="form-label">Patient Name:</label>
-                                        <input type="text" class="form-control" id="patientName" value="John Doe"
-                                            disabled>
+                                        <input type="text" class="form-control" id="patientName" value="N/A" disabled>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="doctorName" class="form-label">Doctor Name:</label>
-                                        <input type="text" class="form-control" id="doctorName" value="Dr. Smith"
-                                            disabled>
+                                        <input type="text" class="form-control" id="doctorName" value="N/A" disabled>
                                     </div>
                                 </div>
 
@@ -165,4 +162,32 @@
         });
         checkAll.checked = allChecked;
     }
+
+
+    function openPrescribeDetailsModal(button) {
+        var modal = new bootstrap.Modal(document.getElementById("prescribeDetailModal"));
+
+        var appointmentId = button.getAttribute("data-prescription-appoinment-id");
+        var appointmentTime = button.getAttribute("data-prescription-time");
+        var patientName = button.getAttribute("data-prescription-patient");
+        var doctorName = button.getAttribute("data-prescription-doctor");
+        var medicines = button.getAttribute("data-prescription-medicines");
+        var prescriptionId = button.getAttribute("data-prescription-id");
+
+        var appointmentIdElement = document.getElementById("appointmentId");
+        var appointmentTimeElement = document.getElementById("appointmentTime");
+        var patientNameElement = document.getElementById("patientName");
+        var doctorNameElement = document.getElementById("doctorName");
+        var medicinesElement = document.getElementById("medicines");
+
+        appointmentIdElement.value = appointmentId;
+        appointmentTimeElement.value = appointmentTime;
+        patientNameElement.value = patientName;
+        doctorNameElement.value = doctorName;
+        // Assuming medicinesElement is a text input or textarea
+        medicinesElement.value = medicines;
+
+        modal.show();
+    }
+
 </script>
