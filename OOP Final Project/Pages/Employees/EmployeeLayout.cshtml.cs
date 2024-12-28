@@ -58,79 +58,69 @@ namespace OOP_Final_Project.Pages.Employees
         // -- Get Partial View ---------------------------
         public async Task<IActionResult> OnGetLoadPartialAsync(string section, string view)
         {
-            if (section == "AppointmentTableRows")
-            {
-                switch (view)
-                {
-                    case "today":
-                        await FetchAppointmentsTodayAsync();
-
-                        break;
-                    case "all":
-                        await FetchAppointmentsAsync();
-
-                        break;
-                    case "previous":
-                        await FetchPastAppointmentsAsync();
-
-                        break;
-
-                }
-                return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
-            }
-
-            if (section == "PatientCards")
-            {
-                switch (view)
-                {
-                    case "observedPatients":
-                        // Fetch observed patients
-                        await FetchObservedPatientsAsync();
-                        return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
-
-                    case "allPatients":
-                        // Fetch all patients
-                        await FetchAllPatientsAsync();
-                        return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
-
-                    default:
-                        return BadRequest("Invalid view parameter.");
-                }
-            }
-
-            switch (view)
-            {
-                case "allPatients":
-                    await FetchAllPatientsAsync();
-                    break;
-                case "observedPatients":
-                    await FetchObservedPatientsAsync();
-                    break;
-            }
-
-
-
             switch (section)
             {
+                case "AppointmentTableRows":
+                    await LoadAppointmentsAsync(view);
+                    return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
+
+                case "PatientCards":
+                    await LoadPatientCardsAsync(view);
+                    return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
+
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
+
                 case "Appointment":
                     await FetchAppointmentCountsAsync();
-
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
+
                 case "Patient":
                     await FetchPatientCountAsync();
-
-
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
+
                 case "Schedule":
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
+
                 case "Logout":
-                    return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
                 default:
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
         }
+
+        private async Task LoadAppointmentsAsync(string view)
+        {
+            switch (view)
+            {
+                case "today":
+                    await FetchAppointmentsTodayAsync();
+                    break;
+                case "all":
+                    await FetchAppointmentsAsync();
+                    break;
+                case "previous":
+                    await FetchPastAppointmentsAsync();
+                    break;
+                default:
+                    throw new ArgumentException("Invalid view parameter");
+            }
+        }
+
+        private async Task LoadPatientCardsAsync(string view)
+        {
+            switch (view)
+            {
+                case "observedPatients":
+                    await FetchObservedPatientsAsync();
+                    break;
+                case "allPatients":
+                    await FetchAllPatientsAsync();
+                    break;
+                default:
+                    throw new ArgumentException("Invalid view parameter");
+            }
+        }
+
 
 
 

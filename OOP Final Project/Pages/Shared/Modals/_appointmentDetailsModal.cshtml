@@ -78,7 +78,7 @@
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapseSymptoms" aria-expanded="false"
                                 aria-controls="collapseSymptoms">
-                                Symptoms
+                                Reason for Visit
                             </button>
                         </h2>
                         <div id="collapseSymptoms" class="accordion-collapse collapse"
@@ -90,23 +90,6 @@
                         </div>
                     </div>
 
-                    <!-- Health check records -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingHealthCheck">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseHealthCheck" aria-expanded="false"
-                                aria-controls="collapseHealthCheck">
-                                Health Check Records
-                            </button>
-                        </h2>
-                        <div id="collapseHealthCheck" class="accordion-collapse collapse"
-                            data-bs-parent="#appointmentAccordion">
-                            <div class="accordion-body">
-                                <textarea class="form-control" id="healthCheckInput" rows="4"
-                                    placeholder="Describe health check records"></textarea>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Diagnosis Section -->
                     <div class="accordion-item">
@@ -172,8 +155,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="markAsDoneBtn" onclick="markAsDone()" disabled>Mark as
-                    Done</button>
+
             </div>
         </div>
     </div>
