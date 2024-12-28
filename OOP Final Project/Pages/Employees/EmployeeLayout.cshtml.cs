@@ -113,6 +113,7 @@ namespace OOP_Final_Project.Pages.Employees
                 case "observedPatients":
                     await FetchObservedPatientsAsync();
                     break;
+
                 case "allPatients":
                     await FetchAllPatientsAsync();
                     break;

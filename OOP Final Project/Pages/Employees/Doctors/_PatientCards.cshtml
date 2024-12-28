@@ -12,7 +12,10 @@
             <button class="btn-sm btn btn-outline-dark px-3 shadow-sm" data-patient-id="@patient.Id"
                 data-patient-name="@patient.FirstName @patient.LastName" data-patient-phone="@patient.Phone"
                 data-patient-address="@patient.Address" data-patient-email="@patient.Email"
-                data-patient-latest-visit="@patient.LatestVisit" onclick="openPatientDetailsModal(this)">
+                data-patient-latest-visit="@patient.LatestVisit" data-patient-reason="@patient.ReasonForVisit"
+                data-patient-diagnose="@patient.Diagnosis"
+                data-patient-medicines='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(patient.Medicines))'
+                onclick="openPatientDetailsModal(this)">
                 Details
             </button>
         </div>
