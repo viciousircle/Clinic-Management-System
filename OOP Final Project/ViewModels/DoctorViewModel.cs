@@ -101,3 +101,20 @@ public class MedicinePrescriptionViewModel
     public string Route { get; set; }
     public string Instruction { get; set; }
 }
+
+public class ScheduleViewModel
+{
+    public int DoctorId { get; set; }
+    public int TotalSection { get; set; }
+    public List<SectionViewModel> SectionsAvailable { get; set; } = new List<SectionViewModel>();
+    public List<SectionViewModel> SectionsUnavailable { get; set; } = new List<SectionViewModel>();
+
+
+}
+
+public class SectionViewModel
+{
+    public string Date { get; set; }
+    public string Time { get; set; }
+
+}

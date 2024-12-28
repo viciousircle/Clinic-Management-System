@@ -723,5 +723,31 @@ public class EmployeesController : ControllerBase
         return Ok(new { PrescriptionsOnDate = prescriptions });
     }
 
+
+    // ! -----------------------------------------------------------
+
+    // ! --- Schedule ----------------------------------------------
+
+    [HttpGet("{id}/schedule")]
+    public IActionResult GetScheduleByEmployeeId(int id)
+    {
+        // var schedule = _context.Schedules
+        //     .Where(s => s.EmployeeId == id)
+        //     .Select(s => new ScheduleViewModel
+        //     {
+        //         Id = s.Id,
+        //         EmployeeId = s.EmployeeId,
+        //         DayOfWeek = s.DayOfWeek,
+        //         TimeStart = s.TimeStart,
+        //         TimeEnd = s.TimeEnd
+        //     })
+        // .ToList();
+
+        // return Ok(new { EmployeeId = id, Schedule = schedule });
+        return Ok();
+    }
+
+
+
 }
 
