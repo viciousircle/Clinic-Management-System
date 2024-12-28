@@ -1,6 +1,6 @@
-﻿@model IEnumerable<OOP_Final_Project.ViewModels.MedicineViewModel>
+﻿@model OOP_Final_Project.ViewModels.DoctorViewModel
 
-@foreach (var medicine in Model)
+@foreach (var medicine in Model.Medicines)
 {
     <tr>
     <td>@medicine.Name</td>
