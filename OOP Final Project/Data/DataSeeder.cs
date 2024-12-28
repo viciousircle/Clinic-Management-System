@@ -735,19 +735,22 @@ public class DataSeeder
 
 
     //! Create a Faker instance for DocumentDiagnosis
-    public static List<DocumentDiagnose> SeedDocumentDiagnoses(List<Appointment> appointments)
+    public static List<DocumentDiagnose> SeedDocumentDiagnoses(List<Appointment> appointments, List<Prescription> prescriptions)
     {
         var faker = new Faker<DocumentDiagnose>();
         var documentDiagnoses = new List<DocumentDiagnose>();
 
         foreach (var appointment in appointments)
         {
+            // Check if this appointment has a prescription
+            bool hasPrescription = prescriptions.Any(p => p.AppointmentId == appointment.Id);
+
             var documentDiagnose = faker
                 .RuleFor(dd => dd.Id, f => f.IndexFaker + 1)
                 .RuleFor(dd => dd.DocumentTypeId, f => 2)
                 .RuleFor(dd => dd.AppointmentId, f => appointment.Id)
                 .RuleFor(dd => dd.PatientStatus, f => f.PickRandom(new[] { "stable", "critical", "recovering" }))
-                .RuleFor(dd => dd.IsSick, f => f.Random.Bool())
+                .RuleFor(dd => dd.IsSick, f => hasPrescription) // Set IsSick to true if a prescription exists
                 .RuleFor(dd => dd.DiagnoseDetails, f => f.Lorem.Paragraph())
                 .Generate();
 
@@ -756,6 +759,7 @@ public class DataSeeder
 
         return documentDiagnoses;
     }
+
 
     //! Create a Faker instance for DocumentAppointment
     public static List<DocumentAppointment> SeedDocumentAppointments(List<Appointment> appointments, List<EmployeeSchedule> employeeSchedules)

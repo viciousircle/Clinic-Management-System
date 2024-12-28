@@ -92,7 +92,7 @@ app.UseAuthentication();  // Enable authentication
 
 
 
-Console.WriteLine("Application setup completed.");
+// Console.WriteLine("Application setup completed.");
 
 
 
@@ -333,7 +333,7 @@ static void SeedDataLevel7(IServiceProvider serviceProvider)
 
     if (!dbContext.DocumentDiagnoses.Any())
     {
-        var documentDiagnoses = DataSeeder.SeedDocumentDiagnoses(dbContext.Appointments.ToList());
+        var documentDiagnoses = DataSeeder.SeedDocumentDiagnoses(dbContext.Appointments.ToList(), dbContext.Prescriptions.ToList());
         dbContext.DocumentDiagnoses.AddRange(documentDiagnoses);
     }
 
