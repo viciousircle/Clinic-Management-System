@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using Bogus.DataSets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OOP_Final_Project.Controllers.ApiResponses;
 using OOP_Final_Project.Data;
 using OOP_Final_Project.Models;
 using OOP_Final_Project.ViewModels;
@@ -51,6 +52,33 @@ public class EmployeesController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("username/{username}/password/{password}")]
+    public IActionResult GetEmployeeByUsernameAndPassword(string username, string password)
+    {
+        var employee = _context.Employees
+            .Where(e => e.Account.UserName == username && e.Account.Password == password)
+            .Join(_context.Accounts, e => e.AccountId, a => a.Id, (e, a) => new
+            {
+                e.Id,
+                a.AccountTypeId,
+            })
+            .FirstOrDefault();
+
+        if (employee == null)
+        {
+            return NotFound(new { Message = "Employee not found." });
+        }
+
+        var response = new LoginResponse
+        {
+            AccountId = employee.Id,
+            AccountTypeId = employee.AccountTypeId
+        };
+
+        return Ok(response);  // Returning LoginResponse
+    }
+
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
@@ -76,6 +104,8 @@ public class EmployeesController : ControllerBase
     }
 
     // ! ----------------------------------------------------
+
+
 
     // ! ------------------- Appointments -------------------
     // ? [GET] /api/employees/{id}/appointments : Get all appointments by employee id

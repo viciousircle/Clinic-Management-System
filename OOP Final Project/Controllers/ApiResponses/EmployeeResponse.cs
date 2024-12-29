@@ -19,3 +19,9 @@ public class EmployeesResponse
 {
     public List<EmployeeViewModel> Employees { get; set; } = new();
 }
+
+public class LoginResponse
+{
+    public int AccountId { get; set; }
+    public int AccountTypeId { get; set; }
+}
