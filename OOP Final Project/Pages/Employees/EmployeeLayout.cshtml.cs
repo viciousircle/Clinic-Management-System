@@ -81,15 +81,18 @@ namespace OOP_Final_Project.Pages.Employees
             switch (section)
             {
                 case "AppointmentTableRows":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     await LoadAppointmentsAsync(view);
                     return Partial("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", DoctorData);
 
                 case "PatientCards":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     await LoadPatientCardsAsync(view);
                     return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
 
 
                 case "Dashboard":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     await FetchAppointmentCountsAsync();
                     await FetchAllPatientsAsync();
                     await FetchEmployeeDetailsAsync();
@@ -97,10 +100,14 @@ namespace OOP_Final_Project.Pages.Employees
                     await FetchPatientCountAsync();
                     await FetchAllPatientsAsync();
                     await FetchScheduleAsync();
-                    await FetchEmployeeDetailsAsync();
+
+
+
+
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
 
                 case "Appointment":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     await FetchAppointmentCountsAsync();
                     await FetchAllPatientsAsync();
                     await FetchEmployeeDetailsAsync();
@@ -110,6 +117,7 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
 
                 case "Patient":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     await FetchPatientCountAsync();
                     await FetchAllPatientsAsync();
                     await FetchScheduleAsync();
@@ -117,10 +125,15 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
 
                 case "Schedule":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     return Partial("~/Pages/Employees/Shared/_Schedule.cshtml", DoctorData);
 
                 case "Logout":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
+                    return Partial("~/Pages/Employees/Shared/_Logout.cshtml", DoctorData);
+
                 default:
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
             }
         }
@@ -259,10 +272,10 @@ namespace OOP_Final_Project.Pages.Employees
         // -- [GET] api/employees/6/appointments/cancelled/count ---
         private async Task FetchAppointmentCountsAsync()
         {
-            DoctorData.AppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/count", "totalAppointments");
-            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/future/count", "totalFutureAppointments");
-            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/completed/count", "totalCompletedAppointments");
-            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync("api/employees/6/appointments/cancelled/count", "totalCancelledAppointments");
+            DoctorData.AppointmentCount = await FetchAppointmentCountAsync($"api/employees/{EmployeeId}/appointments/count", "totalAppointments");
+            DoctorData.FutureAppointmentCount = await FetchAppointmentCountAsync($"api/employees/{EmployeeId}/appointments/future/count", "totalFutureAppointments");
+            DoctorData.CompletedAppointmentCount = await FetchAppointmentCountAsync($"api/employees/{EmployeeId}/appointments/completed/count", "totalCompletedAppointments");
+            DoctorData.CancelledAppointmentCount = await FetchAppointmentCountAsync($"api/employees/{EmployeeId}/appointments/cancelled/count", "totalCancelledAppointments");
         }
 
         private async Task<int> FetchAppointmentCountAsync(string url, string jsonProperty)
@@ -381,13 +394,13 @@ namespace OOP_Final_Project.Pages.Employees
         // Method to fetch all appointments
         private Task FetchAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/6/appointments");
+            return FetchAppointmentsAsync($"api/employees/{EmployeeId}/appointments");
         }
 
         // Method to fetch today's appointments
         private Task FetchAppointmentsTodayAsync()
         {
-            return FetchAppointmentsAsync("api/employees/6/appointments/today", "today");
+            return FetchAppointmentsAsync($"api/employees/{EmployeeId}/appointments/today", "today");
 
         }
 
@@ -401,7 +414,7 @@ namespace OOP_Final_Project.Pages.Employees
         // Method to fetch past appointments
         private Task FetchPastAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/6/appointments/past", "previous");
+            return FetchAppointmentsAsync($"api/employees/{EmployeeId}/appointments/past", "previous");
 
         }
 
@@ -460,13 +473,13 @@ namespace OOP_Final_Project.Pages.Employees
         // Fetch all patients
         private Task FetchAllPatientsAsync()
         {
-            return FetchPatientsAsync("api/employees/6/patients", "all patients");
+            return FetchPatientsAsync($"api/employees/{EmployeeId}/patients", "all patients");
         }
 
         // Fetch observed patients
         private Task FetchObservedPatientsAsync()
         {
-            return FetchPatientsAsync("api/employees/6/patients/observed", "observed patients");
+            return FetchPatientsAsync($"api/employees/{EmployeeId}/patients/observed", "observed patients");
         }
 
 
@@ -478,8 +491,8 @@ namespace OOP_Final_Project.Pages.Employees
 
         private async Task FetchPatientCountAsync()
         {
-            DoctorData.PatientCount = await FetchPatientCountAsync("api/employees/6/patients/count", "totalPatients");
-            DoctorData.ObservedPatientCount = await FetchPatientCountAsync("api/employees/6/patients/observed/count", "totalObservedPatients");
+            DoctorData.PatientCount = await FetchPatientCountAsync($"api/employees/{EmployeeId}/patients/count", "totalPatients");
+            DoctorData.ObservedPatientCount = await FetchPatientCountAsync($"api/employees/{EmployeeId}/patients/observed/count", "totalObservedPatients");
         }
 
         private async Task<int> FetchPatientCountAsync(string url, string jsonProperty)
@@ -531,7 +544,7 @@ namespace OOP_Final_Project.Pages.Employees
         {
             try
             {
-                var response = await _client.GetAsync("api/employees/6/schedule");
+                var response = await _client.GetAsync($"api/employees/{EmployeeId}/schedule");
 
                 if (response.IsSuccessStatusCode)
                 {
