@@ -123,7 +123,21 @@ public class EmployeesController : ControllerBase
                     DiagnoseDetails = appt.diag.DiagnoseDetails,
                     IsSick = appt.diag.IsSick,
                     PatientStatus = appt.diag.PatientStatus
-                }
+                },
+                Medicines = _context.Prescriptions
+                    .Where(prescription => prescription.AppointmentId == appt.appt.Id)
+                    .SelectMany(prescription => prescription.PrescriptionMedicines)
+                    .Select(prescriptionMedicine => new MedicinePrescriptionViewModel
+                    {
+                        MedicineId = prescriptionMedicine.MedicineId,
+                        MedicineName = prescriptionMedicine.Medicine.Name,
+                        DosageAmount = prescriptionMedicine.DosageAmount,
+                        Frequency = prescriptionMedicine.Frequency,
+                        FrequencyUnit = prescriptionMedicine.FrequencyUnit,
+                        Route = prescriptionMedicine.Route,
+                        Instruction = prescriptionMedicine.Instructions
+                    })
+                    .ToList()
             })
             .ToList();
 

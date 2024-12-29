@@ -328,7 +328,7 @@
         const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
         const patientReason = button.getAttribute('data-patient-reason') || "N/A";
         const patientDiagnose = button.getAttribute('data-patient-diagnose') || "N/A";
-
+        const prescription = button.getAttribute('data-patient-prescription') || "N/A";
 
         document.getElementById('appointmentDetailsPatientID').value = patientID;
         document.getElementById('appointmentDetailsPatientName').value = patientName;
@@ -345,10 +345,49 @@
             return;
         }
 
+        const medicinesTableBody = document.getElementById('appointmentMedicinesTableBody');
+        medicinesTableBody.innerHTML = "";
+
+        if (prescription !== "N/A") {
+            const medicinesArray = JSON.parse(prescription);
+            medicinesArray.forEach(function (medicine) {
+                const row = document.createElement("tr");
+
+                const idCell = document.createElement("td");
+                idCell.textContent = medicine.MedicineId;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = medicine.MedicineName;
+                row.appendChild(nameCell);
+
+                const dosageCell = document.createElement("td");
+                dosageCell.textContent = medicine.DosageAmount;
+                row.appendChild(dosageCell);
+
+                const frequencyCell = document.createElement("td");
+                frequencyCell.textContent = medicine.Frequency;
+                row.appendChild(frequencyCell);
+
+                const frequencyUnitCell = document.createElement("td");
+                frequencyUnitCell.textContent = medicine.FrequencyUnit;
+                row.appendChild(frequencyUnitCell);
+
+                const routeCell = document.createElement("td");
+                routeCell.textContent = medicine.Route;
+                row.appendChild(routeCell);
+
+                const instructionsCell = document.createElement("td");
+                instructionsCell.textContent = medicine.Instruction;
+                row.appendChild(instructionsCell);
+
+                medicinesTableBody.appendChild(row);
+            });
+        }
+
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }
-
 
 
     function markAsDone() {

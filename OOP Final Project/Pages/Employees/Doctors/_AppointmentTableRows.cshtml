@@ -25,6 +25,7 @@
                         data-patient-latest-visit="@appointment.Patient.LatestVisit"
                         data-patient-reason="@appointment.Diagnose.PatientStatus"
                         data-patient-diagnose="@appointment.Diagnose.DiagnoseDetails"
+                        data-patient-prescription="@System.Text.Json.JsonSerializer.Serialize(appointment.Medicines)"
                         onclick="openAppointmentDetailsModal(this)">Details</button>
                 }
                 else

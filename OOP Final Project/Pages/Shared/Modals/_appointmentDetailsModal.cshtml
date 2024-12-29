@@ -124,39 +124,39 @@
                             aria-labelledby="headingPrescription" data-bs-parent="#accordionExample">
                             <div class="accordion-body" id="prescription">
                                 <h5 class="mb-3">Medicines</h5>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" value="Paracetamol" readonly>
-                                    <input type="text" class="form-control" value="500mg" readonly>
-                                    <input type="text" class="form-control" value="3 times a day" readonly>
-                                    <input type="text" class="form-control" value="Oral" readonly>
-                                    <input type="text" class="form-control" value="Take after meals" readonly>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" value="Ibuprofen" readonly>
-                                    <input type="text" class="form-control" value="200mg" readonly>
-                                    <input type="text" class="form-control" value="2 times a day" readonly>
-                                    <input type="text" class="form-control" value="Oral" readonly>
-                                    <input type="text" class="form-control" value="Take with water" readonly>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" value="Amoxicillin" readonly>
-                                    <input type="text" class="form-control" value="250mg" readonly>
-                                    <input type="text" class="form-control" value="Every 8 hours" readonly>
-                                    <input type="text" class="form-control" value="Oral" readonly>
-                                    <input type="text" class="form-control" value="Complete the full course" readonly>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col" style="width: 5%;">ID</th>
+                                                <th scope="col" style="width: 20%;">Medicine Name</th>
+                                                <th scope="col" style="width: 10%;">Dosage</th>
+                                                <th scope="col" style="width: 10%;">Frequency</th>
+                                                <th scope="col" style="width: 15%;">Frequency Unit</th>
+                                                <th scope="col" style="width: 10%;">Route</th>
+                                                <th scope="col" style="width: 25%;">Instructions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="appointmentMedicinesTableBody">
+                                            <!-- Rows will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-            </div>
         </div>
+
     </div>
+</div>
 </div>

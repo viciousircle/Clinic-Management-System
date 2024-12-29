@@ -1,4 +1,5 @@
 using System;
+using OOP_Final_Project.ViewModels;
 
 namespace OOP_Final_Project.ViewModels.Shared;
 
@@ -9,6 +10,8 @@ public class AppointmentViewModel
     public PatientViewModel Patient { get; set; }
     public AppointmentRecordViewModel AppointmentRecord { get; set; }
     public DiagnoseViewModel Diagnose { get; set; }
+
+    public List<MedicinePrescriptionViewModel> Medicines { get; set; } = new List<MedicinePrescriptionViewModel>();
 }
 
 public class AppointmentRecordViewModel
