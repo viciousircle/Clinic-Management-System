@@ -36,7 +36,7 @@
 
         @* ? Side bar *@
         <nav class="col-md-3 col-lg-2 d-flex flex-column ps-5">
-            <partial name="~/Pages/Employees/Pharmacists/_SideBar.cshtml" />
+            <partial name="~/Pages/Employees/Pharmacists/_SideBar.cshtml" model="Model.DoctorData" />
         </nav>
 
         @* ? Main content *@
@@ -45,7 +45,7 @@
 
             @* ? Default content *@
             <div id="default-content">
-                <partial name="~/Pages/Employees/Pharmacists/_Dashboard.cshtml" />
+                <partial name="~/Pages/Employees/Pharmacists/_Dashboard.cshtml" model="Model.DoctorData" />
 
 
             </div>

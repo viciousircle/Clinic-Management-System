@@ -64,6 +64,11 @@ namespace OOP_Final_Project.Pages.Employees.Shared
                             _logger.LogInformation("Employee logged in.");
                             return RedirectToPage("/Employees/EmployeeLayout");
                         }
+                        else if (accountTypeId == 3)
+                        {
+                            _logger.LogInformation("Pharmacist logged in.");
+                            return RedirectToPage("/Employees/TestPharma");
+                        }
                         else
                         {
                             return RedirectToPage("/Employees/Shared/LogIn");

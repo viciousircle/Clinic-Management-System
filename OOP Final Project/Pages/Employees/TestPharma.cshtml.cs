@@ -38,11 +38,20 @@ namespace OOP_Final_Project.Pages.Employees
         public DoctorViewModel DoctorData { get; set; }
         public EmployeeViewModel Employee { get; set; }
         public List<MedicineViewModel> Medicines { get; set; } = new List<MedicineViewModel>();
+        public int EmployeeId { get; set; }
 
         // -- Methods -----------------------------------
         public async Task OnGetAsync()
         {
+            EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
             await FetchAllDataAsync();
+
+            await FetchEmployeeDetailsAsync();
+            await FetchPrescriptionsByDateAsync(EmployeeId, "08-10-2025");
+            await FetchPrescriptionsByDatePrepareAsync(EmployeeId, "08-10-2025");
+            await FetchPrescriptionByDatePickupAsync(EmployeeId, "08-10-2025");
+            await FetchPrescriptionByDateDoneAsync(EmployeeId, "08-10-2025");
+            await FetchMedicineCountsAsync();
             // await FetchMedicinesAsync();
         }
 
@@ -65,14 +74,23 @@ namespace OOP_Final_Project.Pages.Employees
                     await LoadPatientCardsAsync(view);
                     return Partial("~/Pages/Employees/Pharmacists/_PatientCards.cshtml", DoctorData);
                 case "Dashboard":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
+                    await FetchPrescriptionsByDateAsync(EmployeeId, "08-10-2025");
+                    await FetchPrescriptionsByDatePrepareAsync(EmployeeId, "08-10-2025");
+                    await FetchPrescriptionByDatePickupAsync(EmployeeId, "08-10-2025");
+                    await FetchPrescriptionByDateDoneAsync(EmployeeId, "08-10-2025");
+                    await FetchMedicinesAsync(filter);
+                    await FetchMedicineCountsAsync();
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
                 case "Prescribe":
-                    await FetchPrescriptionsByDateAsync(4, "08-10-2025");
-                    await FetchPrescriptionsByDatePrepareAsync(4, "08-10-2025");
-                    await FetchPrescriptionByDatePickupAsync(4, "08-10-2025");
-                    await FetchPrescriptionByDateDoneAsync(4, "08-10-2025");
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
+                    await FetchPrescriptionsByDateAsync(EmployeeId, "08-10-2025");
+                    await FetchPrescriptionsByDatePrepareAsync(EmployeeId, "08-10-2025");
+                    await FetchPrescriptionByDatePickupAsync(EmployeeId, "08-10-2025");
+                    await FetchPrescriptionByDateDoneAsync(EmployeeId, "08-10-2025");
                     return Partial("~/Pages/Employees/Pharmacists/_Prescribe.cshtml", DoctorData);
                 case "Warehouse":
+                    EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
                     await FetchMedicinesAsync(filter);
                     await FetchMedicineCountsAsync();
                     return Partial("~/Pages/Employees/Pharmacists/_Warehouse.cshtml", DoctorData);
@@ -94,17 +112,19 @@ namespace OOP_Final_Project.Pages.Employees
 
         private async Task LoadPatientCardsAsync(string view)
         {
+            EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
+
             switch (view)
             {
                 case "prepare":
-                    await FetchPrescriptionsByDatePrepareAsync(4, "08-10-2025");
+                    await FetchPrescriptionsByDatePrepareAsync(EmployeeId, "08-10-2025");
                     break;
 
                 case "pickup":
-                    await FetchPrescriptionByDatePickupAsync(4, "08-10-2025");
+                    await FetchPrescriptionByDatePickupAsync(EmployeeId, "08-10-2025");
                     break;
                 case "done":
-                    await FetchPrescriptionByDateDoneAsync(4, "08-10-2025");
+                    await FetchPrescriptionByDateDoneAsync(EmployeeId, "08-10-2025");
                     break;
 
                 default:
@@ -114,6 +134,7 @@ namespace OOP_Final_Project.Pages.Employees
             // Log DoctorData for debugging
             _logger.LogInformation("DoctorData: {@DoctorData}", DoctorData);
         }
+
 
 
         // ! -- Medicine Counts ---------------------------
@@ -149,6 +170,50 @@ namespace OOP_Final_Project.Pages.Employees
             }
             return 0;
         }
+
+        // ! --- Employee  ----------------------------
+        private async Task FetchEmployeeDetailsAsync()
+        {
+            try
+            {
+                // _logger.LogInformation("Fetching employee details from API..."); //For logging purposes
+                var response = await _client.GetAsync($"api/employees/{EmployeeId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var employeeResponse = JsonSerializer.Deserialize<EmployeeResponse>(json, options);
+
+                    if (employeeResponse?.Employee != null)
+                    {
+                        DoctorData.Doctor = employeeResponse.Employee;
+                        _logger.LogInformation("Employee details fetched successfully.");
+                        _logger.LogInformation($"Employee: {DoctorData.Doctor.FirstName} {DoctorData.Doctor.LastName}");
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to deserialize employee data.");
+                        DoctorData.Doctor = new EmployeeViewModel();
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch employee details. Status code: {response.StatusCode}");
+                    DoctorData.Doctor = new EmployeeViewModel();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching employee details.");
+                DoctorData.Doctor = new EmployeeViewModel();
+
+            }
+
+        }
+
+
 
         // ! -- Medicine List -----------------------------
         //  -- [GET] api/medicines ------------------------
