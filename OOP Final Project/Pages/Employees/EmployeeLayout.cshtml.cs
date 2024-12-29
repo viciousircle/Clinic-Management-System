@@ -324,6 +324,7 @@ namespace OOP_Final_Project.Pages.Employees
                     if (appointmentsResponse != null)
                     {
 
+
                         // Check each possible appointment list and assign it to DoctorData.Appointments
                         if (appointmentsResponse.Appointments != null && appointmentsResponse.Appointments.Count > 0)
                         {
@@ -395,7 +396,7 @@ namespace OOP_Final_Project.Pages.Employees
         // Method to fetch past appointments
         private Task FetchPastAppointmentsAsync()
         {
-            return FetchAppointmentsAsync("api/employees/6/appointments/past", "in the past");
+            return FetchAppointmentsAsync("api/employees/6/appointments/past", "previous");
 
         }
 
