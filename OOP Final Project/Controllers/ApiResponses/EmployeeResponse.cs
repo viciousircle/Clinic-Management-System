@@ -22,6 +22,6 @@ public class EmployeesResponse
 
 public class LoginResponse
 {
-    public int AccountId { get; set; }
+    public int EmployeeId { get; set; }
     public int AccountTypeId { get; set; }
 }

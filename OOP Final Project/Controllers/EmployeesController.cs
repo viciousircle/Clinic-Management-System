@@ -71,7 +71,7 @@ public class EmployeesController : ControllerBase
 
         var response = new LoginResponse
         {
-            AccountId = employee.Id,
+            EmployeeId = employee.Id,
             AccountTypeId = employee.AccountTypeId
         };
 
