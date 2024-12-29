@@ -25,6 +25,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddDistributedMemoryCache(); // Required for session
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 
 
@@ -44,6 +50,7 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers(); // Map API controllers
+app.UseSession();
 
 app.UseSwagger();
 app.UseSwaggerUI();

@@ -55,6 +55,9 @@ namespace OOP_Final_Project.Pages.Employees.Shared
                     {
                         var accountTypeId = result.AccountTypeId;
 
+                        // Store EmployeeId in session
+                        HttpContext.Session.SetInt32("EmployeeId", result.EmployeeId);
+
                         // Redirect based on AccountTypeId
                         if (accountTypeId == 4)
                         {
@@ -84,7 +87,6 @@ namespace OOP_Final_Project.Pages.Employees.Shared
 
             return Page();
         }
-
 
     }
 }

@@ -41,10 +41,14 @@ namespace OOP_Final_Project.Pages.Employees
         public EmployeeViewModel Employee { get; set; }
         public List<EmployeeViewModel> Employees { get; set; } = new List<EmployeeViewModel>();
 
+        public int EmployeeId { get; set; }
+
 
         // -- Methods -----------------------------------
         public async Task OnGetAsync()
         {
+            EmployeeId = HttpContext.Session.GetInt32("EmployeeId") ?? 0;
+            _logger.LogInformation($"EmployeeId hahaha: {EmployeeId}");
             await FetchAllDataAsync();
 
             // Load appointments for "today" by default
