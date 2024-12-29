@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Bogus.DataSets;
@@ -731,22 +732,64 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}/schedule")]
     public IActionResult GetScheduleByEmployeeId(int id)
     {
-        // var schedule = _context.Schedules
-        //     .Where(s => s.EmployeeId == id)
-        //     .Select(s => new ScheduleViewModel
-        //     {
-        //         Id = s.Id,
-        //         EmployeeId = s.EmployeeId,
-        //         DayOfWeek = s.DayOfWeek,
-        //         TimeStart = s.TimeStart,
-        //         TimeEnd = s.TimeEnd
-        //     })
-        // .ToList();
+        var scheduleData = _context.EmployeeSchedules
+            .Where(s => s.EmployeeId == id && s.IsActive)
+            .Select(s => new
+            {
+                DoctorId = s.EmployeeId,
+                TimeStart = s.Schedule.TimeStart,
+                TimeEnd = s.Schedule.TimeEnd
+            })
+            .ToList();
 
-        // return Ok(new { EmployeeId = id, Schedule = schedule });
-        return Ok();
+        // Create schedule with sections
+        var schedule = scheduleData.Select(s => new ScheduleViewModel
+        {
+            DoctorId = s.DoctorId,
+            Sections = GetSections(s.TimeStart, s.TimeEnd)
+        }).ToList();
+
+        return Ok(new { EmployeeId = id, Schedule = schedule });
     }
 
+    private List<SectionViewModel> GetSections(TimeSpan timeFrom, TimeSpan timeTo)
+    {
+        var sections = new List<SectionViewModel>();
+        var currentTime = timeFrom;
+
+        // Loop through the time range, dividing it into 1-hour sections
+        while (currentTime < timeTo)
+        {
+            var nextTime = currentTime.Add(TimeSpan.FromHours(1));
+
+            // Ensure nextTime doesn't exceed the given timeTo
+            if (nextTime > timeTo)
+            {
+                nextTime = timeTo;
+            }
+
+            sections.Add(new SectionViewModel
+            {
+                Time = FormatTimeRange(currentTime, nextTime)
+            });
+
+            currentTime = nextTime;
+        }
+
+        return sections;
+    }
+
+    private string FormatTimeRange(TimeSpan startTime, TimeSpan endTime)
+    {
+        // Convert TimeSpan to DateTime for AM/PM formatting
+        DateTime start = DateTime.Today.Add(startTime);
+        DateTime end = DateTime.Today.Add(endTime);
+
+        // Format to ensure AM/PM appears
+        string timeRange = $"{start:hh:mm tt} - {end:hh:mm tt}";
+
+        return timeRange;
+    }
 
 
 }

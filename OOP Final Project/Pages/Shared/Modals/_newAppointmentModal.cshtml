@@ -107,8 +107,14 @@
 
     function openNewAppoinmentModal(button) {
         var patientsInformation = button.getAttribute('data-patients') || "[]"; // Ensure it's a valid JSON array
+        var doctorName = button.getAttribute('data-doctor') || "Dr. John Smith";
+
 
         var patients = JSON.parse(patientsInformation);
+
+        document.getElementById('doctor').value = doctorName;
+
+
 
         console.log(patients);
 
@@ -233,6 +239,7 @@
         document.getElementById('appointmentDate').value = '';
         document.getElementById('appointmentTime').value = '';
         document.getElementById('reason').value = '';
+
 
         patientSelected = false;
     }

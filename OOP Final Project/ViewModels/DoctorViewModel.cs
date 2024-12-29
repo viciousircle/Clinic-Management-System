@@ -105,16 +105,10 @@ public class MedicinePrescriptionViewModel
 public class ScheduleViewModel
 {
     public int DoctorId { get; set; }
-    public int TotalSection { get; set; }
-    public List<SectionViewModel> SectionsAvailable { get; set; } = new List<SectionViewModel>();
-    public List<SectionViewModel> SectionsUnavailable { get; set; } = new List<SectionViewModel>();
-
-
+    public List<SectionViewModel> Sections { get; set; } = new List<SectionViewModel>();  // Make sure 'Sections' is defined
 }
 
 public class SectionViewModel
 {
-    public string Date { get; set; }
     public string Time { get; set; }
-
 }
