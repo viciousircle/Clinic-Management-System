@@ -70,10 +70,14 @@
             <div class="d-flex gap-md-2">
                 <!-- View Options -->
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn   btn-dark">Prepare</button>
-                    <button type="button" class="btn btn-outline-dark  ">Pick up</button>
-                    <button type="button" class="btn btn-outline-dark ">Done</button>
+                    <button type="button" class="btn btn-dark" id="prepareBtn"
+                        onclick="toggleButtonClass(this); loadPatients('prepare')">Prepare</button>
+                    <button type="button" class="btn btn-outline-dark" id="pickupBtn"
+                        onclick="toggleButtonClass(this); loadPatients('pickup')">Pick up</button>
+                    <button type="button" class="btn btn-outline-dark" id="doneBtn"
+                        onclick="toggleButtonClass(this); loadPatients('done')">Done</button>
                 </div>
+
 
                 @* <!-- Date Filter -->
                 <div>
@@ -99,58 +103,47 @@
                 <input type="text" class="form-control" placeholder="Search">
             </div>
         </div>
-
-
-
-
         <!-- Patients List Section -->
-        <div class="d-flex flex-wrap  mb-3 text-dark ms-4" style="gap: 30px;">
-            @foreach (var prescription in Model.OnDatePickupPrescriptions)
-            {
-                <div class="card rounded-12px shadow-sm" style="padding: 3px;">
-                    <div class="card-body col-md-2" style="width: 100%;">
-                        <div class="d-flex  align-items-center " style="justify-content: space-between;">
-                            <div class="d-flex  align-items-center gap-md-1">
-                                <i class="fas fa-user-tag"></i>
-                                <h5 class="card-title mb-0">Patient</h5>
-                            </div>
-                            <div class="btn-sm btn btn-outline-dark" data-bs-toggle="modal"
-                                data-bs-target="#prescribeDetailModal" data-prescription-patient="@prescription.PatientName"
-                                data-prescription-time="@prescription.AppointmentTime"
-                                data-prescription-doctor="@prescription.DoctorName"
-                                data-prescription-medicines='@System.Text.Json.JsonSerializer.Serialize(prescription.Medicines)'
-                                data-prescription-appoinment-id="@prescription.AppointmentId"
-                                data-prescription-id="@prescription.Id" onclick="openPrescribeDetailsModal(this)">
-                                Details
-                            </div>
+        <div class="d-flex flex-wrap  mb-3 text-dark ms-4" style="gap: 30px;" id="patientsList">
 
-                        </div>
-                        <hr>
-                        <div class="d-flex gap-md-2 flex-column">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>ID:</div>
-                                <div class="text-dark btn-sm" style="background-color:#f4f4f4;">@prescription.Id</div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Patient:</div>
-                                <div class="text-dark btn-sm" style="background-color:#f4f4f4;">@prescription.PatientName
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center gap-md-4">
-                                <div>Time:</div>
-                                <div class="text-dark btn-sm" style="background-color:#f4f4f4;">
-                                    @prescription.AppointmentTime</div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            }
         </div>
     </div>
 
 </div>
 
 <script>
+    // Define the toggleButtonClass function
+    function toggleButtonClass(button) {
+        // Remove the 'btn-dark' class from all buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.classList.remove('btn-dark');
+            btn.classList.add('btn-outline-dark');
+        });
+
+        // Add 'btn-dark' class to the clicked button
+        button.classList.remove('btn-outline-dark');
+        button.classList.add('btn-dark');
+    }
+
+    // Define the loadPatients function
+    function loadPatients(view) {
+        let url = `/Employees/TestPharma?handler=LoadPartial&section=PatientCards&view=${view}`;
+        console.log("Fetching URL:", url); // Debugging the URL
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(html => {
+                document.querySelector('#patientsList').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading patients:', error);
+                document.querySelector('#patientsList').innerHTML = `<p class="text-danger">Failed to load patients. Please try again later.</p>`;
+            });
+    }
 
 </script>

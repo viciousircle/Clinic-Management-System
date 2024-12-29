@@ -84,6 +84,7 @@ namespace OOP_Final_Project.Pages.Employees
                     await LoadPatientCardsAsync(view);
                     return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
 
+
                 case "Dashboard":
                     await FetchAppointmentCountsAsync();
                     await FetchAllPatientsAsync();

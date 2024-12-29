@@ -52,10 +52,18 @@ namespace OOP_Final_Project.Pages.Employees
         }
 
         // -- Partial Methods ----------------------------
-        public async Task<IActionResult> OnGetLoadPartial(string section, string filter)
+        public async Task<IActionResult> OnGetLoadPartial(string section, string filter, string view)
         {
             switch (section)
             {
+                case "PatientCards":
+                    // Ensure prescriptions are loaded
+                    if (DoctorData.OnDatePickupPrescriptions == null || !DoctorData.OnDatePickupPrescriptions.Any())
+                    {
+                        _logger.LogError("No prescriptions found for OnDatePickupPrescriptions.");
+                    }
+                    await LoadPatientCardsAsync(view);
+                    return Partial("~/Pages/Employees/Pharmacists/_PatientCards.cshtml", DoctorData);
                 case "Dashboard":
                     return Partial("~/Pages/Employees/Pharmacists/_Dashboard.cshtml", DoctorData);
                 case "Prescribe":
@@ -83,6 +91,30 @@ namespace OOP_Final_Project.Pages.Employees
         }
 
         // -- API Calls ---------------------------------
+
+        private async Task LoadPatientCardsAsync(string view)
+        {
+            switch (view)
+            {
+                case "prepare":
+                    await FetchPrescriptionsByDatePrepareAsync(4, "08-10-2025");
+                    break;
+
+                case "pickup":
+                    await FetchPrescriptionByDatePickupAsync(4, "08-10-2025");
+                    break;
+                case "done":
+                    await FetchPrescriptionByDateDoneAsync(4, "08-10-2025");
+                    break;
+
+                default:
+                    throw new ArgumentException("Invalid view parameter");
+            }
+
+            // Log DoctorData for debugging
+            _logger.LogInformation("DoctorData: {@DoctorData}", DoctorData);
+        }
+
 
         // ! -- Medicine Counts ---------------------------
         private async Task FetchMedicineCountsAsync()
