@@ -119,6 +119,7 @@
                     </select>
                 </div>
 
+
                 <!-- Date Filter -->
                 <div id="dateFilterContainer" style="display: none;">
                     <input type="date" id="dateFilter" class="form-control d-inline-block w-auto"
@@ -151,6 +152,7 @@
             </thead>
             <tbody>
                 <!-- Appointment rows will be loaded here -->
+                @* @await Html.PartialAsync("~/Pages/Employees/Doctors/_AppointmentTableRows.cshtml", Model) *@
             </tbody>
         </table>
 
@@ -210,9 +212,14 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
-        loadAppointments('today');
+        // Call the function to load today's appointments
+        loadTodayAppointments();
     });
 
+    function loadTodayAppointments() {
+        // Your existing logic to load today's appointments
+        openAppointmentDetailsModal(document.querySelector('[data-view="today"]'));
+    }
 
     function updateButtonStyles(view) {
         const buttonMapping = {
