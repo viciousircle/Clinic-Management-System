@@ -46,6 +46,10 @@ namespace OOP_Final_Project.Pages.Employees
         public async Task OnGetAsync()
         {
             await FetchAllDataAsync();
+
+            // Load appointments for "today" by default
+            await LoadAppointmentsAsync("today");
+            await LoadPatientCardsAsync("observedPatients");
         }
 
         // -- Helper Methods -----------------------------
@@ -60,6 +64,9 @@ namespace OOP_Final_Project.Pages.Employees
             await FetchAllPatientsAsync();
             await FetchScheduleAsync();
             await FetchEmployeeDetailsAsync();
+
+            await LoadAppointmentsAsync("today");
+
 
         }
 
@@ -93,6 +100,8 @@ namespace OOP_Final_Project.Pages.Employees
                     await FetchAllPatientsAsync();
                     await FetchEmployeeDetailsAsync();
                     await FetchScheduleAsync();
+
+
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
 
                 case "Patient":
