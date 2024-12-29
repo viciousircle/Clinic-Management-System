@@ -213,7 +213,7 @@ namespace OOP_Final_Project.Pages.Employees
             try
             {
                 // _logger.LogInformation("Fetching employee details from API..."); //For logging purposes
-                var response = await _client.GetAsync("api/employees/6");
+                var response = await _client.GetAsync($"api/employees/{EmployeeId}");
 
                 if (response.IsSuccessStatusCode)
                 {
