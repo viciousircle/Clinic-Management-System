@@ -103,30 +103,71 @@
     </div>
 </div>
 
+
 <script>
 
     function openNewAppoinmentModal(button) {
-        var patientsInformation = button.getAttribute('data-patients') || "[]"; // Ensure it's a valid JSON array
+        // Get the data attributes
+        var patientsInformation = button.getAttribute('data-patients') || "[]";
+        var scheduleInformation = button.getAttribute('data-schedule') || "[]";
         var doctorName = button.getAttribute('data-doctor') || "Dr. John Smith";
 
+        // Log the schedule data for debugging
+        console.log("Schedule Data: ", scheduleInformation);
 
+        // Parse the JSON data
         var patients = JSON.parse(patientsInformation);
+        var schedule = JSON.parse(scheduleInformation);
 
+        // Log the parsed data
+        console.log("Parsed Schedule: ", schedule);
+
+        // Populate the modal with data (if needed)
         document.getElementById('doctor').value = doctorName;
 
-
-
-        console.log(patients);
-
+        // Use the schedule to populate the appointment times dropdown
+        populateScheduleTimes(schedule.Sections);
         populatePatientsDropdown(patients);
 
+        // Open the modal
         const modal = new bootstrap.Modal(document.getElementById('newAppointmentModal'));
-        if (!modal) {
-            console.error('Modal element not found: newAppointmentModal');
-            return;
+        modal.show();
+    }
+
+    function populateScheduleTimes(schedule) {
+        var appointmentTimeDropdown = document.getElementById('appointmentTime'); // Appointment time dropdown
+
+        // Clear previous options
+        appointmentTimeDropdown.innerHTML = '';
+
+        // Add default "Select a time" option
+        var defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = 'Select a time slot';
+        appointmentTimeDropdown.appendChild(defaultOption);
+
+        // Check if schedule.Sections is an array and has valid data
+        if (Array.isArray(schedule) && schedule.length > 0) {
+            schedule.forEach(function (section) {
+                if (section.Time) { // Check if Time exists
+                    var option = document.createElement('option');
+                    option.value = section.Time;
+                    option.textContent = section.Time;
+                    appointmentTimeDropdown.appendChild(option);
+                } else {
+                    console.error('Missing time in schedule section');
+                }
+            });
+        } else {
+            console.error('Invalid schedule format or empty sections');
         }
 
-        modal.show();
+        // Ensure the patient dropdown remains visible if there's a patient already selected
+        if (patientSelected) {
+            document.getElementById('patientDropdown').style.display = "block"; // Show dropdown
+        }
     }
 
     function populatePatientsDropdown(patients) {
@@ -150,6 +191,9 @@
 
         dropdown.style.display = patients.length > 0 ? 'block' : 'none';
     }
+
+
+
 
     let patients = []; // Initialize an empty array for patients
 

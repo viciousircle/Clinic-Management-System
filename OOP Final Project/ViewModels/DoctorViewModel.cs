@@ -57,7 +57,7 @@ public class DoctorViewModel
     public List<PrescriptionViewModel> OnDateDonePrescriptions { get; set; } = new List<PrescriptionViewModel>();
 
 
-
+    public ScheduleViewModel Schedule { get; set; } = new ScheduleViewModel();
 
 
 

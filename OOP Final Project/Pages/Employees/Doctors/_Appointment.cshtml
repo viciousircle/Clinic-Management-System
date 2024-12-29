@@ -10,7 +10,9 @@
             <div class="btn btn-outline-dark shadow-sm" id="makeNewAppointmentBtn" data-bs-toggle="modal"
                 data-patients='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Patients))'
                 data-doctor="@Model.Doctor.FirstName @Model.Doctor.LastName" data-bs-target="#newAppointmentModal"
-                onclick="openNewAppoinmentModal(this)">Make new appointment</div>
+                data-schedule='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Schedule))'
+                onclick="openNewAppoinmentModal(this)">Make new appointment
+            </div>
         </div>
     </div>
 

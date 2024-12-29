@@ -52,6 +52,7 @@ namespace OOP_Final_Project.Pages.Employees
         private async Task FetchAllDataAsync()
         {
             await FetchEmployeeDetailsAsync();
+
         }
 
 
@@ -75,10 +76,14 @@ namespace OOP_Final_Project.Pages.Employees
                     await FetchAppointmentCountsAsync();
                     await FetchAllPatientsAsync();
                     await FetchEmployeeDetailsAsync();
+                    await FetchScheduleAsync();
                     return Partial("~/Pages/Employees/Doctors/_Appointment.cshtml", DoctorData);
 
                 case "Patient":
                     await FetchPatientCountAsync();
+                    await FetchAllPatientsAsync();
+                    await FetchScheduleAsync();
+                    await FetchEmployeeDetailsAsync();
                     return Partial("~/Pages/Employees/Doctors/_Patient.cshtml", DoctorData);
 
                 case "Schedule":
@@ -484,6 +489,45 @@ namespace OOP_Final_Project.Pages.Employees
             }
 
             return 0;
+        }
+
+        // ! ------------------------------------------------------------------------------------------------
+
+        // --- Fetch Schedule -----------------------------
+        // -- [GET] api/employees/6/schedule --------------
+
+        private async Task FetchScheduleAsync()
+        {
+            try
+            {
+                var response = await _client.GetAsync("api/employees/6/schedule");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var scheduleResponse = JsonSerializer.Deserialize<ScheduleResponse>(json, options);
+
+                    if (scheduleResponse?.Schedule != null)
+                    {
+                        DoctorData.Schedule = scheduleResponse.Schedule.FirstOrDefault();
+                        _logger.LogInformation("Successfully fetched schedule.");
+                        _logger.LogInformation($"Schedule: {DoctorData.Schedule.Sections.Count} sections");
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to deserialize schedule data.");
+                    }
+                }
+                else
+                {
+                    _logger.LogError($"Failed to fetch schedule. Status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching schedule.");
+            }
         }
 
 
