@@ -326,6 +326,9 @@
         const patientEmail = button.getAttribute('data-patient-email') || "N/A";
         const patientAddress = button.getAttribute('data-patient-address') || "N/A";
         const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
+        const patientReason = button.getAttribute('data-patient-reason') || "N/A";
+        const patientDiagnose = button.getAttribute('data-patient-diagnose') || "N/A";
+
 
         document.getElementById('appointmentDetailsPatientID').value = patientID;
         document.getElementById('appointmentDetailsPatientName').value = patientName;
@@ -333,6 +336,8 @@
         document.getElementById('appointmentDetailsPatientEmail').value = patientEmail;
         document.getElementById('appointmentDetailsPatientAddress').value = patientAddress;
         document.getElementById('appointmentDetailsPatientLatestVisit').value = patientLatestVisit;
+        document.getElementById('appointmentDetailsPatientReason').value = patientReason;
+        document.getElementById('appointmentDetailsPatientDiagnose').value = patientDiagnose;
 
         const modalElement = document.getElementById('appointmentDetailsModal');
         if (!modalElement) {
