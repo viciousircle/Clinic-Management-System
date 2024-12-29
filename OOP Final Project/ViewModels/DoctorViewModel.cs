@@ -112,3 +112,13 @@ public class SectionViewModel
 {
     public string Time { get; set; }
 }
+
+
+public class NewAppointmentViewModel
+{
+    public int DoctorId { get; set; }
+    public int PatientId { get; set; }
+    public string AppointmentTime { get; set; }
+    public string AppointmentDate { get; set; }
+    public string Reason { get; set; }
+}

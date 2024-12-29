@@ -792,5 +792,81 @@ public class EmployeesController : ControllerBase
     }
 
 
+    // ! -----------------------------------------------------------
+    // [POST] /api/employees/{id}/newAppointment
+    // ...existing code...
+
+    [HttpPost("{id}/newAppointment/{patientId}")]
+    public IActionResult CreateNewAppointment(int id, int patientId, [FromBody] NewAppointmentViewModel newAppointment)
+    {
+        if (!ModelState.IsValid || newAppointment == null)
+        {
+            return BadRequest(new { Message = "Invalid appointment data." });
+        }
+
+        DateTime appointmentDateTime;
+        if (string.IsNullOrEmpty(newAppointment.AppointmentDate) || string.IsNullOrEmpty(newAppointment.AppointmentTime))
+        {
+            return BadRequest(new { Message = "Invalid date or time format." });
+        }
+
+        if (!DateTime.TryParse($"{newAppointment.AppointmentDate} {newAppointment.AppointmentTime}", out appointmentDateTime))
+        {
+            return BadRequest(new { Message = "Invalid date or time format." });
+        }
+
+        // Check if the employee (doctor) exists
+        var employee = _context.Employees
+            .FirstOrDefault(e => e.Id == id);
+        if (employee == null)
+        {
+            return NotFound(new { Message = "Doctor (employee) not found." });
+        }
+
+        // Check if the patient exists
+        var patient = _context.Patients
+            .FirstOrDefault(p => p.Id == patientId);
+        if (patient == null)
+        {
+            return NotFound(new { Message = "Patient not found." });
+        }
+
+        // Create the new appointment
+        var newAppointmentEntity = new Appointment
+        {
+            DoctorId = id,
+            PatientId = patientId,
+        };
+
+        try
+        {
+            // Save the appointment first
+            _context.Appointments.Add(newAppointmentEntity);
+            _context.SaveChanges();  // Save Appointment
+
+            // Now create the document appointment
+            var newDocumentAppointment = new DocumentAppointment
+            {
+                AppointmentId = newAppointmentEntity.Id, // Link to the saved appointment
+                TimeBook = DateTime.Now,
+                Date = appointmentDateTime.Date,
+                TimeStart = appointmentDateTime.TimeOfDay,
+                TimeEnd = appointmentDateTime.AddHours(1).TimeOfDay,  // Assuming 1-hour duration
+                DocumentTypeId = 1 // Set DocumentTypeId to null if not required
+            };
+
+            // Save the document appointment
+            _context.DocumentAppointments.Add(newDocumentAppointment);
+            _context.SaveChanges(); // Save DocumentAppointment
+
+            return Ok(new { Message = "Appointment created successfully.", AppointmentId = newAppointmentEntity.Id });
+        }
+        catch (DbUpdateException dbEx)
+        {
+            return StatusCode(500, new { Message = "An error occurred while saving the appointment.", Error = dbEx.InnerException?.Message });
+        }
+    }
+
+    // ...existing code...
 }
 
