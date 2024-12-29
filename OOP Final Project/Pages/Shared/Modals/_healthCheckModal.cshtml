@@ -135,62 +135,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Commit & Rules Section -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingCommitAndRules">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseCommitAndRules" aria-expanded="false"
-                                aria-controls="collapseCommitAndRules">
-                                Commit & Rules
-                            </button>
-                        </h2>
-                        <div id="collapseCommitAndRules" class="accordion-collapse collapse"
-                            data-bs-parent="#healthCheckAccordion">
-                            <div class="accordion-body" id="commitAndRules">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rule1" required>
-                                    <label class="form-check-label" for="rule1">
-                                        Rule 1: Ensure patient consent is obtained. This is crucial to protect both
-                                        the patient's rights and the healthcare provider's responsibility.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rule2" required>
-                                    <label class="form-check-label" for="rule2">
-                                        Rule 2: Verify all entered data is correct, including medical history,
-                                        symptoms, and diagnostic details.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rule3" required>
-                                    <label class="form-check-label" for="rule3">
-                                        Rule 3: Follow hospital guidelines strictly. This includes adhering to
-                                        protocols for patient care and medical record keeping.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rule4" required>
-                                    <label class="form-check-label" for="rule4">
-                                        Rule 4: Ensure thorough understanding of treatment plans before prescribing
-                                        or recommending them.
-                                    </label>
-                                </div>
-                                <div class="form-check mt-3">
-                                    <input class="form-check-input" type="checkbox" id="confirmCheck"
-                                        onclick="toggleMarkAsDone()">
-                                    <label class="form-check-label" for="confirmCheck">
-                                        I have read and made sure all the above rules are followed.
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="markAsDoneBtn" onclick="markAsDone()" disabled>Mark as
+                <button type="button" class="btn btn-primary" id="markAsDoneBtn" onclick="markAsDone()">Mark as
                     Done</button>
             </div>
         </div>
@@ -292,10 +241,7 @@
                 frequencyUnit: group.querySelector('input[id^="frequencyUnit"]').value,
                 route: group.querySelector('input[id^="route"]').value,
                 instructions: group.querySelector('input[id^="instructions"]').value
-            })),
-            rulesChecked: Array.from(document.querySelectorAll('#commitAndRules input:checked')).map(
-                (checkbox) => checkbox.labels[0].innerText
-            )
+            }))
         };
 
         console.log("Form Data:", formData);
@@ -322,14 +268,6 @@
         }
     }
 
-    // Enable "Mark as Done" button if all checkboxes are checked
-    function toggleMarkAsDone() {
-        const confirmCheck = document.getElementById('confirmCheck');
-        const markAsDoneBtn = document.getElementById('markAsDoneBtn');
-
-        markAsDoneBtn.disabled = !confirmCheck.checked;
-    }
-
     // Function to reset the form
     function resetForm() {
         document.getElementById('healthCheckPatientName').value = '';
@@ -337,7 +275,5 @@
         document.getElementById('symptomsInput').value = '';
         document.getElementById('diagnosisInput').value = '';
         document.getElementById('medicinesContainer').innerHTML = '';
-        document.getElementById('confirmCheck').checked = false;
-        toggleMarkAsDone();
     }
 </script>
