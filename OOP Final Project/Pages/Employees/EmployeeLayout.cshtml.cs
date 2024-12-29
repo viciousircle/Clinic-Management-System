@@ -52,6 +52,14 @@ namespace OOP_Final_Project.Pages.Employees
         private async Task FetchAllDataAsync()
         {
             await FetchEmployeeDetailsAsync();
+            await FetchAppointmentCountsAsync();
+            await FetchAllPatientsAsync();
+            await FetchEmployeeDetailsAsync();
+            await FetchScheduleAsync();
+            await FetchPatientCountAsync();
+            await FetchAllPatientsAsync();
+            await FetchScheduleAsync();
+            await FetchEmployeeDetailsAsync();
 
         }
 
@@ -74,6 +82,10 @@ namespace OOP_Final_Project.Pages.Employees
                     await FetchAllPatientsAsync();
                     await FetchEmployeeDetailsAsync();
                     await FetchScheduleAsync();
+                    await FetchPatientCountAsync();
+                    await FetchAllPatientsAsync();
+                    await FetchScheduleAsync();
+                    await FetchEmployeeDetailsAsync();
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
 
                 case "Appointment":
