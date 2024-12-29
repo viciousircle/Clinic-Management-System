@@ -54,7 +54,7 @@ app.UseSession();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.MapFallbackToPage("/Employees/Shared/Login");
 
 
 app.UseAuthentication();  // Enable authentication
