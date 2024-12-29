@@ -283,6 +283,8 @@
         }
     }
 
+
+
     function openHealthCheckModal(button) {
         if (!button || !button.closest) {
             console.error('Invalid button element passed:', button);
@@ -295,6 +297,8 @@
         const patientEmail = button.getAttribute('data-patient-email') || "N/A";
         const patientAddress = button.getAttribute('data-patient-address') || "N/A";
         const patientLatestVisit = button.getAttribute('data-patient-latest-visit') || "N/A";
+        const patientReason = button.getAttribute('data-patient-reason') || "N/A";
+        const patientDiagnose = button.getAttribute('data-patient-diagnose') || "N/A";
 
         document.getElementById('healthCheckPatientID').value = patientID;
         document.getElementById('healthCheckPatientName').value = patientName;
@@ -302,6 +306,8 @@
         document.getElementById('healthCheckPatientEmail').value = patientEmail;
         document.getElementById('healthCheckPatientAddress').value = patientAddress;
         document.getElementById('healthCheckPatientLatestVisit').value = patientLatestVisit;
+        document.getElementById('healthCheckPatientReason').value = patientReason;
+        document.getElementById('diagnosisInput').value = patientDiagnose;
 
         const modal = new bootstrap.Modal(document.getElementById('healthCheckModal'));
         modal.show();
@@ -358,4 +364,5 @@
             selectedRow = null;
         }
     }
+
 </script>
