@@ -70,6 +70,10 @@ namespace OOP_Final_Project.Pages.Employees
                     return Partial("~/Pages/Employees/Doctors/_PatientCards.cshtml", DoctorData);
 
                 case "Dashboard":
+                    await FetchAppointmentCountsAsync();
+                    await FetchAllPatientsAsync();
+                    await FetchEmployeeDetailsAsync();
+                    await FetchScheduleAsync();
                     return Partial("~/Pages/Employees/Doctors/_Dashboard.cshtml", DoctorData);
 
                 case "Appointment":
